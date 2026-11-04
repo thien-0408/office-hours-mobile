@@ -1,0 +1,1055 @@
+{
+ "_note": "Read by eye from the floor plans in EIU's public virtual tour (https://eiu.edu.vn/KhamPhaEIU/index.htm), so names and capacities need checking on site. Plans for upper floors of Blocks 4, 5, 6 are not in the tour. 207.B6 comes from the International Affairs office page. Lecturer office rooms must be confirmed separately.",
+ "rooms": [
+  {
+   "building": "B3",
+   "floor": 1,
+   "code": "100.B3",
+   "name": "P.VIP",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 1,
+   "code": "101.B3",
+   "name": "P.Họp",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 1,
+   "code": "102.B3",
+   "name": "P.Học lý thuyết",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 1,
+   "code": "103.B3",
+   "name": "P.Học lý thuyết",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 1,
+   "code": "104.B3",
+   "name": "VP K.QTKD",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 1,
+   "code": "106.B3",
+   "name": "P.Họp",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 1,
+   "code": "107.B3",
+   "name": "P.Học",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 1,
+   "code": "108.B3",
+   "name": "VP OCE",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 1,
+   "code": "109.B3",
+   "name": "VP OCE",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 1,
+   "code": "110.B3",
+   "name": "VP OCE",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 2,
+   "code": "200.B3",
+   "name": "Hội trường lớn",
+   "capacity": 544
+  },
+  {
+   "building": "B3",
+   "floor": 2,
+   "code": "201.B3",
+   "name": "Giảng đường 1",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 2,
+   "code": "202.B3",
+   "name": "Giảng đường 2",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 2,
+   "code": "203.B3",
+   "name": "Giảng đường 3",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 2,
+   "code": "204.B3",
+   "name": "Giảng đường 4",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 2,
+   "code": "205.B3",
+   "name": null,
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 3,
+   "code": "301.B3",
+   "name": "Giảng đường 5",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 3,
+   "code": "302.B3",
+   "name": "Giảng đường 6",
+   "capacity": null
+  },
+  {
+   "building": "B3",
+   "floor": 3,
+   "code": "303.B3",
+   "name": "VP K.QTKD",
+   "capacity": null
+  },
+  {
+   "building": "B4",
+   "floor": 1,
+   "code": "100.B4",
+   "name": "Thư viện",
+   "capacity": null
+  },
+  {
+   "building": "B5",
+   "floor": 1,
+   "code": "101.B5",
+   "name": "P.CTSV",
+   "capacity": null
+  },
+  {
+   "building": "B5",
+   "floor": 1,
+   "code": "102.B5",
+   "name": "P.Quản trị",
+   "capacity": null
+  },
+  {
+   "building": "B5",
+   "floor": 1,
+   "code": "104.B5",
+   "name": "Kho P.TCHC",
+   "capacity": null
+  },
+  {
+   "building": "B5",
+   "floor": 1,
+   "code": "106.B5",
+   "name": "P.TCHC",
+   "capacity": null
+  },
+  {
+   "building": "B5",
+   "floor": 1,
+   "code": "112.B5",
+   "name": "P.KT",
+   "capacity": null
+  },
+  {
+   "building": "B6",
+   "floor": 1,
+   "code": "100.B6",
+   "name": null,
+   "capacity": null
+  },
+  {
+   "building": "B6",
+   "floor": 1,
+   "code": "101.B6",
+   "name": null,
+   "capacity": null
+  },
+  {
+   "building": "B6",
+   "floor": 1,
+   "code": "102.B6",
+   "name": null,
+   "capacity": null
+  },
+  {
+   "building": "B6",
+   "floor": 1,
+   "code": "103.B6",
+   "name": null,
+   "capacity": null
+  },
+  {
+   "building": "B6",
+   "floor": 1,
+   "code": "105.B6",
+   "name": null,
+   "capacity": null
+  },
+  {
+   "building": "B6",
+   "floor": 1,
+   "code": "107.B6",
+   "name": null,
+   "capacity": null
+  },
+  {
+   "building": "B6",
+   "floor": 1,
+   "code": "109.B6",
+   "name": "VP BBI",
+   "capacity": null
+  },
+  {
+   "building": "B6",
+   "floor": 2,
+   "code": "207.B6",
+   "name": "Phòng Hợp tác Quốc tế",
+   "capacity": null
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "101.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "102.B8",
+   "name": "Kỹ thuật điện",
+   "capacity": null
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "103.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "104.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "105.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "106.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "107.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "108.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "109.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "110.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "111.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "112.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "113.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "114.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "115.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "116.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "117.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "118.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "119.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "120.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 1,
+   "code": "121.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "201.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "202.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "203.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "204.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "205.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "206.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "207.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "208.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "209.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "210.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "211.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "212.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "213.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "214.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "215.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "216.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "217.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "218.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "219.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "220.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 2,
+   "code": "221.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "301.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "302.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "303.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "304.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "305.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "306.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "307.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "308.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "309.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "310.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "311.B8",
+   "name": "Phòng học",
+   "capacity": 60
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "312.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "313.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "314.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "315.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "316.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "317.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "318.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "319.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 3,
+   "code": "320.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "401.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "402.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "403.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "404.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "405.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "406.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "407.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "408.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "409.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "410.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "411.B8",
+   "name": "Phòng học",
+   "capacity": 60
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "412.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "413.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "414.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "415.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "416.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "417.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "418.B8",
+   "name": "Phòng học",
+   "capacity": 25
+  },
+  {
+   "building": "B8",
+   "floor": 4,
+   "code": "419.B8",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B11",
+   "floor": 1,
+   "code": "101.B11",
+   "name": "Trung tâm SSC",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 1,
+   "code": "102A.B11",
+   "name": "Phòng thí nghiệm 3.0",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 1,
+   "code": "102B.B11",
+   "name": "Phòng khí nén, thủy lực",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 1,
+   "code": "103.B11",
+   "name": "P.TNCN4.0",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 1,
+   "code": "104.B11",
+   "name": "P.TNCN4.0",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 1,
+   "code": "SHOP.B11",
+   "name": "Shop Fablab",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 2,
+   "code": "201.B11",
+   "name": "PTH PLC",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 2,
+   "code": "202.B11",
+   "name": "STEM Lab",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 2,
+   "code": "203.B11",
+   "name": "PTH Lắp đặt điện",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 2,
+   "code": "204.B11",
+   "name": "Fablab",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 2,
+   "code": "205.B11",
+   "name": "PTH Kỹ thuật điện tử",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 2,
+   "code": "207.B11",
+   "name": "PTH VXL",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 2,
+   "code": "209.B11",
+   "name": "Phòng trống",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 2,
+   "code": "211.B11",
+   "name": "Phòng trống",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 2,
+   "code": "213.B11",
+   "name": "PTH Điện tử công suất",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 2,
+   "code": "215.B11",
+   "name": "PTH Máy điện",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 2,
+   "code": "217.B11",
+   "name": "PTH Chiếu sáng",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 3,
+   "code": "302.B11",
+   "name": "P.ERIS",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 3,
+   "code": "304.B11",
+   "name": "P.PERE",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 3,
+   "code": "306.B11",
+   "name": "VP K.ĐD",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 3,
+   "code": "307.B11",
+   "name": "Kill Lab",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 3,
+   "code": "308.B11",
+   "name": "PTN VLĐC",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 3,
+   "code": "310.B11",
+   "name": "VP K.ĐD",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 3,
+   "code": "312.B11",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B11",
+   "floor": 3,
+   "code": "314.B11",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B11",
+   "floor": 3,
+   "code": "316.B11",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B11",
+   "floor": 3,
+   "code": "318.B11",
+   "name": "Phòng học",
+   "capacity": 40
+  },
+  {
+   "building": "B11",
+   "floor": 3,
+   "code": "320.B11",
+   "name": "VP K.KT",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 4,
+   "code": "402.B11",
+   "name": "Lab CNTT",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 4,
+   "code": "404.B11",
+   "name": "Lab CNTT",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 4,
+   "code": "406.B11",
+   "name": "Lab CNTT",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 4,
+   "code": "408.B11",
+   "name": "Lab CNTT",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 4,
+   "code": "410.B11",
+   "name": "PNC AI",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 4,
+   "code": "412.B11",
+   "name": "P.Họp",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 4,
+   "code": "414.B11",
+   "name": "VP.KCNTT",
+   "capacity": null
+  },
+  {
+   "building": "B11",
+   "floor": 4,
+   "code": "416.B11",
+   "name": "VP.KKT",
+   "capacity": null
+  }
+ ]
+}

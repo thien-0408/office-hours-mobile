@@ -1,3 +1,16 @@
+# OfficeHours mobile
+
+App React Native cho môn CSW434, dùng chung backend với web.
+
+| Tài liệu | Nội dung |
+|---|---|
+| [MOBILE-PLAN.md](MOBILE-PLAN.md) | Phase, task và kết quả tìm hiểu campus |
+| [CHECKLIST.md](CHECKLIST.md) | Tiến độ |
+| [CONVENTIONS.md](CONVENTIONS.md) | Quy ước code |
+| [PROJECT-HUB.md](https://github.com/thien-0408/office-hours/blob/main/docs/PROJECT-HUB.md) | Bản đồ cả 3 repo |
+
+---
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started

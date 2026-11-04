@@ -84,3 +84,6 @@ web-build/
 .env
 .env.*
 !.env.example
+
+# EIU floor plans from the virtual tour: local reference only, EIU owns them
+docs/campus/reference/
