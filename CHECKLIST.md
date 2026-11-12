@@ -2,6 +2,8 @@
 
 Chi tiết từng task ở [MOBILE-PLAN.md](MOBILE-PLAN.md), quy ước ở [CONVENTIONS.md](CONVENTIONS.md), bản đồ cả 3 repo ở [PROJECT-HUB.md](https://github.com/thien-0408/office-hours/blob/main/docs/PROJECT-HUB.md).
 
+Checklist theo từng màn hình và các bước cài Firebase ở [SCREENS-FIREBASE.md](SCREENS-FIREBASE.md).
+
 Tick task cùng commit với code. Mã `BE-xx` là task trong [checklist backend](https://github.com/chaunhattang/office-hours/blob/feature/realtime-hybrid/OfficeHours/CHECKLIST.md).
 
 ## M0 — Nền
