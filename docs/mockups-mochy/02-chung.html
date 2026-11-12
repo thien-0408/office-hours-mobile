@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chung — OfficeHours × Mochy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="mochy.css">
+  <link rel="stylesheet" href="app.css">
+  <script src="mochy.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="mark"><i data-logo></i></span><span><strong>OfficeHours × Mochy</strong><small>Mock dark-first · CSW434</small></span></a>
+  <nav class="mnav"></nav>
+</header>
+
+<main class="wrap">
+  <section class="section" style="margin-top:0">
+    <h2>Chung</h2>
+    <p class="lead">Màn 5–9. Ảnh giảng viên là nội dung chính; icon chỉ còn ở thanh nav nổi và vài nút hành động. Ảnh là ảnh giả lập (<code>img/README.md</code>).</p>
+
+    <div class="grid">
+
+      <!-- 5a. Dashboard SV -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow tl indigo"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app">
+            <div class="apphead">
+              <i data-logo style="width:30px;height:30px"></i>
+              <img class="avatar" src="img/sv-bao.jpg" alt="" style="width:34px;height:34px">
+            </div>
+            <p class="t-sm mt8 rv">Chào Bảo, tuần này bạn có</p>
+            <div class="stats mt8 rv">
+              <div class="stat"><b>3</b><span>lịch hẹn</span></div>
+              <div class="stat"><b>1</b><span>đang chờ duyệt</span></div>
+              <div class="stat"><b>2</b><span>trong hàng đợi</span></div>
+            </div>
+
+            <div class="hsec rv">Buổi hẹn tiếp theo</div>
+            <div class="feature p3d rv" data-tilt="3">
+              <img src="img/gv-khoa.jpg" alt="">
+              <span class="tr pill glass done"><i data-g="ok"></i>Đã xác nhận</span>
+              <div class="ov">
+                <div class="eyebrow">Thứ Tư 18/11 · 14:00 · B11.204</div>
+                <div class="t-2 mt4" style="font-weight:700">TS. Nguyễn Minh Khoa</div>
+                <div class="t-sm" style="color:rgba(255,255,255,.7)">Góp ý đề cương đồ án</div>
+              </div>
+            </div>
+
+            <div class="hsec rv">Gợi ý cho bạn <i data-i="right"></i></div>
+            <div class="shelf rv">
+              <div class="it p3d"><img src="img/gv-ha.jpg" alt=""><b>TS. Trần Thu Hà</b><span>Thứ Năm · 09:30</span></div>
+              <div class="it p3d"><img src="img/gv-hoang.jpg" alt=""><b>ThS. Lê Hoàng</b><span>Thứ Năm · 13:00</span></div>
+              <div class="it p3d"><img src="img/gv-thu.jpg" alt=""><b>ThS. Phạm Anh Thư</b><span>Thứ Sáu · 10:00</span></div>
+            </div>
+          </div>
+          <nav class="navpill glass" data-role="sv" data-on="home"></nav>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>5a. Dashboard sinh viên</b><span class="tag">SV</span>Số đếm và buổi hẹn tiếp theo nghe Firestore <code>users/{uid}/bookings</code>. Gợi ý từ <code>GET /users/me/suggested-slots</code> (có <code>photoUrl</code>).
+          <span class="mochy">Ba số lớn thay cho các ô thống kê có icon. Buổi hẹn tiếp theo là thẻ ảnh lớn như hero. Gợi ý là dãy ảnh chân dung kiểu "Recently Played".</span></figcaption>
+      </figure>
+
+      <!-- 5b. Dashboard GV -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow tr teal"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app">
+            <div class="apphead">
+              <i data-logo style="width:30px;height:30px"></i>
+              <img class="avatar" src="img/gv-khoa.jpg" alt="" style="width:34px;height:34px">
+            </div>
+            <h1 class="t-1 mt8 rv">Chiều nay<br>của bạn</h1>
+            <div class="seg n3 flat mt16 rv"><span class="on">Có mặt</span><span>Đang bận</span><span>Vắng</span></div>
+            <div class="stats mt20 rv">
+              <div class="stat"><b>4</b><span>chờ duyệt</span></div>
+              <div class="stat"><b>6</b><span>buổi hôm nay</span></div>
+              <div class="stat"><b>2</b><span>đã xong</span></div>
+            </div>
+
+            <div class="hsec rv">Hôm nay <i data-i="right"></i></div>
+            <div class="rows rv">
+              <div class="rw"><img class="round" src="img/sv-minh.jpg" alt=""><div class="tx"><b>Trần Quang Minh</b><span>13:00 · Hỏi về điểm giữa kỳ</span></div><span class="pill soft"><i data-g="done"></i>Xong</span></div>
+              <div class="rw"><img class="round" src="img/sv-mai.jpg" alt=""><div class="tx"><b>Phạm Ngọc Mai</b><span>14:00 · Đề cương đồ án</span></div><span class="pill done"><i data-g="ok"></i>14:00</span></div>
+              <div class="rw"><img class="round" src="img/sv-linh.jpg" alt=""><div class="tx"><b>Lê Khánh Linh</b><span>14:20 · Thực tập doanh nghiệp</span></div><span class="pill done"><i data-g="ok"></i>14:20</span></div>
+            </div>
+          </div>
+          <div class="nowcard glass">
+            <img src="img/sv-mai.jpg" alt="">
+            <div class="grow"><b>Phạm Ngọc Mai</b><span>Bắt đầu sau 12 phút · B11.204</span></div>
+            <span class="act"><i data-i="message" class="s"></i></span>
+          </div>
+          <nav class="navpill glass" data-role="gv" data-on="home"></nav>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>5b. Dashboard giảng viên</b><span class="tag">GV</span>Trạng thái ghi lên Realtime DB <code>/presence/{uid}</code>. Thẻ nổi lấy buổi hẹn gần nhất có <code>startAt</code> trong vòng 60 phút; chạm vào mở chat (màn 19).
+          <span class="mochy">Thẻ nổi đóng vai mini player, nằm trên thanh nav. Danh sách hôm nay chỉ có ảnh, hai dòng chữ và glyph trạng thái.</span></figcaption>
+      </figure>
+
+      <!-- 6. Hồ sơ -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="cover"><img src="img/gv-khoa.jpg" alt=""></div>
+          <div class="sb"></div>
+          <div class="body app" style="position:relative;z-index:2">
+            <div class="apphead"><span class="iconbtn glass"><i data-i="left"></i></span><span class="btn glass sm">Đổi ảnh</span></div>
+            <div style="height:236px"></div>
+            <div class="eyebrow rv" style="color:var(--fg-2)">Tiến sĩ · Giảng viên</div>
+            <div class="t-name mt8 rv">Nguyễn<br>Minh Khoa</div>
+            <p class="t-sm mt10 rv">Khoa Công nghệ thông tin</p>
+
+            <div class="group mt20 rv">
+              <div class="ln">Email<span class="val">khoa.nguyen@eiu.edu.vn</span></div>
+              <div class="ln">Phòng làm việc<span class="val">B11.204 <i data-i="right" class="xs"></i></span></div>
+              <div class="ln">Giới thiệu<span class="val">Hệ phân tán, đồ án <i data-i="right" class="xs"></i></span></div>
+            </div>
+          </div>
+          <nav class="navpill glass" data-role="gv" data-on="me"></nav>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>6. Hồ sơ</b><span class="tag">Tất cả</span><code>GET/PATCH /users/me</code>. "Phòng làm việc" chỉ có ở giảng viên, chọn từ <code>GET /campus/rooms</code>. "Đổi ảnh" cần endpoint upload chưa có ở backend.
+          <span class="mochy">Header kiểu trang nghệ sĩ: ảnh tràn viền mờ dần xuống nền đen, tên chữ rất lớn. Không có icon cho email hay phòng; nhãn chữ là đủ.</span></figcaption>
+      </figure>
+
+      <!-- 7. Cài đặt -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app">
+            <div class="apphead"><span class="title rv">Cài đặt</span></div>
+            <div class="sub-label rv">Thông báo</div>
+            <div class="group rv">
+              <div class="ln"><span>Lịch hẹn đổi trạng thái<small>Xác nhận, từ chối, đổi giờ</small></span><span class="sw on"></span></div>
+              <div class="ln"><span>Nhắc trước buổi hẹn<small>60 phút và 10 phút trước</small></span><span class="sw on"></span></div>
+              <div class="ln">Có slot từ hàng đợi<span class="sw on"></span></div>
+              <div class="ln">Tin nhắn mới<span class="sw"></span></div>
+            </div>
+            <div class="sub-label rv">Hiển thị</div>
+            <div class="group rv">
+              <div class="ln">Ngôn ngữ<span class="val">Tiếng Việt <i data-i="right" class="xs"></i></span></div>
+              <div class="ln">Hiệu ứng kính<span class="val">Tự động <i data-i="right" class="xs"></i></span></div>
+            </div>
+            <div class="sub-label rv">Tài khoản</div>
+            <div class="group rv">
+              <div class="ln">Đổi mật khẩu<span class="val"><i data-i="right" class="xs"></i></span></div>
+              <div class="ln" style="color:var(--err)">Đăng xuất</div>
+            </div>
+          </div>
+          <nav class="navpill glass" data-role="sv" data-on="me"></nav>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>7. Cài đặt</b><span class="tag">Tất cả</span>Bốn công tắc là <code>notificationPrefs</code> trong <code>PATCH /users/me</code>. Ngôn ngữ đổi header <code>Accept-Language</code>. "Hiệu ứng kính" (Tự động, Cao, Thấp, Tắt) là mức chất lượng của component <code>&lt;Glass&gt;</code>.
+          <span class="mochy">Không có icon đầu dòng: nhóm kiểu iOS mới, chữ cộng công tắc trắng đen.</span></figcaption>
+      </figure>
+
+      <!-- 8. Thông báo -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app">
+            <div class="apphead"><span class="title rv">Thông báo</span><span class="t-sm link">Đọc hết</span></div>
+            <div class="sub-label rv">Hôm nay</div>
+            <div class="rows rv">
+              <div class="rw"><img class="round" src="img/gv-khoa.jpg" alt=""><div class="tx"><p><b>TS. Nguyễn Minh Khoa</b> đã xác nhận buổi hẹn Thứ Tư 18/11 lúc 14:00.</p></div><span class="tm">5 ph</span></div>
+              <div class="rw"><img class="round" src="img/gv-ha.jpg" alt=""><div class="tx"><p><b>TS. Trần Thu Hà</b> có slot trống Thứ Năm 09:30. Slot được giữ cho bạn tới 10:15.</p><a class="btn light sm mt8" style="display:inline-flex;height:34px;font-size:13px">Xem slot</a></div><span class="tm">40 ph</span></div>
+            </div>
+            <div class="sub-label rv">Tuần này</div>
+            <div class="rows rv">
+              <div class="rw"><img class="round" src="img/gv-hoang.jpg" alt=""><div class="tx"><p class="read"><b>ThS. Lê Hoàng</b> đã từ chối yêu cầu Thứ Hai: trùng lịch họp khoa.</p></div><span class="tm">T2</span></div>
+              <div class="rw"><img class="round" src="img/gv-thu.jpg" alt=""><div class="tx"><p class="read"><b>ThS. Phạm Anh Thư</b> đã gửi tóm tắt buổi hẹn.</p></div><span class="tm">CN</span></div>
+            </div>
+          </div>
+          <nav class="navpill glass" data-role="sv" data-on="home"></nav>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>8. Thông báo</b><span class="tag">Tất cả</span>Firestore <code>users/{uid}/notifications</code> hoặc <code>GET /notifications</code>. Chạm vào thì mở booking hoặc waitlist tương ứng.
+          <span class="mochy">Ảnh người gây ra thông báo thay cho icon màu theo loại. Loại thông báo nằm trong câu chữ. Chưa đọc: chữ trắng; đã đọc: chữ xám.</span></figcaption>
+      </figure>
+
+      <!-- 9. Trợ giúp -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow tl brand" style="opacity:.22"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app nonav">
+            <div class="apphead"><span class="iconbtn glass"><i data-i="left"></i></span></div>
+            <h1 class="t-1 mt8 rv">Trợ giúp</h1>
+            <div class="group mt20 rv">
+              <div class="ln">Đặt lịch với giảng viên thế nào?<span class="val"><i data-i="down" class="xs"></i></span></div>
+              <div class="ln" style="flex-direction:column;align-items:flex-start;gap:6px">Vì sao không hủy được lịch hẹn?
+                <small style="font-size:13px;line-height:1.5">Trong vòng 24 giờ trước buổi hẹn, lịch không hủy hay đổi được trên app. Hãy nhắn tin cho giảng viên trong phòng chat của buổi hẹn.</small></div>
+              <div class="ln">Hàng đợi hoạt động ra sao?<span class="val"><i data-i="down" class="xs"></i></span></div>
+              <div class="ln">App dùng vị trí của tôi khi nào?<span class="val"><i data-i="down" class="xs"></i></span></div>
+            </div>
+            <div class="sub-label rv">Giới thiệu</div>
+            <div class="group rv">
+              <div class="ln">Phiên bản<span class="val">0.1.0 (beta)</span></div>
+              <div class="ln">Dữ liệu bản đồ<span class="val">© OpenStreetMap</span></div>
+              <div class="ln">Quyền riêng tư<span class="val"><i data-i="right" class="xs"></i></span></div>
+            </div>
+            <div class="spacer"></div>
+            <div class="row g8 rv" style="justify-content:center;color:var(--fg-3)"><i data-logo style="width:20px;height:20px;color:var(--fg-3)"></i><span class="t-xs">officehours · EIU · CSW434</span></div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>9. Trợ giúp và giới thiệu</b><span class="tag">Tất cả</span>Màn tĩnh. Phải ghi nguồn OpenStreetMap (ODbL) và giải thích khi nào app dùng vị trí.
+          <span class="mochy">Câu hỏi mở rộng tại chỗ, chỉ dùng chevron. Logo "oh" nhỏ ở chân trang thay cho ảnh minh họa.</span></figcaption>
+      </figure>
+
+    </div>
+  </section>
+</main>
+</body>
+</html>

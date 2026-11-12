@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lịch, chat — OfficeHours × Mochy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="mochy.css">
+  <link rel="stylesheet" href="app.css">
+  <script src="mochy.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="mark"><i data-logo></i></span><span><strong>OfficeHours × Mochy</strong><small>Mock dark-first · CSW434</small></span></a>
+  <nav class="mnav"></nav>
+</header>
+
+<main class="wrap">
+  <section class="section" style="margin-top:0">
+    <h2>Lịch, chat</h2>
+    <p class="lead">Màn 17–19. Bản đồ và buổi hẹn trực tiếp (màn 20–22) để lại sau khi trả lời các câu hỏi về phần map.</p>
+
+    <div class="grid">
+
+      <!-- 17. Lịch bận -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app">
+            <div class="apphead"><span class="title rv">Lịch của tôi</span><span class="iconbtn glass"><i data-i="plus"></i></span></div>
+            <div class="days mt8 rv">
+              <div class="d"><small>T2</small><b>16</b></div>
+              <div class="d"><small>T3</small><b>17</b></div>
+              <div class="d on"><small>T4</small><b>18</b></div>
+              <div class="d"><small>T5</small><b>19</b></div>
+              <div class="d"><small>T6</small><b>20</b></div>
+            </div>
+            <div class="agenda mt20 rv">
+              <div class="hr"><small>07:00</small><div></div></div>
+              <div class="hr"><small>08:00</small><div></div></div>
+              <div class="hr"><small>09:00</small><div></div></div>
+              <div class="hr"><small>10:00</small><div></div></div>
+              <div class="hr"><small>11:00</small><div></div></div>
+              <div class="hr"><small>12:00</small><div></div></div>
+              <div class="hr"><small>13:00</small><div></div></div>
+              <div class="hr"><small>14:00</small><div></div></div>
+              <div class="hr"><small>15:00</small><div></div></div>
+              <div class="ev" style="top:27px;height:104px"><b>Lập trình Web</b><span>07:30 – 09:30 · A1.203</span></div>
+              <div class="ev" style="top:162px;height:104px"><b>Cấu trúc dữ liệu</b><span>10:00 – 12:00 · B11.105</span></div>
+              <div class="now" style="top:400px"></div>
+              <div class="ev bk" style="top:378px;height:22px;padding:3px 12px"><b style="font-size:12px">14:00 · Hẹn TS. Nguyễn Minh Khoa</b></div>
+            </div>
+          </div>
+          <nav class="navpill glass" data-role="sv" data-on="book"></nav>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>17. Lịch bận của tôi</b><span class="tag">SV, GV</span><code>GET /users/me/schedule-entries</code>; thêm bằng <code>POST</code>, xóa bằng <code>DELETE /schedule-entries/{id}</code>. Nút + mở menu: nhập tay hoặc quét thời khóa biểu.
+          <span class="mochy">Giờ học là khối xám, lịch hẹn là khối trắng: phân biệt bằng độ sáng, không bằng màu.</span></figcaption>
+      </figure>
+
+      <!-- 18a. Quét: chụp -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="cam"></div>
+          <div class="paper">
+            <i class="h"></i><i class="h">Thứ 2</i><i class="h">Thứ 3</i><i class="h">Thứ 4</i><i class="h">Thứ 5</i><i class="h">Thứ 6</i>
+            <i class="h">7:30</i><i class="c hit">Lập trình Web A1.203</i><i></i><i class="c hit">Lập trình Web A1.203</i><i></i><i class="c hit">Mạng máy tính B8.201</i>
+            <i class="h">9:30</i><i></i><i class="c hit">CTDL B11.105</i><i></i><i class="c hit">CTDL B11.105</i><i></i>
+            <i class="h">13:00</i><i class="c hit">Tiếng Anh 4 B4.002</i><i></i><i></i><i class="c">Kỹ năng mềm</i><i></i>
+            <i class="h">15:00</i><i></i><i class="c hit">Thể chất Sân B</i><i></i><i></i><i></i>
+          </div>
+          <div class="corners"></div>
+          <div class="sb" style="position:relative"></div>
+          <div class="body nonav" style="position:relative;z-index:3">
+            <div class="topnav"><span class="iconbtn glass"><i data-i="x"></i></span><span class="pill glass done"><i data-g="ok"></i>Đã đọc 8 ô</span></div>
+            <div class="spacer"></div>
+            <p class="t-sm center">Đặt cả thời khóa biểu vào khung. Giữ máy thẳng.</p>
+            <div class="row mt20" style="justify-content:space-between;align-items:center;padding:0 18px">
+              <span class="iconbtn glass"><i data-i="image"></i></span>
+              <span class="shutter"></span>
+              <span class="iconbtn glass"><i data-i="flash"></i></span>
+            </div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>18a. Quét thời khóa biểu: chụp</b><span class="tag">SV, GV</span><code>expo-camera</code> chụp, ML Kit (<code>@react-native-ml-kit/text-recognition</code>) đọc chữ ngay trên máy. Ô có viền là ô đã đọc được.
+          <span class="mochy">Không có khung xanh: viền góc trắng và số ô đã đọc trong viên thuốc kính.</span></figcaption>
+      </figure>
+
+      <!-- 18b. Quét: soát -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app nonav">
+            <div class="apphead"><span class="iconbtn glass"><i data-i="left"></i></span><span class="t-sm">8 dòng · 1 cần sửa</span></div>
+            <h1 class="t-1 mt8 rv">Kiểm tra lại</h1>
+            <div class="seg flat mt16 rv"><span class="on">Thay lịch cũ</span><span>Gộp thêm</span></div>
+            <div class="rows mt8 rv">
+              <div class="rw"><div class="tx"><b>Lập trình Web</b><span>Thứ 2 · 07:30 – 09:30 · A1.203</span></div><span class="ch"><i data-i="right" class="s"></i></span></div>
+              <div class="rw"><div class="tx"><b>Cấu trúc dữ liệu</b><span>Thứ 3 · 09:30 – 11:30 · B11.105</span></div><span class="ch"><i data-i="right" class="s"></i></span></div>
+              <div class="rw"><div class="tx"><b style="color:var(--err)">Thể chất</b><span>Thứ 3 · 15:00 – <span style="display:inline;color:var(--err)">14:00</span> · Sân B</span><span style="color:var(--err)">Giờ kết thúc phải sau giờ bắt đầu.</span></div><span class="ch"><i data-i="right" class="s"></i></span></div>
+              <div class="rw"><div class="tx"><b>Mạng máy tính</b><span>Thứ 6 · 07:30 – 09:30 · B8.201</span></div><span class="ch"><i data-i="right" class="s"></i></span></div>
+              <div class="rw"><div class="tx"><b>Tiếng Anh 4</b><span>Thứ 2 · 13:00 – 15:00 · B4.002</span></div><span class="ch"><i data-i="right" class="s"></i></span></div>
+            </div>
+            <div class="spacer"></div>
+            <div class="btn primary disabled rv">Lưu 8 dòng</div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>18b. Quét thời khóa biểu: soát lại</b><span class="tag">SV, GV</span><code>POST /users/me/schedule-entries/batch</code> với <code>REPLACE</code> (thay lịch cũ) hoặc <code>MERGE</code> (gộp thêm). Nút Lưu chỉ bật khi hết dòng lỗi. Server trả <code>422</code> thì đánh dấu dòng theo <code>rowIndex</code>.
+          <span class="mochy">Dòng lỗi chỉ đổi màu chữ, không có icon cảnh báo hay nền đỏ.</span></figcaption>
+      </figure>
+
+      <!-- 19. Chat -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow tl teal" style="opacity:.25"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app nonav">
+            <div class="apphead">
+              <span class="row g10"><span class="iconbtn glass"><i data-i="left"></i></span>
+                <img class="avatar" src="img/sv-mai.jpg" alt="" style="width:38px;height:38px">
+                <span><span class="t-3" style="display:block;font-weight:700">Phạm Ngọc Mai</span><span class="t-xs">14:00 · Đề cương đồ án</span></span></span>
+            </div>
+            <div class="actbar glass mt12 rv">
+              <span class="t-sm grow" style="color:var(--fg)">Đã tới giờ hẹn</span>
+              <span class="btn ghost glass sm">Vắng mặt</span>
+              <span class="btn light sm">Đã gặp</span>
+            </div>
+            <div class="chat mt16">
+              <div class="sys">Thứ Tư 18/11</div>
+              <div class="bub them">Em chào thầy, em tới cửa phòng B11.204 rồi ạ.</div>
+              <div class="meta">13:58</div>
+              <div class="bub me">Chờ thầy 2 phút, thầy đang xong buổi trước.</div>
+              <div class="meta r">13:59 · Đã xem</div>
+              <div class="bub them">Dạ vâng. Em gửi trước bản đề cương mới nhất trong file đính kèm ạ.</div>
+              <div class="meta">14:00</div>
+              <div class="typing"><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <div class="composer"><span class="in glass">Nhắn cho Mai…</span><span class="send"><i data-i="send" class="s"></i></span></div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>19. Phòng chat</b><span class="tag">SV, GV</span>STOMP <code>/api/v1/ws</code>: gửi <code>/app/bookings/{id}/messages</code>, nghe <code>/topic/bookings/{id}/messages</code> và <code>/typing</code>. Thanh "Đã tới giờ hẹn" chỉ giảng viên thấy, từ giờ bắt đầu: <code>POST /bookings/{id}/complete</code> hoặc <code>/no-show</code>.
+          <span class="mochy">Tin của mình là bong bóng xám sáng chữ đen (cùng màu nút chính), tin người kia là #161616. Thanh hành động là kính nổi.</span></figcaption>
+      </figure>
+
+    </div>
+  </section>
+</main>
+</body>
+</html>
