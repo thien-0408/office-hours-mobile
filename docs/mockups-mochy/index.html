@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OfficeHours × Mochy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="mochy.css">
+  <script src="mochy.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="mark"><i data-logo></i></span><span><strong>OfficeHours × Mochy</strong><small>Mock dark-first · CSW434</small></span></a>
+  <nav class="mnav"></nav>
+</header>
+
+<main class="wrap">
+  <div class="hero-page">
+    <h1>OfficeHours, dựng lại theo phong cách Mochy Music</h1>
+    <p>Bản này chạy song song với <a class="link u" href="../mockups/index.html">bộ mock theo design web</a>. Thông số lấy từ <code>docs/STYLE-MOCHY.md</code>: nền đen, kính tối cho phần nổi, chữ đậm và chặt, nút viên thuốc, chuyển động spring. Thêm một quy tắc riêng: <b>icon chỉ một màu</b>. Đã có 31 khung cho các màn trừ phần bản đồ. Quy tắc đầy đủ ở <code>docs/STYLE-MOCHY.md</code> §8.</p>
+  </div>
+
+  <div class="cards">
+    <a class="idx-card" href="01-auth.html"><span class="n">Màn 0–4 · 8 khung</span><h3>Auth</h3><p>Chào mừng, đăng nhập, bị giới hạn, đăng ký, quên mật khẩu, đã gửi, đặt lại, thành công.</p><span class="go">Xem <i data-i="arrow" class="xs"></i></span></a>
+    <a class="idx-card" href="02-chung.html"><span class="n">Màn 5–9 · 6 khung</span><h3>Chung</h3><p>Dashboard sinh viên và giảng viên, hồ sơ kiểu trang nghệ sĩ, cài đặt, thông báo, trợ giúp. Thanh nav viên thuốc nổi.</p><span class="go">Xem <i data-i="arrow" class="xs"></i></span></a>
+    <a class="idx-card" href="03-booking.html"><span class="n">Màn 10–16 · 8 khung</span><h3>Booking</h3><p>Lưới ảnh giảng viên, trang giảng viên, sheet đặt lịch, slot vừa hết, lịch hẹn, nút Google Meet, đổi giờ, hàng đợi.</p><span class="go">Xem <i data-i="arrow" class="xs"></i></span></a>
+    <a class="idx-card" href="04-lich-chat.html"><span class="n">Màn 17–19 · 4 khung</span><h3>Lịch, chat</h3><p>Lịch bận, quét thời khóa biểu (chụp và soát), phòng chat.</p><span class="go">Xem <i data-i="arrow" class="xs"></i></span></a>
+    <a class="idx-card" href="05-giang-vien-admin.html"><span class="n">Màn 23–26 · 5 khung</span><h3>Giảng viên, admin</h3><p>Lịch rảnh, thêm khung giờ có link Zoom, duyệt yêu cầu, biên bản và tóm tắt tự động, quản lý người dùng.</p><span class="go">Xem <i data-i="arrow" class="xs"></i></span></a>
+    <div class="idx-card soon"><span class="n">Màn 20–22, 27</span><h3>Bản đồ</h3><p>Bản đồ campus, xin quyền vị trí, buổi hẹn trực tiếp, hoạt động campus. Chờ trả lời các câu hỏi về phần map.</p></div>
+  </div>
+
+  <div class="prose">
+    <h2>Quy tắc icon: chỉ một màu</h2>
+    <p>Bộ mock theo web đặt icon trong ô nền màu (coral, rose, mint, info…) để phân loại. Trên nền đen, các ô màu này làm giao diện rối và tranh chỗ với nội dung. Bản này bỏ hẳn:</p>
+    <ul>
+      <li><b>Icon dùng <code>currentColor</code></b> ở 3 mức: trắng 100% (đang chọn, hành động chính), 62% (bình thường), 38% (phụ, bị tắt). Không tô màu icon.</li>
+      <li><b>Không có ô nền màu sau icon.</b> Khi icon cần nền (nút back, toast, avatar) thì dùng vòng tròn trắng 10% hoặc <code>#1F1F1F</code> có viền mảnh.</li>
+      <li><b>Trạng thái dùng glyph tròn đặc</b> có dấu khoét rỗng bên trong, kiểu SF Symbols <code>.fill</code>, thay cho chấm 6px (chấm tròn là kiểu AI hay dùng). Mỗi nhóm trạng thái một hình (xem bảng bên dưới). Glyph trắng là đã chốt; glyph xám 62% là đang chờ hoặc đã kết thúc. Bảng màu trạng thái của web chỉ dùng nếu người test thấy khó phân biệt, và chỉ tô glyph.</li>
+      <li><b>Màu chỉ còn ở 2 chỗ:</b> quầng sáng nền (mỗi màn một tông) và chữ hoặc viền báo lỗi <code>#FF8A80</code>.</li>
+      <li><b>Logo dịch vụ bên ngoài</b> (Google Calendar…) nếu có thì cũng chuyển sang đơn sắc.</li>
+    </ul>
+    <div class="compare">
+      <div>
+        <h4>Bản theo web: chip màu</h4>
+        <div class="icon-row">
+          <span class="chip-old" style="background:#FFEDD5;color:#C2410C"><i data-i="calendar" class="s"></i></span>
+          <span class="chip-old" style="background:#FCE7F3;color:#BE185D"><i data-i="message" class="s"></i></span>
+          <span class="chip-old" style="background:#DCFCE7;color:#15803D"><i data-i="check" class="s"></i></span>
+          <span class="chip-old" style="background:#EDE9FE;color:#6D28D9"><i data-i="sparkles" class="s"></i></span>
+          <span class="chip-old" style="background:#FEF3C7;color:#B45309"><i data-i="hourglass" class="s"></i></span>
+        </div>
+      </div>
+      <div>
+        <h4>Bản Mochy: đơn sắc</h4>
+        <div class="icon-row">
+          <span class="chip-new"><i data-i="calendar" class="s"></i></span>
+          <span class="chip-new"><i data-i="message" class="s"></i></span>
+          <span class="chip-new"><i data-i="check" class="s"></i></span>
+          <span class="chip-new" style="color:var(--fg-2)"><i data-i="sparkles" class="s"></i></span>
+          <span class="chip-new" style="color:var(--fg-3)"><i data-i="hourglass" class="s"></i></span>
+          <span class="pill done"><i data-g="ok"></i>Đã xác nhận</span>
+          <span class="pill soft"><i data-g="wait"></i>Chờ duyệt</span>
+        </div>
+      </div>
+    </div>
+
+    <h3>Glyph trạng thái</h3>
+    <div class="tbl-glyph">
+      <div><i data-g="wait" class="l mid"></i><b>Chờ duyệt</b><code>PENDING</code></div>
+      <div><i data-g="ok" class="l"></i><b>Đã xác nhận</b><code>CONFIRMED · FULFILLED</code></div>
+      <div><i data-g="done" class="l"></i><b>Hoàn thành</b><code>COMPLETED</code></div>
+      <div><i data-g="queue" class="l mid"></i><b>Hàng đợi</b><code>WAITING</code></div>
+      <div><i data-g="offer" class="l"></i><b>Có slot mời</b><code>OFFERED</code></div>
+      <div><i data-g="no" class="l mid"></i><b>Bị từ chối</b><code>DECLINED</code></div>
+      <div><i data-g="off" class="l mid"></i><b>Đã hủy, hết hạn</b><code>CANCELLED · EXPIRED</code></div>
+      <div><i data-g="warn" class="l"></i><b>Vắng mặt, lỗi</b><code>NO_SHOW · toast lỗi</code></div>
+    </div>
+    <p class="mt12">Trong RN: mỗi glyph là một component <code>react-native-svg</code> dùng <code>&lt;Mask&gt;</code> để khoét dấu, hoặc ghép sẵn thành một path (khoét bằng <code>fillRule="evenodd"</code>), gọn hơn và không cần mask.</p>
+
+    <h2>Logo mới</h2>
+    <p>Logo cũ là hai vòng tròn lồng nhau với 3 gradient xanh, tím, xanh lá, lệch với ngôn ngữ đơn sắc của bản này. Logo mới là chữ <b>"oh"</b> viết thường bằng nét tròn: <b>chữ o là một vòng thời gian còn hở một khe ở hướng 12–2 giờ</b>, ý là "còn slot trống", chữ h đứng sát bên. Chỉ một màu, nét 12/120 nên vẫn đọc được ở 16 px.</p>
+    <div class="logo-row">
+      <img src="logo/oh-appicon.svg" width="120" alt="App icon tối">
+      <img src="logo/oh-appicon-light.svg" width="120" alt="App icon sáng">
+      <img src="logo/oh-appicon.svg" width="60" alt="">
+      <img src="logo/oh-appicon.svg" width="32" alt="">
+      <img src="logo/oh-appicon.svg" width="16" alt="">
+      <span class="row g10" style="margin-left:12px"><i data-logo style="width:44px;height:44px"></i><span style="font-size:34px;font-weight:700;letter-spacing:-.055em">officehours</span></span>
+    </div>
+    <ul class="mt12">
+      <li><code>logo/oh-mark.svg</code>: chỉ phần chữ "oh", theo <code>currentColor</code>; dùng trong app và favicon.</li>
+      <li><code>logo/oh-appicon.svg</code> và <code>oh-appicon-light.svg</code>: icon app. Bản tối có quầng brand mờ ở góc, giống nền các màn.</li>
+      <li><code>logo/oh-wordmark.svg</code>: logo kèm chữ <b>officehours</b> viết thường, Inter 700, khoảng cách chữ −0.05em. Chữ trong file vẫn là <code>&lt;text&gt;</code>; cần outline trong Figma trước khi dùng thật.</li>
+      <li>Icon Android dạng adaptive: lấy phần chữ "oh", thu nhỏ còn 66% vùng an toàn, đặt trên nền <code>#0D0D0D</code>. Icon iOS: xuất PNG 1024 từ <code>oh-appicon.svg</code> sau khi bỏ bo góc, vì iOS tự bo.</li>
+    </ul>
+
+    <h2>Token</h2>
+    <div class="swatches">
+      <div class="swatch"><div style="background:#000"></div><span><b>bg</b><br><code>#000000</code></span></div>
+      <div class="swatch"><div style="background:#0D0D0D"></div><span><b>s1 · thẻ</b><br><code>#0D0D0D</code></span></div>
+      <div class="swatch"><div style="background:#161616"></div><span><b>s2 · ô nhập</b><br><code>#161616</code></span></div>
+      <div class="swatch"><div style="background:#1F1F1F"></div><span><b>s3 · avatar</b><br><code>#1F1F1F</code></span></div>
+      <div class="swatch"><div style="background:#E0E0E0"></div><span><b>primary</b><br><code>#E0E0E0</code></span></div>
+      <div class="swatch"><div style="background:rgba(19,19,19,.78);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)"></div><span><b>glass</b><br><code>#131313 · 78%</code></span></div>
+      <div class="swatch"><div style="background:#3465E0"></div><span><b>quầng · brand</b><br><code>#3465E0 · 34%</code></span></div>
+      <div class="swatch"><div style="background:#FF8A80"></div><span><b>err (chữ)</b><br><code>#FF8A80</code></span></div>
+    </div>
+
+    <h2>Khác với bản theo web</h2>
+    <ul>
+      <li><b>Dark-first.</b> Auth không còn kiểu neo-brutalist sáng; mọi màn dùng chung một ngôn ngữ. Chế độ sáng làm sau, theo công thức kính sáng trong <code>STYLE-MOCHY.md</code> §6.</li>
+      <li><b>Font Inter</b> thay cho Plus Jakarta Sans, giống Mochy. Inter có đủ dấu tiếng Việt trên Google Fonts và <code>@expo-google-fonts/inter</code>. Chữ thường đậm 500–600, khoảng cách −0.01 đến −0.02em. Tiêu đề đậm 700, −0.045 đến −0.055em. Mochy dùng −0.05em cho mọi cỡ chữ, nhưng chữ thường tiếng Việt siết vậy thì dấu dễ dính nhau.</li>
+      <li><b>Màu brand <code>#3465E0</code></b> chỉ còn ở quầng sáng, không dùng cho nút hay link. Nút chính là viên thuốc xám sáng, link là chữ trắng đậm.</li>
+      <li><b>Bo góc squircle</b> dùng <code>corner-shape</code> của CSS ở trình duyệt hỗ trợ; trình duyệt cũ hiện bo tròn thường. Trong RN: <code>borderCurve: 'continuous'</code> trên iOS.</li>
+      <li><b>Chuyển động:</b> nội dung hiện lần lượt khi mở màn, thẻ và nút nghiêng khi nhấn (press3D, tối đa 4–6°), số đếm cuộn kiểu đồng hồ cơ. Tất cả tắt khi máy bật giảm chuyển động.</li>
+    </ul>
+
+    <h2>Ghi chú khi làm bằng React Native</h2>
+    <ul>
+      <li>Quầng sáng: <code>expo-linear-gradient</code> không vẽ được oval mờ. Dùng ảnh PNG quầng có sẵn (rẻ nhất), Skia <code>RadialGradient</code> + <code>Blur</code>, hoặc <code>react-native-svg</code> <code>RadialGradient</code>.</li>
+      <li>Lớp hạt: ảnh PNG 120×120 lặp lại, opacity 6%, blend overlay. Android không có blend mode cho View; giảm opacity xuống 3% và bỏ blend.</li>
+      <li>Toast và nút back kính: <code>expo-blur</code>. Trên Android có thể dùng mức <code>solid</code> (<code>#131313</code> 94%), vì ở màn auth phía sau gần như toàn màu đen nên khác biệt rất nhỏ.</li>
+      <li>Số đếm: Reanimated <code>withSpring</code> cho <code>translateY</code> từng cột chữ số, mép mờ bằng <code>@react-native-masked-view/masked-view</code>.</li>
+    </ul>
+  </div>
+</main>
+</body>
+</html>

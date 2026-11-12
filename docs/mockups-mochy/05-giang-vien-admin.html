@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Giảng viên, admin — OfficeHours × Mochy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="mochy.css">
+  <link rel="stylesheet" href="app.css">
+  <script src="mochy.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="mark"><i data-logo></i></span><span><strong>OfficeHours × Mochy</strong><small>Mock dark-first · CSW434</small></span></a>
+  <nav class="mnav"></nav>
+</header>
+
+<main class="wrap">
+  <section class="section" style="margin-top:0">
+    <h2>Giảng viên, admin</h2>
+    <p class="lead">Màn 23–26. Màn 27 (hoạt động campus) dùng bản đồ nên để lại cùng phần map.</p>
+
+    <div class="grid">
+
+      <!-- 23. Lịch rảnh -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app">
+            <div class="apphead"><span class="title rv">Lịch rảnh</span><span class="iconbtn glass"><i data-i="plus"></i></span></div>
+            <p class="t-sm rv">Mỗi khung giờ lặp lại hằng tuần và tự chia thành slot.</p>
+            <div class="sub-label rv">Thứ Hai</div>
+            <div class="group rv">
+              <div class="ln"><span>08:00 – 10:00<small>Slot 20 phút · B11.204</small></span><span class="val">6 slot <i data-i="right" class="xs"></i></span></div>
+            </div>
+            <div class="sub-label rv">Thứ Tư</div>
+            <div class="group rv">
+              <div class="ln"><span>14:00 – 16:00<small>Slot 20 phút · B11.204</small></span><span class="val">6 slot <i data-i="right" class="xs"></i></span></div>
+              <div class="ln"><span>19:00 – 20:00<small>Slot 15 phút · online</small></span><span class="val"><i data-b="zoom" class="bl" style="width:40px;height:40px;margin:-12px 0"></i> 4 slot <i data-i="right" class="xs"></i></span></div>
+            </div>
+            <div class="sub-label rv">Ngoại lệ</div>
+            <div class="group rv">
+              <div class="ln"><span>Nghỉ · Thứ Sáu 20/11<small>Họp khoa cả ngày</small></span><span class="val"><i data-i="right" class="xs"></i></span></div>
+              <div class="ln"><span>Thêm · Thứ Bảy 21/11, 09:00 – 10:00<small>Ôn thi cuối kỳ · B11.204</small></span><span class="val"><i data-i="right" class="xs"></i></span></div>
+            </div>
+          </div>
+          <nav class="navpill glass" data-role="gv" data-on="book"></nav>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>23. Lịch rảnh</b><span class="tag">GV</span>Rule: <code>GET/POST /lecturers/{me}/availability-rules</code>, <code>PATCH/DELETE /availability-rules/{id}</code>. Ngoại lệ: <code>/availability-exceptions</code> (<code>BLOCK</code> = Nghỉ, <code>ADD</code> = Thêm).
+          <span class="mochy">Nhóm theo thứ, chỉ có chữ. Logo Zoom chỉ xuất hiện ở khung online để biết link họp là của dịch vụ nào.</span></figcaption>
+      </figure>
+
+      <!-- 23b. Thêm khung giờ -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app"><div class="apphead"><span class="title">Lịch rảnh</span></div><div class="sub-label">Thứ Hai</div><div class="group"><div class="ln">08:00 – 10:00</div></div></div>
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div class="grab"></div>
+            <h2 class="t-2" style="font-weight:700">Khung giờ mới</h2>
+            <div class="chips mt16" style="margin-right:0;flex-wrap:wrap">
+              <span class="chip">T2</span><span class="chip">T3</span><span class="chip on">T4</span><span class="chip">T5</span><span class="chip on">T6</span><span class="chip">T7</span>
+            </div>
+            <div class="timepick mt16">
+              <div class="tp"><small>Từ</small><b>19:00</b></div>
+              <span class="to">–</span>
+              <div class="tp on"><small>Đến</small><b>20:00</b></div>
+            </div>
+            <div class="sub-label">Độ dài slot</div>
+            <div class="seg n3 flat"><span class="on">15 phút</span><span>20 phút</span><span>30 phút</span></div>
+            <div class="sub-label">Hình thức</div>
+            <div class="seg flat"><span>Trực tiếp</span><span class="on">Online</span></div>
+            <div class="field focus mt12"><div class="in"><span class="lb">Link họp</span><span class="v">zoom.us/j/8812 3450 921<span class="caret"></span></span></div><span class="trail"><i data-b="zoom" class="bl" style="width:46px;height:46px;margin:-14px 0"></i></span></div>
+            <div class="btn primary p3d mt20">Tạo 2 khung · 8 slot</div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>23b. Thêm khung giờ</b><span class="tag">GV</span><code>POST /lecturers/{me}/availability-rules</code>, mỗi thứ một rule. Chọn Online thì hiện ô link <code>meetingUrl</code>; app nhận ra tên miền và hiện logo ngay trong ô.
+          <span class="mochy">Giờ là số lớn trong ô. Nút chính đếm sẵn số khung và số slot sẽ tạo.</span></figcaption>
+      </figure>
+
+      <!-- 24. Duyệt yêu cầu -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app">
+            <div class="apphead"><span class="title rv">Duyệt</span></div>
+            <div class="seg flat mt8 rv"><span class="on">Chờ duyệt<em>4</em></span><span>Hàng đợi<em>3</em></span></div>
+            <div class="card mt16 rv" style="padding:14px">
+              <div class="row g12">
+                <img class="avatar md" src="img/sv-tuan.jpg" alt="" style="border-radius:14px">
+                <div class="grow"><div class="t-3" style="font-weight:700">Võ Minh Tuấn</div><div class="t-xs">Thứ Năm 19/11 · 09:00 · gửi 2 giờ trước</div></div>
+              </div>
+              <p class="t-sm mt12" style="color:var(--fg)">"Em muốn hỏi về cách chia module cho đồ án nhóm 4 người."</p>
+              <div class="row g8 mt14"><span class="btn ghost glass sm grow">Từ chối</span><span class="btn light sm grow">Duyệt</span></div>
+            </div>
+            <div class="card mt10 rv" style="padding:14px">
+              <div class="row g12">
+                <img class="avatar md" src="img/sv-anh.jpg" alt="" style="border-radius:14px">
+                <div class="grow"><div class="t-3" style="font-weight:700">Nguyễn Ngọc Anh</div><div class="t-xs">Thứ Năm 19/11 · 09:20 · gửi 3 giờ trước</div></div>
+              </div>
+              <p class="t-sm mt12" style="color:var(--fg)">"Xin góp ý chủ đề khóa luận."</p>
+              <div class="row g8 mt14"><span class="btn ghost glass sm grow">Từ chối</span><span class="btn light sm grow">Duyệt</span></div>
+            </div>
+          </div>
+          <nav class="navpill glass" data-role="gv" data-on="review"></nav>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>24. Duyệt yêu cầu</b><span class="tag">GV</span><code>GET /bookings?status=PENDING</code>, <code>POST /bookings/{id}/confirm</code> hoặc <code>/decline { reason }</code>. Xử lý <code>409 SLOT_ALREADY_CONFIRMED</code> và <code>409 SLOT_HELD_FOR_WAITLIST</code>. Tab hai: <code>GET /lecturers/me/slot-waitlist</code>.
+          <span class="mochy">Lý do của sinh viên đặt trong ngoặc kép, chữ trắng, là phần đọc chính. Hai nút cùng cỡ, "Duyệt" là nút sáng.</span></figcaption>
+      </figure>
+
+      <!-- 25. Biên bản -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow tr teal" style="opacity:.25"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app nonav">
+            <div class="apphead"><span class="iconbtn glass"><i data-i="left"></i></span><span class="btn light sm">Lưu</span></div>
+            <div class="row g12 mt8 rv">
+              <img class="avatar lg" src="img/sv-mai.jpg" alt="" style="border-radius:20px">
+              <div class="grow"><div class="t-2" style="font-weight:700">Phạm Ngọc Mai</div><div class="t-sm">Thứ Tư 18/11 · 14:00 – 14:20</div></div>
+            </div>
+            <div class="seg flat mt20 rv"><span class="on">Có mặt</span><span>Vắng mặt</span></div>
+            <div class="field textarea mt12 rv" style="min-height:120px"><div class="in"><span class="lb">Ghi chú</span><span class="v">Đề cương ổn. Cần rút gọn phần tổng quan, bổ sung sơ đồ ERD và kế hoạch kiểm thử.</span></div></div>
+            <div class="hsec rv" style="margin:22px 0 10px">Tóm tắt tự động</div>
+            <div class="note rv" style="color:var(--fg)">Mai trình bày đề cương đồ án. Giảng viên đề nghị: (1) rút gọn chương tổng quan, (2) thêm sơ đồ ERD, (3) viết kế hoạch kiểm thử trước buổi sau.
+              <div class="row g8 mt12"><span class="btn light sm">Dùng bản tóm tắt</span><span class="btn ghost sm" style="color:var(--fg-2)">Tạo lại</span></div></div>
+            <p class="hint rv">Bản tóm tắt chỉ vào ghi chú khi bạn bấm "Dùng bản tóm tắt".</p>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>25. Biên bản và tóm tắt</b><span class="tag">GV</span><code>PATCH /bookings/{id}/meeting-record { attended, notes }</code>. Tóm tắt gọi <code>@react-native-firebase/ai</code> (MO-28); giảng viên phải bấm "Dùng bản tóm tắt" thì nội dung mới vào ghi chú.
+          <span class="mochy">Không có icon ✨ và gradient tím cho AI: một tiêu đề chữ "Tóm tắt tự động" và một thẻ chữ thường là đủ.</span></figcaption>
+      </figure>
+
+      <!-- 26. Quản lý người dùng -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app">
+            <div class="apphead"><span class="title rv">Người dùng</span><span class="t-sm">1.284</span></div>
+            <div class="search mt8 rv"><i data-i="search" class="s"></i>Tên hoặc email</div>
+            <div class="chips mt12 rv"><span class="chip on">Tất cả</span><span class="chip">Sinh viên</span><span class="chip">Giảng viên</span><span class="chip">Admin</span></div>
+            <div class="rows mt8 rv">
+              <div class="rw"><img class="round" src="img/gv-khoa.jpg" alt=""><div class="tx"><b>TS. Nguyễn Minh Khoa</b><span>Giảng viên · CNTT · B11.204</span></div><span class="ch"><i data-i="more" class="s"></i></span></div>
+              <div class="rw"><img class="round" src="img/gv-ha.jpg" alt=""><div class="tx"><b>TS. Trần Thu Hà</b><span>Giảng viên · Kinh tế · B4.110</span></div><span class="ch"><i data-i="more" class="s"></i></span></div>
+              <div class="rw"><img class="round" src="img/sv-bao.jpg" alt=""><div class="tx"><b>Phạm Gia Bảo</b><span>Sinh viên · CNTT</span></div><span class="ch"><i data-i="more" class="s"></i></span></div>
+              <div class="rw"><img class="round" src="img/sv-linh.jpg" alt=""><div class="tx"><b>Lê Khánh Linh</b><span>Sinh viên · Kinh tế</span></div><span class="ch"><i data-i="more" class="s"></i></span></div>
+              <div class="rw" style="opacity:.45"><img class="round" src="img/sv-tuan.jpg" alt=""><div class="tx"><b>Võ Minh Tuấn</b><span>Đã khóa · Sinh viên · Kỹ thuật</span></div><span class="ch"><i data-i="more" class="s"></i></span></div>
+            </div>
+          </div>
+          <nav class="navpill glass" data-role="ad" data-on="users"></nav>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>26. Quản lý người dùng</b><span class="tag">Admin</span><code>GET /users?role=&amp;department=</code> có phân trang. Chạm vào dòng để sửa vai trò, khoa, phòng (<code>PATCH /users/{id}</code>) hoặc khóa (<code>DELETE /users/{id}</code>).
+          <span class="mochy">Vai trò nằm trong dòng chữ phụ, không có huy hiệu màu. Tài khoản bị khóa làm mờ cả dòng.</span></figcaption>
+      </figure>
+
+    </div>
+  </section>
+</main>
+</body>
+</html>

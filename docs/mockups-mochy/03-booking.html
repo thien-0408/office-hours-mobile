@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Booking — OfficeHours × Mochy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="mochy.css">
+  <link rel="stylesheet" href="app.css">
+  <script src="mochy.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="mark"><i data-logo></i></span><span><strong>OfficeHours × Mochy</strong><small>Mock dark-first · CSW434</small></span></a>
+  <nav class="mnav"></nav>
+</header>
+
+<main class="wrap">
+  <section class="section" style="margin-top:0">
+    <h2>Booking</h2>
+    <p class="lead">Màn 10–16. Trang giảng viên mượn bố cục trang nghệ sĩ của Mochy, với nút "Đặt lịch" ở chỗ nút "Play". Lịch hẹn online hiện logo Zoom hoặc Google Meet theo <code>meetingUrl</code>.</p>
+
+    <div class="grid">
+
+      <!-- 10. Tìm giảng viên -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app">
+            <div class="apphead"><span class="title rv">Giảng viên</span></div>
+            <div class="search mt8 rv"><i data-i="search" class="s"></i>Tên, môn, phòng…</div>
+            <div class="chips mt12 rv"><span class="chip on">Tất cả</span><span class="chip">Còn slot tuần này</span><span class="chip">CNTT</span><span class="chip">Kinh tế</span></div>
+            <div class="pgrid mt16 rv">
+              <div class="it p3d"><img src="img/gv-khoa.jpg" alt=""><b>TS. Nguyễn Minh Khoa</b><span>CNTT · B11.204</span><span class="free">Rảnh Thứ Năm 09:00</span></div>
+              <div class="it p3d"><img src="img/gv-ha.jpg" alt=""><b>TS. Trần Thu Hà</b><span>Kinh tế · B4.110</span><span class="free">Rảnh hôm nay 15:30</span></div>
+              <div class="it p3d"><img src="img/gv-hoang.jpg" alt=""><b>ThS. Lê Hoàng</b><span>CNTT · Online</span></div>
+              <div class="it p3d"><img src="img/gv-son.jpg" alt=""><b>PGS. Đỗ Văn Sơn</b><span>Kỹ thuật · B8.301</span></div>
+            </div>
+          </div>
+          <nav class="navpill glass" data-role="sv" data-on="find"></nav>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>10. Tìm giảng viên</b><span class="tag">SV</span><code>GET /lecturers?q=&amp;department=&amp;availableOnly=</code>, phân trang bằng FlashList. "Rảnh…" là slot gần nhất.
+          <span class="mochy">Lưới ảnh chân dung 2 cột thay cho danh sách avatar nhỏ. Bộ lọc chỉ là chữ. Ô tìm kiếm là chỗ duy nhất giữ icon đầu ô.</span></figcaption>
+      </figure>
+
+      <!-- 11. Chi tiết giảng viên -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="cover"><img src="img/gv-khoa.jpg" alt=""></div>
+          <div class="sb"></div>
+          <div class="body app nonav" style="position:relative;z-index:2">
+            <div class="apphead"><span class="iconbtn glass"><i data-i="left"></i></span><span class="iconbtn glass"><i data-i="more"></i></span></div>
+            <div style="height:196px"></div>
+            <div class="eyebrow rv" style="color:var(--fg-2)">Tiến sĩ · Khoa CNTT · B11.204</div>
+            <div class="t-name mt8 rv">Nguyễn<br>Minh Khoa</div>
+            <div class="row g8 mt14 rv"><span class="btn light sm p3d">Đặt lịch</span><span class="t-sm" style="margin-left:6px">Đang ở phòng · trả lời trong ngày</span></div>
+
+            <div class="hsec rv" style="margin-top:22px">Tuần 47 <span class="more">16–22/11</span></div>
+            <div class="days rv">
+              <div class="d off"><small>T2</small><b>16</b></div>
+              <div class="d"><small>T3</small><b>17</b></div>
+              <div class="d"><small>T4</small><b>18</b></div>
+              <div class="d on"><small>T5</small><b>19</b></div>
+              <div class="d"><small>T6</small><b>20</b></div>
+            </div>
+            <div class="slots mt12 rv">
+              <span class="s full">09:00</span><span class="s">09:20</span><span class="s on">09:40</span>
+              <span class="s">10:00</span><span class="s full">10:20</span><span class="s">10:40</span>
+            </div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>11. Chi tiết giảng viên</b><span class="tag">SV</span><code>GET /lecturers/{id}</code> (có <code>officeRoom</code>, <code>photoUrl</code>), <code>GET /lecturers/{id}/slots?week=2026-W47</code>. Slot gạch ngang là đã có người, chạm vào thì mời vào hàng đợi.
+          <span class="mochy">Trang nghệ sĩ: ảnh tràn viền mờ xuống nền, tên rất lớn, nút viên thuốc trắng "Đặt lịch" ở chỗ nút "Play". Slot là viên thuốc; slot chọn màu trắng.</span></figcaption>
+      </figure>
+
+      <!-- 12. Sheet đặt lịch -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="cover"><img src="img/gv-khoa.jpg" alt=""></div>
+          <div class="sb"></div>
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div class="grab"></div>
+            <div class="row g12">
+              <img class="avatar md" src="img/gv-khoa.jpg" alt="" style="border-radius:14px">
+              <div class="grow"><div class="t-3" style="font-weight:700">TS. Nguyễn Minh Khoa</div><div class="t-xs">Trực tiếp tại B11.204</div></div>
+            </div>
+            <div class="dateblk mt20"><b>19</b><span>Thứ Năm, tháng 11<br><b>09:40 – 10:00</b></span></div>
+            <div class="field textarea focus mt20"><div class="in"><span class="lb">Bạn muốn trao đổi gì?</span><span class="v">Góp ý phần thiết kế cơ sở dữ liệu trong đề cương đồ án<span class="caret"></span></span></div></div>
+            <p class="hint">Giảng viên duyệt xong bạn sẽ nhận thông báo. Có thể hủy trước 24 giờ.</p>
+            <div class="btn primary p3d mt20">Gửi yêu cầu</div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>12. Đặt lịch</b><span class="tag">SV</span><code>POST /bookings { slotId, topic }</code>. Bottom sheet dùng <code>@gorhom/bottom-sheet</code>.
+          <span class="mochy">Ngày giờ là khối chữ lớn, không có icon lịch hay đồng hồ. Sheet nền #121212, có thanh kéo, phía sau là trang giảng viên làm tối đi.</span></figcaption>
+      </figure>
+
+      <!-- 12b. Slot vừa hết -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="cover"><img src="img/gv-khoa.jpg" alt=""></div>
+          <div class="sb"></div>
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div class="grab"></div>
+            <span class="pill" style="margin-bottom:14px"><i data-g="warn"></i>Slot đã có người</span>
+            <h2 class="t-1">Có người vừa<br>đặt slot này.</h2>
+            <p class="t-sub mt10">Thứ Năm 19/11 · 09:40. Vào hàng đợi để được mời ngay khi slot trống, hoặc chọn giờ khác.</p>
+            <div class="slots mt20">
+              <span class="s full">09:40</span><span class="s">10:00</span><span class="s">10:40</span>
+            </div>
+            <div class="btn primary p3d mt20">Vào hàng đợi</div>
+            <div class="btn quiet mt8">Chọn giờ khác</div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>12b. Slot vừa có người</b><span class="tag">SV</span><code>POST /bookings</code> trả <code>409</code> với <code>details.waitlistAvailable: true</code>. "Vào hàng đợi" gọi <code>POST /slots/{id}/waitlist</code>.
+          <span class="mochy">Không có ô cảnh báo màu vàng: viên thuốc có glyph "!" cộng tiêu đề chữ lớn. Giờ trống gần đó hiện ngay trong sheet.</span></figcaption>
+      </figure>
+
+      <!-- 13. Danh sách lịch hẹn -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app">
+            <div class="apphead"><span class="title rv">Lịch hẹn</span><span class="btn glass sm">Hàng đợi · 2</span></div>
+            <div class="seg n3 flat mt8 rv"><span class="on">Sắp tới</span><span>Chờ duyệt<em>1</em></span><span>Đã qua</span></div>
+            <div class="sub-label rv">Thứ Tư 18/11</div>
+            <div class="rows rv">
+              <div class="rw"><img src="img/gv-khoa.jpg" alt=""><div class="tx"><b>TS. Nguyễn Minh Khoa</b><span>14:00 · B11.204 · Đề cương đồ án</span></div><span class="pill done"><i data-g="ok"></i>Xác nhận</span></div>
+            </div>
+            <div class="sub-label rv">Thứ Năm 19/11</div>
+            <div class="rows rv">
+              <div class="rw"><img src="img/gv-khoa.jpg" alt=""><div class="tx"><b>TS. Nguyễn Minh Khoa</b><span>09:40 · B11.204 · Thiết kế CSDL</span></div><span class="pill soft"><i data-g="wait"></i>Chờ</span></div>
+              <div class="rw"><img src="img/gv-thu.jpg" alt=""><div class="tx"><b>ThS. Phạm Anh Thư</b><span>15:00 · Google Meet · IELTS Writing</span></div><span class="pill done"><i data-g="ok"></i>Xác nhận</span></div>
+            </div>
+            <div class="sub-label rv">Thứ Hai 23/11</div>
+            <div class="rows rv">
+              <div class="rw"><img src="img/gv-ha.jpg" alt=""><div class="tx"><b>TS. Trần Thu Hà</b><span>10:00 · B4.110 · Kinh tế vi mô</span></div><span class="pill done"><i data-g="ok"></i>Xác nhận</span></div>
+            </div>
+          </div>
+          <nav class="navpill glass" data-role="sv" data-on="book"></nav>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>13. Danh sách lịch hẹn</b><span class="tag">SV, GV</span><code>GET /bookings?status=</code>, cập nhật trực tiếp từ Firestore. Nút "Hàng đợi" mở màn 16.
+          <span class="mochy">Nhóm theo ngày bằng nhãn chữ nhỏ. Mỗi dòng: ảnh, hai dòng chữ, glyph trạng thái. Không có icon đồng hồ cát.</span></figcaption>
+      </figure>
+
+      <!-- 14. Chi tiết lịch hẹn (online) -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow tl wine"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="toast glass rv"><i data-g="ok"></i><div class="grow"><b>Đã được xác nhận</b><span>ThS. Phạm Anh Thư vừa duyệt yêu cầu.</span></div></div>
+          <div class="body app nonav">
+            <div class="apphead"><span class="iconbtn glass"><i data-i="left"></i></span><span class="iconbtn glass"><i data-i="message"></i></span></div>
+            <div class="row g12 mt16 rv">
+              <img class="avatar lg" src="img/gv-thu.jpg" alt="" style="border-radius:20px">
+              <div class="grow"><div class="t-2" style="font-weight:700">ThS. Phạm Anh Thư</div><div class="t-sm">Khoa Ngôn ngữ · IELTS Writing</div></div>
+            </div>
+            <div class="dateblk mt24 rv"><b>19</b><span>Thứ Năm, tháng 11<br><b>15:00 – 15:20</b> · online</span></div>
+            <div class="btn light p3d mt20 rv"><i data-b="googlemeet" class="bl"></i>Tham gia trên Google Meet</div>
+            <div class="btn ghost glass mt10 rv"><i data-b="googlecalendar" class="bl"></i>Thêm vào Google Calendar</div>
+
+            <div class="hsec rv" style="margin:24px 0 12px">Diễn biến</div>
+            <div class="tline rv">
+              <div class="e"><i data-g="ok"></i><span>Đã xác nhận<small>bởi ThS. Phạm Anh Thư</small></span><time>11:30</time></div>
+              <div class="e"><i data-g="wait" class="mid"></i><span>Đã gửi yêu cầu<small>"Sửa bài Task 2 tuần trước"</small></span><time>08:02</time></div>
+            </div>
+            <div class="spacer"></div>
+            <div class="row g8 rv"><span class="btn ghost glass grow">Đổi giờ</span><span class="btn ghost grow" style="color:var(--fg-2)">Hủy lịch</span></div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>14. Chi tiết lịch hẹn</b><span class="tag">SV, GV</span><code>GET /bookings/{id}</code> và <code>/timeline</code>. Nút họp lấy từ <code>meetingUrl</code>: tên miền <code>meet.google.com</code> → logo Meet, <code>zoom.us</code> → Zoom, không khớp → "Mở link". "Thêm vào Google Calendar" mở link mẫu của Google Calendar, không cần backend. Trong vòng 24 giờ (<code>cancellationNotice</code>) thì hai nút dưới bị tắt.
+          <span class="mochy">Logo màu gốc chỉ xuất hiện ở hai nút mở đúng dịch vụ đó. Diễn biến là danh sách chữ với glyph, không có đường kẻ và chấm màu.</span></figcaption>
+      </figure>
+
+      <!-- 15. Đổi giờ -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="cover"><img src="img/gv-thu.jpg" alt=""></div>
+          <div class="sb"></div>
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div class="grab"></div>
+            <h2 class="t-2" style="font-weight:700">Đổi sang giờ khác</h2>
+            <p class="t-sm mt4">Cùng giảng viên. Giờ mới cần được duyệt lại.</p>
+            <div class="days mt16">
+              <div class="d"><small>T4</small><b>18</b></div>
+              <div class="d"><small>T5</small><b>19</b></div>
+              <div class="d on"><small>T6</small><b>20</b></div>
+              <div class="d"><small>T2</small><b>23</b></div>
+              <div class="d"><small>T3</small><b>24</b></div>
+            </div>
+            <div class="slots mt12">
+              <span class="s">14:00</span><span class="s on">14:20</span><span class="s full">14:40</span>
+              <span class="s">15:00</span><span class="s">15:20</span><span class="s full">15:40</span>
+            </div>
+            <div class="note mt16">Giờ hiện tại <b>Thứ Năm 19/11 · 15:00</b> sẽ bị hủy ngay khi bạn đổi. Giờ mới cần giảng viên duyệt lại.</div>
+            <div class="btn primary p3d mt16">Đổi sang Thứ Sáu 14:20</div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>15. Đổi giờ</b><span class="tag">SV</span>Slot của cùng giảng viên từ <code>GET /lecturers/{id}/slots</code>, rồi <code>POST /bookings/{id}/reschedule { newSlotId }</code>. Backend hủy lịch cũ trong cùng giao dịch; lịch mới ở trạng thái <code>PENDING</code>. Ghi chú trong sheet nói rõ điều này.
+          <span class="mochy">Nút chính ghi rõ giờ mới, nên không cần bước xác nhận thứ hai.</span></figcaption>
+      </figure>
+
+      <!-- 16. Hàng đợi -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow c brand" style="opacity:.28"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app nonav">
+            <div class="apphead"><span class="iconbtn glass"><i data-i="left"></i></span></div>
+            <h1 class="t-1 mt8 rv">Hàng đợi</h1>
+            <div class="feature mt16 p3d rv" data-tilt="3" style="height:250px">
+              <img src="img/gv-ha.jpg" alt="">
+              <span class="tr pill glass done"><i data-g="offer"></i>Có slot cho bạn</span>
+              <div class="ov">
+                <div class="eyebrow">Thứ Năm 19/11 · 09:30 · B4.110</div>
+                <div class="t-2 mt4" style="font-weight:700">TS. Trần Thu Hà</div>
+                <div class="row g8 mt12"><span class="btn light sm grow">Nhận slot</span><span class="btn glass sm">Bỏ qua</span></div>
+              </div>
+            </div>
+            <p class="t-sm mt10 rv">Slot được giữ cho bạn thêm <span class="odo tnum" data-countdown="581" style="color:var(--fg)"></span> phút.</p>
+
+            <div class="hsec rv">Đang chờ</div>
+            <div class="rows rv">
+              <div class="rw"><img src="img/gv-khoa.jpg" alt=""><div class="tx"><b>TS. Nguyễn Minh Khoa</b><span>Thứ Sáu 20/11 · 14:40</span></div><span class="t-2 mono-num" style="font-weight:700">#2</span></div>
+              <div class="rw"><img src="img/gv-son.jpg" alt=""><div class="tx"><b>PGS. Đỗ Văn Sơn</b><span>Thứ Hai 23/11 · 08:00</span></div><span class="t-2 mono-num" style="font-weight:700">#5</span></div>
+            </div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>16. Hàng đợi</b><span class="tag">SV</span><code>GET /waitlist/me</code>, nghe Firestore <code>users/{uid}/waitlist</code> để thấy <code>position</code> và offer ngay. Thời gian giữ lấy từ <code>offeredExpiresAt</code>. Nhận: <code>POST /waitlist/{id}/accept</code>; bỏ qua: <code>/decline</code>.
+          <span class="mochy">Offer là thẻ ảnh lớn có nút ngay trên ảnh, không còn màu tím "info". Vị trí trong hàng là số lớn "#2" thay cho viên thuốc.</span></figcaption>
+      </figure>
+
+    </div>
+  </section>
+</main>
+</body>
+</html>

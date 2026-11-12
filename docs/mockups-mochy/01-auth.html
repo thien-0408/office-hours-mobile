@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Auth — OfficeHours × Mochy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="mochy.css">
+  <script src="mochy.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="mark"><i data-logo></i></span><span><strong>OfficeHours × Mochy</strong><small>Mock dark-first · CSW434</small></span></a>
+  <nav class="mnav"></nav>
+</header>
+
+<main class="wrap">
+  <section class="section" style="margin-top:0">
+    <h2>Auth</h2>
+    <p class="lead">8 khung cho màn 1–4 trong <code>SCREENS-FIREBASE.md</code>, thêm màn chào mừng. Icon chỉ một màu; trạng thái thể hiện bằng chữ và độ sáng. Màu duy nhất ngoài đen trắng là quầng sáng nền và chữ báo lỗi. Nhấn giữ thẻ ở màn chào mừng hoặc nút chính để xem hiệu ứng nghiêng.</p>
+
+    <div class="grid">
+
+      <!-- 0. Chào mừng -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow tl indigo"></div><div class="glow tr brand"></div><div class="grain"></div><div class="fade-down"></div>
+          <div class="sb"></div>
+          <div class="body">
+            <div class="topnav">
+              <span class="row g8"><i data-logo style="width:30px;height:30px"></i><span style="font-size:18px;font-weight:700;letter-spacing:-.055em">officehours</span></span>
+              <span class="pill glass"><i data-i="globe" class="xs"></i>VI</span>
+            </div>
+
+            <div class="hero-stack">
+              <div class="hero-card glass back1">
+                <div class="row g10" style="white-space:nowrap"><img class="avatar sm" src="img/gv-hoang.jpg" alt=""><span class="t-sm grow">ThS. Lê Hoàng · T5 09:30</span><span class="pill soft"><i data-g="wait"></i>Chờ duyệt</span></div>
+              </div>
+              <div class="hero-card glass back2">
+                <div class="row g10"><img class="avatar sm" src="img/gv-ha.jpg" alt=""><span class="t-sm grow">TS. Trần Hà · T3 10:00</span><span class="pill soft"><i data-g="queue"></i>Hàng đợi</span></div>
+              </div>
+              <div class="hero-card glass front p3d rv" data-tilt="6">
+                <div class="row g12">
+                  <img class="avatar" src="img/gv-khoa.jpg" alt="">
+                  <div class="grow"><div class="t-3">TS. Nguyễn Minh Khoa</div><div class="t-xs">Khoa CNTT · phòng B11.204</div></div>
+                  <span class="iconbtn" style="width:32px;height:32px;background:var(--glass-hi)"><i data-i="message" class="xs"></i></span>
+                </div>
+                <div class="row g12 mt16 t-sm" style="white-space:nowrap">
+                  <span>Thứ Tư 18/11 · 14:00</span>
+                  <span class="grow"></span>
+                  <span class="pill done"><i data-g="ok"></i>Đã xác nhận</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="spacer"></div>
+            <div class="eyebrow rv">EIU · Office hours</div>
+            <h1 class="t-hero mt8 rv">Gặp giảng viên,<br>không cần xếp hàng.</h1>
+            <p class="t-sub mt12 rv">Xem lịch rảnh, đặt slot và nhận xác nhận ngay trên điện thoại.</p>
+            <div class="dots mt20 rv"><i class="on"></i><i></i><i></i></div>
+            <div class="col g10 mt24 rv">
+              <div class="btn primary p3d">Đăng nhập</div>
+              <div class="btn ghost glass p3d">Tạo tài khoản</div>
+            </div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>0. Chào mừng</b><span class="tag">Mới</span>Chỉ hiện ở lần mở đầu, sau đó vào thẳng Đăng nhập. Ba thẻ lịch hẹn là hình minh họa tĩnh, không gọi API. Ảnh là ảnh giả lập (xem <code>img/README.md</code>).
+          <span class="mochy">Lấy từ hero của Home: chiếm khoảng 60% chiều cao, có dòng nhỏ phía trên tiêu đề, quầng sáng hai góc, nút viên thuốc. Thẻ trước dùng press3D.</span></figcaption>
+      </figure>
+
+      <!-- 1. Đăng nhập -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow tl brand"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body">
+            <div class="topnav"><span class="iconbtn glass"><i data-i="left"></i></span></div>
+            <h1 class="t-1 mt16 rv">Chào mừng<br>trở lại.</h1>
+            <p class="t-sub mt10 rv">Đăng nhập bằng email trường.</p>
+
+            <div class="col g10 mt28">
+              <div class="field rv"><div class="in"><span class="lb">Email</span><span class="v">bao.pham@eiu.edu.vn</span></div></div>
+              <div class="field focus rv"><div class="in"><span class="lb">Mật khẩu</span><span class="v dots">••••••••••<span class="caret"></span></span></div><span class="trail"><i data-i="eye" class="s"></i></span></div>
+            </div>
+            <div class="row mt12 rv" style="justify-content:flex-end"><a class="t-sm link">Quên mật khẩu?</a></div>
+
+            <div class="spacer"></div>
+            <div class="btn primary p3d rv">Đăng nhập<span class="kbd-arrow"><i data-i="arrow" class="s"></i></span></div>
+            <p class="t-sm center mt16 rv">Chưa có tài khoản? <a class="link">Tạo tài khoản</a></p>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>1. Đăng nhập</b><span class="tag">Tất cả</span><code>POST /auth/login</code> → <code>/users/me</code> → <code>/realtime/firebase-token</code>. Sai thông tin (<code>401</code>): viền đỏ nhạt ở ô mật khẩu và một dòng chữ bên dưới.
+          <span class="mochy">Ô nhập nền #161616, nhãn nằm trong ô, không có icon đầu ô, viền focus là trắng 34%, không dùng màu brand. Nút chính màu xám sáng #E0E0E0 có vòng mũi tên đen.</span></figcaption>
+      </figure>
+
+      <!-- 1b. Đăng nhập — bị giới hạn -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow tl brand" style="opacity:.2"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="toast glass rv">
+            <i data-g="warn"></i>
+            <div class="grow"><b>Thử quá nhiều lần</b><span>Chờ một chút rồi đăng nhập lại.</span></div>
+          </div>
+          <div class="body">
+            <div class="topnav"><span class="iconbtn glass"><i data-i="left"></i></span></div>
+            <h1 class="t-1 mt16">Chào mừng<br>trở lại.</h1>
+            <p class="t-sub mt10">Đăng nhập bằng email trường.</p>
+
+            <div class="col g10 mt28">
+              <div class="field"><div class="in"><span class="lb">Email</span><span class="v">bao.pham@eiu.edu.vn</span></div></div>
+              <div>
+                <div class="field err"><div class="in"><span class="lb">Mật khẩu</span><span class="v dots">•••••••</span></div><span class="trail"><i data-i="eyeoff" class="s"></i></span></div>
+                <p class="hint err">Email hoặc mật khẩu không đúng.</p>
+              </div>
+            </div>
+            <div class="row mt12" style="justify-content:flex-end"><a class="t-sm link">Quên mật khẩu?</a></div>
+
+            <div class="spacer"></div>
+            <div class="btn primary disabled">Thử lại sau&nbsp;<span class="odo tnum" data-countdown="58"></span></div>
+            <p class="t-sm center mt16">Chưa có tài khoản? <a class="link">Tạo tài khoản</a></p>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>1b. Sai mật khẩu, bị giới hạn</b><span class="tag">Tất cả</span>Sau <code>401</code> là <code>429</code>: số giây đếm lùi lấy từ header <code>Retry-After</code>; hết giờ thì nút bật lại.
+          <span class="mochy">Toast kính tối ở trên, đầu toast là glyph tròn đặc, không đặt icon trong vòng xám. Số đếm cuộn từng chữ số như OdometerText. Màu đỏ chỉ có ở chữ và viền.</span></figcaption>
+      </figure>
+
+      <!-- 2. Đăng ký -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow tr indigo"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body">
+            <div class="topnav"><span class="iconbtn glass"><i data-i="left"></i></span><span class="t-xs">Đã có tài khoản? <a class="link">Đăng nhập</a></span></div>
+            <h1 class="t-1 mt8 rv">Tạo tài khoản</h1>
+
+            <div class="seg mt20 rv"><span class="on"><i data-i="grad" class="xs"></i>Sinh viên</span><span><i data-i="teach" class="xs"></i>Giảng viên</span></div>
+
+            <div class="col g10 mt16">
+              <div class="field rv"><div class="in"><span class="lb">Họ và tên</span><span class="v">Phạm Gia Bảo</span></div></div>
+              <div class="field rv"><div class="in"><span class="lb">Email trường</span><span class="v">bao.pham@eiu.edu.vn</span></div></div>
+              <div class="field rv"><div class="in"><span class="lb">Khoa</span><span class="v">Công nghệ thông tin</span></div><span class="trail"><i data-i="down" class="s"></i></span></div>
+              <div class="rv">
+                <div class="field focus"><div class="in"><span class="lb">Mật khẩu</span><span class="v dots">•••••<span class="caret"></span></span></div><span class="trail"><i data-i="eye" class="s"></i></span></div>
+                <div class="meter"><i class="on"></i><i class="on"></i><i></i><i></i></div>
+                <p class="hint">Cần ít nhất 8 ký tự, còn thiếu 3.</p>
+              </div>
+            </div>
+
+            <div class="spacer"></div>
+            <div class="btn primary disabled rv">Tạo tài khoản</div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>2. Đăng ký</b><span class="tag">SV, GV</span><code>POST /auth/register</code>. Mật khẩu 8–72 ký tự theo <code>RegisterRequest</code>. Lỗi theo từng ô lấy từ <code>details.errors[]</code> của <code>400</code>. Thanh độ mạnh chỉ là gợi ý trên máy.
+          <span class="mochy">Chọn vai trò bằng viên thuốc giống tab đang chọn của thanh nav (trắng 10%). Icon vai trò đơn sắc. Nút chính mờ đi cho tới khi form hợp lệ.</span></figcaption>
+      </figure>
+
+      <!-- 3. Quên mật khẩu -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow tl teal"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body">
+            <div class="topnav"><span class="iconbtn glass"><i data-i="left"></i></span></div>
+            <h1 class="t-1 mt16 rv">Quên mật khẩu?</h1>
+            <p class="t-sub mt10 rv">Nhập email trường. Nếu email có trong hệ thống, bạn sẽ nhận được link đặt lại.</p>
+
+            <div class="col g10 mt28">
+              <div class="field focus rv"><div class="in"><span class="lb">Email</span><span class="v">bao.pham@eiu.edu.vn<span class="caret"></span></span></div><span class="trail"><i data-i="x" class="xs"></i></span></div>
+            </div>
+
+            <div class="spacer"></div>
+            <div class="btn primary loading rv"><span class="spin"></span>Đang gửi</div>
+            <a class="btn quiet mt8 rv">Quay lại đăng nhập</a>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>3. Quên mật khẩu</b><span class="tag">Tất cả</span><code>POST /auth/forgot-password</code> luôn trả <code>202</code>, nên câu chữ không tiết lộ email có tồn tại hay không. Khung này ở trạng thái đang gửi.
+          <span class="mochy">Mỗi màn auth có một quầng sáng khác màu (xanh brand, chàm, xanh rêu) để phân biệt các bước mà icon vẫn đơn sắc.</span></figcaption>
+      </figure>
+
+      <!-- 3b. Đã gửi -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow c teal"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body">
+            <div class="topnav"><span class="iconbtn glass"><i data-i="x"></i></span></div>
+            <div class="spacer"></div>
+            <div class="col g12">
+              <h1 class="t-hero rv">Kiểm tra<br>hộp thư.</h1>
+              <p class="t-sub rv" style="max-width:300px">Nếu <span style="color:var(--fg)">bao.pham@eiu.edu.vn</span> có trong hệ thống, link đặt lại sẽ đến trong vài phút.</p>
+            </div>
+            <div class="card mt28 rv" style="padding:4px 16px">
+              <div class="row g12" style="height:52px"><span class="t-sm grow">Không thấy? Xem cả thư mục Spam.</span></div>
+              <div style="height:1px;background:var(--line)"></div>
+              <div class="row g12" style="height:52px"><span class="t-sm grow">Mở link trên điện thoại này để vào thẳng app.</span></div>
+            </div>
+            <div class="spacer"></div>
+            <div class="btn primary p3d rv"><i data-b="gmail" class="bl"></i>Mở Gmail</div>
+            <div class="btn ghost glass mt10 rv">Ứng dụng email khác</div>
+            <div class="btn quiet mt8 rv">Gửi lại sau&nbsp;<span class="odo tnum" data-countdown="42"></span></div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>3b. Đã gửi</b><span class="tag">Tất cả</span>Nút gửi lại khóa 60 giây trên máy để tránh chạm vào giới hạn tần suất của backend.
+          <span class="mochy">Không còn icon phong bì lớn: tiêu đề chữ to làm điểm nhấn. Nút Gmail có logo màu gốc vì bấm vào sẽ mở đúng Gmail; ứng dụng khác thì dùng nút chữ.</span></figcaption>
+      </figure>
+
+      <!-- 4. Đặt lại mật khẩu -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow tr wine"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body">
+            <div class="topnav"><span class="iconbtn glass"><i data-i="x"></i></span><span class="pill glass done"><i data-g="ok"></i>Đã lấy mã từ link</span></div>
+            <h1 class="t-1 mt16 rv">Đặt mật khẩu mới</h1>
+            <p class="t-sub mt10 rv">Sau khi lưu, đăng nhập lại bằng mật khẩu này.</p>
+
+            <div class="col g10 mt28">
+              <div class="field focus rv"><div class="in"><span class="lb">Mật khẩu mới</span><span class="v">eiu-office-2026<span class="caret"></span></span></div><span class="trail"><i data-i="eyeoff" class="s"></i></span></div>
+              <div class="field rv"><div class="in"><span class="lb">Nhập lại</span><span class="v ph">Nhập lại mật khẩu mới</span></div><span class="trail"><i data-i="eye" class="s"></i></span></div>
+            </div>
+            <div class="rules rv">
+              <div class="r ok"><span class="dot"><i data-i="check"></i></span>Ít nhất 8 ký tự</div>
+              <div class="r ok"><span class="dot"><i data-i="check"></i></span>Không quá 72 ký tự</div>
+              <div class="r"><span class="dot"></span>Hai ô khớp nhau</div>
+            </div>
+
+            <div class="spacer"></div>
+            <div class="btn primary disabled rv">Lưu mật khẩu mới</div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>4. Đặt lại mật khẩu</b><span class="tag">Tất cả</span>Mở từ deep link có <code>token</code>, gọi <code>POST /auth/reset-password</code>. Luật 8–72 ký tự theo <code>ResetPasswordRequest</code>; "khớp nhau" kiểm tra trên máy. Token sai hoặc hết hạn thì về màn 3 với thông báo.
+          <span class="mochy">Luật hiện bằng vòng tròn rỗng chuyển thành vòng trắng đặc có dấu tick, không dùng xanh hay đỏ. Mật khẩu đang hiện rõ vì đã bấm icon mắt.</span></figcaption>
+      </figure>
+
+      <!-- 4b. Thành công -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="glow c brand"></div><div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body">
+            <div class="spacer"></div>
+            <div class="col g12">
+              <span class="pill done rv" style="align-self:flex-start"><i data-g="ok"></i>Xong</span>
+              <h1 class="t-hero rv">Mật khẩu<br>đã được đổi.</h1>
+              <p class="t-sub rv" style="max-width:290px">Đăng nhập lại bằng mật khẩu mới để tiếp tục.</p>
+            </div>
+            <div class="spacer"></div>
+            <div class="btn primary p3d rv">Về đăng nhập</div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>4b. Thành công</b><span class="tag">Tất cả</span>Sau <code>204</code> của <code>reset-password</code>. Response không trả email, nên màn đăng nhập để trống ô email.
+          <span class="mochy">Không còn huy hiệu tick lớn: một viên thuốc trạng thái nhỏ cộng tiêu đề chữ to, căn trái như các màn khác.</span></figcaption>
+      </figure>
+
+    </div>
+  </section>
+</main>
+</body>
+</html>
