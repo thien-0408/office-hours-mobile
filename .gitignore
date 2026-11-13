@@ -90,3 +90,7 @@ docs/campus/reference/
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
+
+# Firebase emulator logs
+*-debug.log
+.firebase/
