@@ -42,3 +42,8 @@ jest.mock('expo-secure-store', () => ({
   setItemAsync: jest.fn(),
   deleteItemAsync: jest.fn(),
 }));
+jest.mock('expo-linear-gradient', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  return { LinearGradient: props => React.createElement(View, props) };
+});
