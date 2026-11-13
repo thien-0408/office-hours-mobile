@@ -141,7 +141,7 @@ async function send<T>(
 let refreshInFlight: Promise<string> | null = null;
 
 /** Resolves with the new access token; rejects if refresh failed (tokens cleared, event emitted). */
-function refreshAccessToken(): Promise<string> {
+export function refreshAccessToken(): Promise<string> {
   if (!refreshInFlight) {
     refreshInFlight = (async () => {
       try {
