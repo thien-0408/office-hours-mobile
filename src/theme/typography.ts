@@ -16,12 +16,6 @@ export const fonts = {
 
 export const ls = (fontSize: number, em: number): number => fontSize * em;
 
-export const tracking = {
-  display: -0.04,
-  title: -0.03,
-  body: 0,
-} as const;
-
 const round1 = (val: number): number => Math.round(val * 10) / 10;
 
 export const text = {
