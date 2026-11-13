@@ -137,7 +137,8 @@
     ["02-chung.html", "Chung"],
     ["03-booking.html", "Booking"],
     ["04-lich-chat.html", "Lịch, chat"],
-    ["05-giang-vien-admin.html", "Giảng viên, admin"]
+    ["05-giang-vien-admin.html", "Giảng viên, admin"],
+    ["06-ban-do.html", "Bản đồ"]
   ];
 
   // Thanh nav viên thuốc nổi: <nav class="navpill" data-role="sv|gv|ad" data-on="home"></nav>

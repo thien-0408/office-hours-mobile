@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bản đồ — OfficeHours × Mochy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="mochy.css">
+  <link rel="stylesheet" href="app.css">
+  <script src="mochy.js" defer></script>
+  <script src="map.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="mark"><i data-logo></i></span><span><strong>OfficeHours × Mochy</strong><small>Mock dark-first · CSW434</small></span></a>
+  <nav class="mnav"></nav>
+</header>
+
+<main class="wrap">
+  <section class="section" style="margin-top:0">
+    <h2>Bản đồ</h2>
+    <p class="lead">Màn 20–22 và 27. Block lấy gần đúng từ <code>docs/campus/eiu-osm-seed.json</code>, phòng từ <code>eiu-rooms.json</code>. Quy tắc tầng và phòng ở <code>MOBILE-PLAN.md</code> §4: app biết block bằng GPS, tầng chỉ ước lượng bằng barometer hoặc người dùng tự chọn, phòng đích lấy từ phòng làm việc của giảng viên. Không có QR, Wi-Fi hay beacon.</p>
+
+    <div class="grid">
+
+      <!-- 20. Map 3D -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <svg class="iso" data-map='{"c":[70,118],"s":1.3,"at":[176,318],"hl":{"code":"11","floor":3},
+            "lines":[{"pts":[[95,60],[60,95],[32,124]],"dash":true,"w":3.2}],
+            "pins":[{"x":95,"z":60,"img":"img/sv-mai.jpg","acc":10,"label":"Bạn","r":15},
+                    {"x":40,"z":160,"floor":3,"img":"img/gv-khoa.jpg","label":"306.B11","solid":true,"r":15,"lift":30}]}'></svg>
+          <div class="mapfade t"></div><div class="mapfade b"></div>
+          <div class="sb"></div>
+          <div class="maptop">
+            <div class="search glass" style="background:var(--glass)"><i data-i="search" class="s"></i>Phòng, giảng viên…</div>
+            <span class="iconbtn glass" style="width:48px;height:48px"><i data-i="locate"></i></span>
+          </div>
+          <div class="floors glass"><small>Tầng</small><span>4</span><span class="on">3</span><span>2</span><span>1</span></div>
+          <div class="mapcard glass rv">
+            <div class="hd"><img src="img/gv-khoa.jpg" alt=""><div><b>TS. Nguyễn Minh Khoa</b><span><i data-g="ok"></i>Có mặt · 306.B11, tầng 3</span></div></div>
+            <div class="meta2"><div><b>1 phút</b><span>Đi bộ</span></div><div><b>90 m</b><span>Tới cửa Block 11</span></div><div><b>14:00</b><span>Giờ hẹn</span></div></div>
+            <div class="acts"><span class="btn primary p3d">Chỉ đường</span><span class="btn ghost glass">Xem tầng 3</span></div>
+          </div>
+          <nav class="navpill glass" data-role="sv" data-on="map"></nav>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>20. Bản đồ campus</b><span class="tag">tất cả</span>Block từ <code>campus.json</code>, phòng từ <code>GET /campus/rooms</code> (<code>floor</code>, <code>xM</code>, <code>zM</code>), trạng thái từ RTDB <code>/presence</code>. Mở từ một booking thì phòng đích là phòng của giảng viên; đường nét chấm chỉ tới cửa block (A*, Should), trong nhà chỉ ghi tầng.
+          <span class="mochy">Mọi block xám, chỉ tầng đích sáng trắng. Người là ảnh tròn viền trắng, không phải chấm màu. Thanh chọn tầng là viên thuốc kính dọc.</span></figcaption>
+      </figure>
+
+      <!-- 20b. Sơ đồ tầng -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app nonav">
+            <div class="apphead"><span class="iconbtn glass"><i data-i="left"></i></span><span class="t-sm">4 tầng · 38 phòng</span></div>
+            <h1 class="t-1 mt8 rv">Block 11</h1>
+            <div class="seg flat mt16 rv" style="grid-template-columns:repeat(4,1fr)"><span>Tầng 1</span><span>Tầng 2</span><span class="on">Tầng 3</span><span>Tầng 4</span></div>
+            <div class="plan rv">
+              <div class="rowp">
+                <div class="rm">302<small>P.ERIS</small></div>
+                <div class="rm">304<small>P.PERE</small></div>
+                <div class="rm on">306<small>VP K.ĐD</small></div>
+                <div class="rm">308<small>PTN VLĐC</small></div>
+                <div class="rm">310<small>VP K.ĐD</small></div>
+              </div>
+              <div class="hall"><span>Cầu thang</span><span>Hành lang</span><span>Thang máy</span></div>
+              <div class="rowp" style="grid-template-columns:repeat(6,1fr)">
+                <div class="rm">307<small>Kill Lab</small></div>
+                <div class="rm">312<small>Học</small></div>
+                <div class="rm">314<small>Học</small></div>
+                <div class="rm">316<small>Học</small></div>
+                <div class="rm">318<small>Học</small></div>
+                <div class="rm">320<small>VP K.KT</small></div>
+              </div>
+            </div>
+            <div class="sub-label rv">Phòng 306 · VP K.ĐD</div>
+            <div class="rows rv">
+              <div class="rw"><img class="round" src="img/gv-khoa.jpg" alt=""><div class="tx"><b>TS. Nguyễn Minh Khoa</b><span>Có mặt · hẹn bạn lúc 14:00</span></div><i data-g="ok" class="gl"></i></div>
+              <div class="rw"><img class="round" src="img/gv-ha.jpg" alt=""><div class="tx"><b>ThS. Trần Thu Hà</b><span>Vắng tới 15:30</span></div><i data-g="off" class="gl" style="color:var(--fg-3)"></i></div>
+            </div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>20b. Sơ đồ tầng</b><span class="tag">tất cả</span>Chạm vào block hoặc "Xem tầng 3". Phòng lấy từ <code>GET /campus/rooms?building=B11</code>, nhóm theo <code>floor</code>; số đầu của mã phòng là tầng (<code>306.B11</code> ở tầng 3, tầng 1 là tầng trệt). Ai đang ở phòng nào là theo phòng làm việc của giảng viên và <code>/presence</code>, không theo GPS.
+          <span class="mochy">Sơ đồ phẳng, phòng là ô xám, phòng đích là ô trắng duy nhất. Không vẽ chấm người trong sơ đồ.</span></figcaption>
+      </figure>
+
+      <!-- 21. Xin phép vị trí -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app nonav">
+            <div class="topnav"><span class="iconbtn glass"><i data-i="x"></i></span></div>
+            <div class="consent-art rv">
+              <svg class="iso" data-map='{"c":[40,140],"s":1.55,"at":[180,262],"hl":{"code":"11","floor":3},"labels":false,
+                "lines":[{"pts":[[20,100],[30,124]],"dash":true,"w":3}],
+                "pins":[{"x":20,"z":100,"img":"img/sv-mai.jpg","acc":8,"r":15},{"x":40,"z":160,"floor":3,"img":"img/gv-khoa.jpg","r":15,"lift":30}]}'
+                style="height:784px;top:-140px"></svg>
+              <div class="mapfade b" style="height:120px;background:linear-gradient(transparent,#000)"></div>
+            </div>
+            <h1 class="t-1 rv">Chia sẻ vị trí trong buổi hẹn</h1>
+            <p class="t-sub mt8 rv">Để hai bên tìm thấy nhau khi gặp trực tiếp. Bạn tắt được bất cứ lúc nào.</p>
+            <div class="group facts mt16 rv">
+              <div class="ln"><span class="k">Ai thấy</span><span class="v">Chỉ TS. Nguyễn Minh Khoa<small class="t-xs">Người trong buổi hẹn này, khi cả hai cùng bật.</small></span></div>
+              <div class="ln"><span class="k">Khi nào</span><span class="v">14:00 – 14:35, thứ Tư 18/11<small class="t-xs">Từ giờ bắt đầu tới 15 phút sau giờ kết thúc. Chỉ khi app đang mở.</small></span></div>
+              <div class="ln"><span class="k">Gửi gì</span><span class="v">Block, vị trí trong campus, tầng ước lượng<small class="t-xs">Không lưu lại. Tự xóa khi hết giờ.</small></span></div>
+            </div>
+            <div class="spacer"></div>
+            <div class="btn primary p3d rv">Bật chia sẻ vị trí</div>
+            <div class="btn quiet mt4 rv">Để sau</div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>21. Xin phép vị trí</b><span class="tag">tất cả</span>Giải thích trước, sau đó mới gọi <code>Location.requestForegroundPermissionsAsync()</code>; không xin quyền chạy nền. iOS cần thêm <code>NSMotionUsageDescription</code> để đọc barometer; máy không có cảm biến thì bỏ qua, người dùng tự chọn tầng.
+          <span class="mochy">Ba dòng chữ dạng nhãn và giá trị, không có icon khiên hay ổ khóa. Minh họa là chính bản đồ thật.</span></figcaption>
+      </figure>
+
+      <!-- 22. Buổi hẹn trực tiếp: SV -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <svg class="iso" data-map='{"c":[36,140],"s":2.7,"at":[172,350],"hl":{"code":"11","floor":3},
+            "pins":[{"x":40,"z":160,"floor":3,"img":"img/gv-khoa.jpg","label":"tại 306.B11","solid":true,"lift":30},
+                    {"x":15,"z":132,"floor":2,"img":"img/sv-mai.jpg","acc":7,"label":"Bạn · tầng 2?","dashed":true}]}'></svg>
+          <div class="mapfade t"></div><div class="mapfade b"></div>
+          <div class="sb"></div>
+          <div class="livebar glass">
+            <img class="avatar" src="img/gv-khoa.jpg" alt="" style="width:40px;height:40px">
+            <span class="t">Hẹn TS. Khoa lúc 14:00<small>306.B11 · tầng 3</small></span>
+            <span class="pill glass" style="height:40px">Còn&nbsp;<span class="odo tnum" data-countdown="252"></span></span>
+          </div>
+          <div class="mapcard glass low rv">
+            <div class="who"><img src="img/gv-khoa.jpg" alt=""><div class="tx"><b>TS. Nguyễn Minh Khoa</b><span>Tại phòng 306.B11 · tầng 3</span></div><span class="lk">Nhắn</span></div>
+            <div class="who"><img src="img/sv-mai.jpg" alt=""><div class="tx"><b>Bạn</b><span>Block 11 · tầng 2 <em>(ước lượng)</em></span></div><span class="lk">Sửa tầng</span></div>
+            <div class="row mt8" style="justify-content:space-between;padding:0 2px">
+              <span class="t-xs">Đang chia sẻ tới 14:35</span>
+              <span class="btn ghost glass sm">Dừng chia sẻ</span>
+            </div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>22. Buổi hẹn trực tiếp</b><span class="tag">SV, GV</span>Đọc <code>/activeBookings/{id}</code>, ghi <code>/bookingLive/{id}/{uid}</code> tối đa 5 giây một lần: <code>building</code>, <code>x</code>, <code>z</code>, <code>acc</code>, <code>floor</code>, <code>floorSource</code> (<code>baro</code>, <code>manual</code>, <code>room</code>). Giảng viên "Có mặt" và đang ở Block 11 thì chấm đặt đúng phòng 306 (<code>floorSource: room</code>).
+          <span class="mochy">Nhãn viền nét đứt là tầng ước lượng, viền liền hoặc nền trắng là vị trí chắc chắn. Đồng hồ đếm ngược kiểu odometer.</span></figcaption>
+      </figure>
+
+      <!-- 22b. Sửa tầng -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <svg class="iso" data-map='{"c":[36,140],"s":2.7,"at":[172,350],"hl":{"code":"11","floor":3},"labels":false}'></svg>
+          <div class="sb"></div>
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div class="grab"></div>
+            <h2 class="t-2" style="font-weight:700">Bạn đang ở tầng mấy?</h2>
+            <p class="t-sm mt8">Barometer đoán bạn ở tầng 2 của Block 11. Chọn tay sẽ được giữ cho tới khi bạn ra khỏi block.</p>
+            <div class="seg mt20" style="grid-template-columns:repeat(4,1fr)"><span>1</span><span>2<em>đoán</em></span><span class="on">3</span><span>4</span></div>
+            <div class="note mt16">TS. Khoa sẽ thấy: <b>Block 11 · tầng 3 (tự chọn)</b></div>
+            <div class="btn primary p3d mt20">Lưu tầng 3</div>
+            <div class="btn quiet mt4">Dùng lại tầng ước lượng</div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>22b. Sửa tầng</b><span class="tag">SV, GV</span>Ghi <code>floor: 3</code>, <code>floorSource: "manual"</code>. Barometer lấy mốc áp suất lúc vào block (tầng 1), mỗi tầng chênh khoảng 0,43 hPa; chỉ đổi tầng khi lệch quá 60% một tầng trong 3 giây.
+          <span class="mochy">Bốn ô số to, tầng đoán chỉ ghi chữ nhỏ "đoán", không đổi màu.</span></figcaption>
+      </figure>
+
+      <!-- 22c. Buổi hẹn trực tiếp: GV, máy SV không có barometer -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <svg class="iso" data-map='{"c":[36,140],"s":2.7,"at":[172,350],"hl":{"code":"11","floor":3},
+            "pins":[{"x":40,"z":160,"floor":3,"img":"img/gv-khoa.jpg","label":"Bạn · 306.B11","solid":true,"lift":30},
+                    {"x":22,"z":127,"img":"img/sv-mai.jpg","acc":9,"label":"Mai · tầng ?","dashed":true}]}'></svg>
+          <div class="mapfade t"></div><div class="mapfade b"></div>
+          <div class="sb"></div>
+          <div class="livebar glass">
+            <img class="avatar" src="img/sv-mai.jpg" alt="" style="width:40px;height:40px">
+            <span class="t">Phạm Ngọc Mai đang tới<small>14:00 · Đề cương đồ án</small></span>
+            <span class="pill glass" style="height:40px">Còn&nbsp;<span class="odo tnum" data-countdown="252"></span></span>
+          </div>
+          <div class="mapcard glass low rv">
+            <div class="who"><img src="img/sv-mai.jpg" alt=""><div class="tx"><b>Phạm Ngọc Mai</b><span>Block 11 · tầng ? <em>(máy không có barometer)</em></span></div><span class="lk">Nhắn</span></div>
+            <div class="who"><img src="img/gv-khoa.jpg" alt=""><div class="tx"><b>Bạn</b><span>Tại phòng 306.B11 <em>(phòng làm việc)</em></span></div></div>
+            <div class="row mt8" style="justify-content:space-between;padding:0 2px">
+              <span class="t-xs">Đang chia sẻ tới 14:35</span>
+              <span class="btn ghost glass sm">Dừng chia sẻ</span>
+            </div>
+          </div>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>22c. Phía giảng viên</b><span class="tag">GV</span>Máy của Mai không có barometer (<code>Barometer.isAvailableAsync()</code> trả <code>false</code>) và Mai chưa chọn tầng, nên <code>floor: null</code>. Đã gặp hay chưa vẫn xác nhận trong chat (màn 19), không dựa vào bản đồ.
+          <span class="mochy">"tầng ?" vẫn hiện, không giấu đi, để không ai hiểu nhầm là app biết chính xác.</span></figcaption>
+      </figure>
+
+      <!-- 27. Hoạt động campus -->
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="grain"></div>
+          <div class="sb"></div>
+          <div class="body app">
+            <div class="apphead"><span class="title rv">Campus lúc này</span><span class="t-sm">14:05</span></div>
+            <p class="t-sm rv">Buổi hẹn trực tiếp đang diễn ra, đếm theo block của phòng.</p>
+            <div style="position:relative;height:300px;margin:4px -18px 0;overflow:hidden" class="rv">
+              <svg class="iso" data-map='{"c":[60,95],"s":0.92,"at":[186,310],"counts":{"8":12,"11":7,"3":4,"5":2,"4":1}}' style="height:784px;top:-150px"></svg>
+              <div class="mapfade b" style="height:70px;background:linear-gradient(transparent,#000)"></div>
+            </div>
+            <div class="rows rank rv">
+              <div class="rw"><div class="tx"><b>Block 8</b><div class="bar"><i style="width:100%"></i></div></div><span class="n">12</span></div>
+              <div class="rw"><div class="tx"><b>Block 11</b><div class="bar"><i style="width:58%"></i></div></div><span class="n">7</span></div>
+              <div class="rw"><div class="tx"><b>Block 3</b><div class="bar"><i style="width:33%"></i></div></div><span class="n">4</span></div>
+              <div class="rw"><div class="tx"><b>Block 4, 5</b><span>Dưới 3 buổi ở mỗi block</span></div><span class="n" style="color:var(--fg-3)">&lt; 3</span></div>
+            </div>
+          </div>
+          <nav class="navpill glass" data-role="ad" data-on="campus"></nav>
+          <div class="gest"></div>
+        </div></div>
+        <figcaption><b>27. Hoạt động campus</b><span class="tag">AD · Could</span>Đếm booking <code>CONFIRMED</code>, gặp trực tiếp, đang trong khung giờ, theo <code>buildingCode</code> của phòng. Lấy từ Postgres, không dùng GPS hay <code>/bookingLive</code>. Block dưới 3 buổi chỉ ghi "&lt; 3". Chưa có endpoint; làm sau BE-51 nếu còn thời gian.
+          <span class="mochy">Độ sáng của mái block thay cho bảng màu nhiệt. Danh sách xếp hạng với thanh mảnh, không phải chart (STYLE-MOCHY §8.9).</span></figcaption>
+      </figure>
+
+    </div>
+  </section>
+</main>
+</body>
+</html>

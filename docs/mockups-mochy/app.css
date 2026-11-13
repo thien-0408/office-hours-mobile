@@ -210,3 +210,66 @@ img.avatar, img.ph { object-fit: cover; display: block; }
 
 .err-row { box-shadow: inset 0 0 0 1px rgba(255,138,128,.4) !important; }
 .mono-num { font-variant-numeric: tabular-nums; }
+
+/* ---------- bản đồ ---------- */
+svg.iso { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; }
+svg.iso text { font-family: var(--font); }
+.mapfade { position: absolute; left: 0; right: 0; z-index: 1; pointer-events: none; }
+.mapfade.t { top: 0; height: 130px; background: linear-gradient(#000 20%, transparent); }
+.mapfade.b { bottom: 0; height: 330px; background: linear-gradient(transparent, #000 62%); }
+.maptop { position: absolute; z-index: 6; top: 46px; left: 14px; right: 14px; display: flex; gap: 8px; align-items: center; }
+.maptop .search { flex: 1; margin: 0; }
+.floors { position: absolute; z-index: 6; right: 14px; top: 116px; display: flex; flex-direction: column; padding: 4px; border-radius: 999px; gap: 2px; }
+.floors span { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; font-weight: 700; color: var(--fg-2); letter-spacing: -.03em; }
+.floors span.on { background: var(--fg); color: #000; }
+.floors small { font-size: 9.5px; color: var(--fg-3); text-align: center; padding: 4px 0 2px; font-weight: 600; }
+.mapcard { position: absolute; z-index: 7; left: 12px; right: 12px; bottom: 98px; border-radius: 26px; padding: 14px; }
+.mapcard.low { bottom: 22px; }
+.mapcard .hd { display: flex; gap: 12px; align-items: center; }
+.mapcard .hd img { width: 52px; height: 52px; border-radius: 16px; object-fit: cover; flex: none; }
+.mapcard .hd b { display: block; font-size: 16px; letter-spacing: -.035em; }
+.mapcard .hd span { display: flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--fg-2); font-weight: 500; letter-spacing: -.01em; }
+.mapcard .hd span .gl { width: 14px; height: 14px; }
+.mapcard .meta2 { display: flex; gap: 22px; margin: 14px 2px 12px; }
+.mapcard .meta2 div b { display: block; font-size: 22px; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+.mapcard .meta2 div span { font-size: 11.5px; color: var(--fg-3); font-weight: 600; }
+.mapcard .acts { display: flex; gap: 8px; }
+.mapcard .acts .btn { flex: 1; height: 46px; font-size: 14.5px; }
+.who { display: flex; align-items: center; gap: 12px; padding: 10px 2px; }
+.who + .who { box-shadow: inset 0 1px 0 var(--line); }
+.who img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: none; }
+.who .tx { flex: 1; min-width: 0; }
+.who .tx b { display: block; font-size: 14.5px; letter-spacing: -.03em; }
+.who .tx span { display: block; font-size: 12.5px; color: var(--fg-2); font-weight: 500; letter-spacing: -.01em; }
+.who .tx em { font-style: normal; color: var(--fg-3); }
+.who .lk { font-size: 13px; font-weight: 600; color: var(--fg); padding: 6px 12px; border-radius: 999px; background: var(--glass-hi); white-space: nowrap; }
+.livebar { position: absolute; z-index: 6; top: 46px; left: 14px; right: 14px; height: 52px; border-radius: 999px; display: flex; align-items: center; gap: 10px; padding: 0 6px 0 6px; }
+.livebar .t { flex: 1; font-size: 13.5px; font-weight: 600; letter-spacing: -.02em; }
+.livebar .t small { display: block; font-size: 11.5px; color: var(--fg-3); font-weight: 500; }
+.livebar .odo { font-size: 20px; }
+.share { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--fg-2); }
+.share i.dotl { width: 7px; height: 7px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 4px rgba(255,255,255,.14); animation: pulse 1.8s ease-in-out infinite; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 7px rgba(255,255,255,0); } }
+/* sơ đồ tầng phẳng */
+.plan { margin-top: 14px; border-radius: 22px; background: var(--s1); box-shadow: inset 0 0 0 1px var(--line); padding: 12px; }
+.plan .rowp { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+.plan .rm { height: 64px; border-radius: 10px; background: var(--s3); padding: 7px; font-size: 11px; font-weight: 700; letter-spacing: -.02em; color: var(--fg-2); display: flex; flex-direction: column; justify-content: space-between; }
+.plan .rm small { font-size: 9px; font-weight: 500; color: var(--fg-3); line-height: 1.2; }
+.plan .rm.on { background: #fff; color: #000; }
+.plan .rm.on small { color: rgba(0,0,0,.55); }
+.plan .rm.void { background: none; box-shadow: inset 0 0 0 1px var(--line); }
+.plan .hall { height: 30px; margin: 5px 0; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 10.5px; color: var(--fg-3); font-weight: 600; background: repeating-linear-gradient(90deg, transparent 0 8px, rgba(255,255,255,.035) 8px 9px); }
+/* consent */
+.consent-art { position: relative; height: 250px; margin: 6px -18px 0; overflow: hidden; }
+.consent-art svg.iso { position: absolute; }
+.facts { margin-top: 6px; }
+.facts .ln { align-items: flex-start !important; }
+.facts .k { width: 74px; flex: none; color: var(--fg-3); font-size: 13px; font-weight: 600; padding-top: 1px; }
+.facts .v { font-size: 14px; line-height: 1.45; letter-spacing: -.02em; }
+.facts .v small { display: block; margin-top: 2px; }
+/* xếp hạng block */
+.rank .rw { min-height: 54px; }
+.rank .bar { height: 4px; border-radius: 4px; background: var(--fg-4); margin-top: 7px; position: relative; overflow: hidden; }
+.rank .bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--fg-2); }
+.rank .rw:first-child .bar i { background: #fff; }
+.rank .n { font-size: 20px; font-weight: 700; letter-spacing: -.05em; font-variant-numeric: tabular-nums; width: 44px; text-align: right; }
