@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { useInfiniteQuery, type InfiniteData } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { listBookings } from '../../../api/bookings';
-import type { Booking, Page } from '../../../api/domainTypes';
+import type { Booking } from '../../../api/domainTypes';
 import {
   DEFAULT_PAGE_SIZE,
   flattenPages,
@@ -13,10 +13,6 @@ import {
   tabStatuses,
   type BookingTab,
 } from './bookingLogic';
-
-// pageInfiniteOptions is spread untyped, so the page param type widens to unknown.
-const flat = (data: unknown): Booking[] =>
-  flattenPages(data);
 
 /**
  * Infinite list for a tab. Tabs with two statuses run two queries (both use the shared
@@ -43,7 +39,10 @@ export function useBookingTabList(tab: BookingTab) {
   });
 
   const items: Booking[] = useMemo(() => {
-    const all = [...flat(q1.data), ...(s2 ? flat(q2.data) : [])];
+    const all = [
+      ...flattenPages(q1.data),
+      ...(s2 ? flattenPages(q2.data) : []),
+    ];
     return sortBookingsForTab(all, tab);
   }, [q1.data, q2.data, s2, tab]);
 
