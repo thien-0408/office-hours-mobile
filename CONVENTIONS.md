@@ -57,4 +57,5 @@ npm run lint
 ```
 
 - Android cần JDK 21, và đường dẫn project không được có dấu tiếng Việt.
+- Windows: CMake 3.22 mặc định của Android SDK đi kèm ninja không xử lý được đường dẫn dài, nên build `react-native-worklets` lỗi `ninja: error: mkdir(...)` hoặc `build.ninja still dirty`. Cài CMake 4.x trong SDK Manager rồi thêm vào `android/local.properties` (file này không commit): `cmake.dir=C\:/Users/<bạn>/AppData/Local/Android/Sdk/cmake/4.1.2`. Bật thêm long path của Windows nếu chưa bật.
 - Test GPS và chia sẻ vị trí trên máy thật, cần 2 điện thoại Android.
