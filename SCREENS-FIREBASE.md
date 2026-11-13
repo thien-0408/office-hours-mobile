@@ -103,6 +103,7 @@ Ký hiệu vai trò: **SV** sinh viên, **GV** giảng viên, **AD** admin. Đư
 - [ ] **22. Buổi hẹn trực tiếp** `LiveMeetingScreen` · SV, GV · MO-14, MO-23
   - [ ] Đọc `/activeBookings/{id}`, ghi `/bookingLive/{id}/{uid}` (giới hạn tần suất), `onDisconnect().remove()`
   - [ ] Hiện chấm của người kia; chỉ mở được khi booking còn trong `/activeBookings`
+  - [ ] Payload: `building`, `x`, `z`, `acc`, `updatedAt`, thêm `floor` (số hoặc `null`) và `floorSource` (`baro`, `manual`, `room`). Ghi rõ nguồn tầng trên giao diện
 
 ### Giảng viên
 
@@ -136,6 +137,7 @@ Nếu thiếu thời gian: gộp 12 và 15 thành bottom sheet, gộp đổi m�
 - [ ] Giờ hiển thị theo `Asia/Ho_Chi_Minh`, `dayOfWeek` theo ISO (1 = Thứ 2)
 - [ ] Trạng thái mất mạng, tự nối lại STOMP khi app quay lại foreground
 - [ ] Không có endpoint `/research/*`, `/admin/analytics/*`, `/bookings/group`, `/bookings/recurring`; không làm màn hình cho các phần này
+- [ ] Không có chart trên mobile. Dashboard dùng số lớn; biểu đồ tải giảng viên chỉ có trên web (`GET /admin/stats/booking-load`, BE-51)
 
 ## 2. Cài Firebase
 
@@ -254,7 +256,7 @@ Backend chưa có rules cho Realtime Database; repo mobile giữ file này. Bả
         ".read": "auth != null && (root.child('activeBookings').child($bookingId).child('studentId').val() === auth.uid || root.child('activeBookings').child($bookingId).child('lecturerId').val() === auth.uid)",
         "$uid": {
           ".write": "auth != null && auth.uid === $uid && (root.child('activeBookings').child($bookingId).child('studentId').val() === auth.uid || root.child('activeBookings').child($bookingId).child('lecturerId').val() === auth.uid) && (!newData.exists() || (now >= root.child('activeBookings').child($bookingId).child('startAtMs').val() && now <= root.child('activeBookings').child($bookingId).child('endAtMs').val() + 900000))",
-          ".validate": "newData.hasChildren(['building', 'x', 'z', 'acc', 'updatedAt'])"
+          ".validate": "newData.hasChildren(['building', 'x', 'z', 'acc', 'updatedAt']) && (!newData.child('floor').exists() || (newData.child('floor').isNumber() && newData.child('floor').val() >= -2 && newData.child('floor').val() <= 20)) && (!newData.child('floorSource').exists() || newData.child('floorSource').val().matches(/^(baro|manual|room)$/))"
         }
       }
     },

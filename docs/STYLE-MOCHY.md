@@ -305,3 +305,14 @@ Ngoài đen, trắng và các sắc xám, màu chỉ xuất hiện ở:
 - **Thẻ "buổi hẹn sắp tới" nổi** trên thanh nav (thay cho mini player). Hiện từ 60 phút trước giờ hẹn đến lúc buổi hẹn kết thúc.
 - **Tiêu đề mục kiểu "Gợi ý cho bạn ›":** cả dòng là vùng chạm, không có icon.
 - **Dãy cuộn ngang** dùng thẻ ảnh chân dung. Danh sách dọc: ảnh 48px, hai dòng chữ, không có icon đầu dòng.
+
+### 8.9 Số liệu và chart
+- **Mobile không có chart.** Dashboard dùng số lớn (odometer) và một dòng mô tả ngắn. Chart tải giảng viên, Lorenz, Gini, frontier chỉ có trên web.
+- Không thêm thư viện chart (`victory-native`, `react-native-gifted-charts`) vào app.
+- Nếu sau này cần so sánh nhanh: xếp hạng dạng danh sách, mỗi dòng có ảnh, tên, con số và một thanh ngang mảnh màu xám (`View` thường, không phải chart).
+
+### 8.10 Map và vị trí
+- Vị trí luôn ghi nguồn bằng chữ nhỏ dưới tên người: "B11 · tầng 2 (ước lượng)", "B11 · tầng 2 (tự chọn)", "tại phòng 306.B11".
+- Tầng ước lượng hiện nhãn viền nét đứt; tầng chọn tay hoặc phòng thật hiện nhãn viền liền.
+- Chấm người trên map là ảnh tròn có viền trắng, không phải chấm màu. Vòng sai số là vòng tròn trắng 8% theo `acc`.
+- Phòng đích là khối trắng sáng duy nhất trên map; mọi block khác xám.
