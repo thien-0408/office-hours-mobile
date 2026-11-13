@@ -49,8 +49,8 @@ jest.mock('expo-linear-gradient', () => {
 });
 
 // expo-image pulls expo-modules-core (native modules); render a plain View.
-jest.mock("expo-image", () => {
-  const React = require("react");
-  const { View } = require("react-native");
+jest.mock('expo-image', () => {
+  const React = require('react');
+  const { View } = require('react-native');
   return { Image: props => React.createElement(View, props) };
 });

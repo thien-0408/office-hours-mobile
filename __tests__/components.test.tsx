@@ -3,12 +3,7 @@ import { Text } from 'react-native';
 import ReactTestRenderer from 'react-test-renderer';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 
-jest.mock('expo-image', () => ({
-  Image: (props: any) => {
-    const { View } = require('react-native');
-    return React.createElement(View, { testID: 'mock-expo-image', ...props });
-  },
-}));
+// expo-image is mocked globally in jest.setup.js
 
 import {
   AppText,
