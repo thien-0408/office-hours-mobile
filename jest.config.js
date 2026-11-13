@@ -4,7 +4,12 @@ module.exports = {
   preset: '@react-native/jest-preset',
   // agent worktrees live under .claude/; never pick up their copies
   modulePathIgnorePatterns: ['<rootDir>/.claude/'],
-  testPathIgnorePatterns: ['/node_modules/', '<rootDir>/.claude/'],
+  // firebase/ has its own Jest config (npm run test:rules, needs the emulator)
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '<rootDir>/.claude/',
+    '[\\\\/]firebase[\\\\/]tests[\\\\/]',
+  ],
   setupFiles: [...preset.setupFiles, '<rootDir>/jest.setup.js'],
   transform: {
     ...preset.transform,

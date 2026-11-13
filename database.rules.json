@@ -1,0 +1,61 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "activeBookings": {
+      "$bookingId": {
+        ".read": "auth != null && (data.child('studentId').val() === auth.uid || data.child('lecturerId').val() === auth.uid)",
+        ".write": false
+      }
+    },
+    "bookingLive": {
+      "$bookingId": {
+        ".read": "auth != null && (root.child('activeBookings').child($bookingId).child('studentId').val() === auth.uid || root.child('activeBookings').child($bookingId).child('lecturerId').val() === auth.uid)",
+        "$uid": {
+          ".write": "auth != null && auth.uid === $uid && (root.child('activeBookings').child($bookingId).child('studentId').val() === auth.uid || root.child('activeBookings').child($bookingId).child('lecturerId').val() === auth.uid) && (!newData.exists() || (now >= root.child('activeBookings').child($bookingId).child('startAtMs').val() && now <= root.child('activeBookings').child($bookingId).child('endAtMs').val() + 900000))",
+          ".validate": "newData.hasChildren(['building', 'x', 'z', 'acc', 'updatedAt'])",
+          "building": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 16"
+          },
+          "x": {
+            ".validate": "newData.isNumber() && newData.val() >= -1000 && newData.val() <= 1000"
+          },
+          "z": {
+            ".validate": "newData.isNumber() && newData.val() >= -1000 && newData.val() <= 1000"
+          },
+          "acc": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 200"
+          },
+          "updatedAt": {
+            ".validate": "newData.isNumber() && newData.val() >= now - 60000 && newData.val() <= now + 60000"
+          },
+          "floor": {
+            ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= -2 && newData.val() <= 20"
+          },
+          "floorSource": {
+            ".validate": "newData.isString() && newData.val().matches(/^(baro|manual|room)$/)"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "presence": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid && auth.token.role === 'LECTURER'",
+        ".validate": "newData.hasChildren(['status', 'updatedAt'])",
+        "status": {
+          ".validate": "newData.isString() && newData.val().matches(/^(IN_ROOM|ON_CAMPUS|AWAY)$/)"
+        },
+        "updatedAt": {
+          ".validate": "newData.isNumber() && newData.val() >= now - 60000 && newData.val() <= now + 60000"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}
