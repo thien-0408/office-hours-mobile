@@ -7,6 +7,13 @@ const { mergeConfig } = require('@react-native/metro-config');
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const config = {};
+const defaultConfig = getDefaultConfig(__dirname);
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+const config = {
+  resolver: {
+    // 3D models exported from Blender, loaded through expo-asset.
+    assetExts: [...defaultConfig.resolver.assetExts, 'glb', 'gltf'],
+  },
+};
+
+module.exports = mergeConfig(defaultConfig, config);
