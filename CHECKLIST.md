@@ -21,7 +21,7 @@ Tick task cùng commit với code. Mã `BE-xx` là task trong [checklist backend
 ## M2 — GPS và map 3D
 
 - [ ] MO-07 Đi đo góc Block 8–11 và lối đi, đo sai số GPS ở 5 điểm, lập `campus.json` (Must)
-- [ ] MO-08 `geo.ts`: đổi tọa độ, lọc, làm mượt, xác định block; có unit test (Must)
+- [x] MO-08 `geo.ts`: đổi tọa độ, lọc, làm mượt, xác định block; có unit test (Must)
 - [ ] MO-09 `useCampusLocation`, màn hình xin phép và giải thích, công tắc chia sẻ (Must, chờ MO-01, MO-08)
 - [ ] MO-10 Map 3D dạng khối hộp: camera, chạm vào block, chấm vị trí, vòng sai số (Must, chờ MO-01, MO-07, MO-08)
 - [ ] MO-11 Thay khối hộp bằng model `.glb` dựng trong Blender (Could, chờ MO-10)
@@ -29,7 +29,7 @@ Tick task cùng commit với code. Mã `BE-xx` là task trong [checklist backend
 ## M3 — Realtime
 
 - [ ] MO-12 Đăng nhập Firebase bằng custom token từ `POST /realtime/firebase-token` (Must, chờ MO-02, MO-04)
-- [ ] MO-13 Security rules và test trên emulator: không ghi được vị trí người khác (Must, chờ MO-12)
+- [x] MO-13 Security rules và test trên emulator: không ghi được vị trí người khác (Must, chờ MO-12)
 - [ ] MO-14 Hai máy thấy nhau qua `/bookingLive`, giới hạn tần suất, `onDisconnect` (Must, chờ MO-09, MO-10, MO-13)
 - [ ] MO-15 Trạng thái giảng viên: Trong phòng, Trong trường, Vắng mặt (Must, chờ MO-14)
 

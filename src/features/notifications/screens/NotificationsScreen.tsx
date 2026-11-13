@@ -27,7 +27,7 @@ import { Seg, type SegOption } from '../../../components/Seg';
 import { TopNav } from '../../../components/TopNav';
 import { resolveTarget } from '../../../navigation/roleConfig';
 import { colors, fonts, ls, space } from '../../../theme';
-import { useSession } from '../../auth/session';
+import { useAppSession } from '../../../navigation/devSession';
 import { formatNotificationRelativeTime } from '../notificationTime';
 
 const FILTER_OPTIONS: SegOption[] = [
@@ -37,7 +37,7 @@ const FILTER_OPTIONS: SegOption[] = [
 
 export function NotificationsScreen() {
   const navigation = useNavigation();
-  const { role } = useSession();
+  const { role } = useAppSession();
   const focused = useIsFocused();
   const insets = useSafeAreaInsets();
   const tabSpace = useTabBarSpace();
