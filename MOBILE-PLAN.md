@@ -101,6 +101,19 @@ Hết giờ hẹn
 
 **Giới hạn cần nói rõ khi demo:** GPS sai khoảng 3–10 m ngoài trời và kém hơn trong nhà. App biết được block, không biết chính xác phòng. Tầng chỉ là ước lượng từ barometer và người dùng có thể tự chỉnh.
 
+**Tầng và phòng (chốt 12/11/2026):**
+- Không đoán phòng của người dùng. Phòng đích luôn có sẵn: phòng làm việc của giảng viên (`CampusRoomResponse`: `buildingCode`, `floor`, `xM`, `zM`). Map chỉ đường tới phòng đó.
+- Tầng của sinh viên ước lượng bằng barometer, đo tương đối:
+  1. Khi GPS xác nhận vừa vào block (2 lần đọc), coi là đang ở tầng 1 (trệt), lưu áp suất làm mốc `p0`. `eiu-rooms.json` đánh số tầng từ 1, số đầu của mã phòng là tầng (`306.B11` ở tầng 3).
+  2. `h = (p0 − p) × 8.3` mét; tầng = 1 + `round(h / chiều cao tầng)`, giới hạn trong số tầng của block, chiều cao tầng lấy từ `campus.json`.
+  3. Làm mượt và chỉ đổi tầng khi chênh quá 60% chiều cao một tầng trong ít nhất 3 giây.
+  4. Ra khỏi block thì bỏ mốc. Máy không có barometer (`Barometer.isAvailableAsync()` trả `false`) thì hiện "Tầng ?" và cho chọn tay.
+- Người dùng luôn chỉnh tay được; chọn tay thắng barometer cho tới khi ra khỏi block.
+- Giảng viên đang "Có mặt" và GPS ở đúng block của phòng làm việc: vẽ chấm ngay tại phòng (`floor`, `xM`, `zM`), không dùng GPS trong nhà.
+- Giao diện luôn ghi nguồn: "tầng 2 (ước lượng)", "tầng 2 (tự chọn)", "tại phòng 306.B11".
+- Không làm QR ở cửa phòng, không dò Wi-Fi, không dùng beacon BLE. Đã gặp hay chưa vẫn do giảng viên xác nhận trong chat.
+- MO-07 đo thêm: máy test nào có barometer, chênh áp suất mỗi tầng ở B11 trên 2 máy, chiều cao tầng 1 so với các tầng trên.
+
 **Quyền riêng tư:** bật theo lựa chọn của người dùng, có màn hình giải thích, có nút xóa dữ liệu. Phải xin phép trường trước khi thử với người ngoài nhóm.
 
 ## 5. Thư viện
@@ -197,7 +210,7 @@ MO-12 cần bật Firebase ở backend (`FIREBASE_ENABLED=true`) nhưng không c
 | MO-23 | Gắn chia sẻ vị trí vào booking thật, nhắc khi đến giờ | 1.5 | Must | MO-14, MO-18, BE-31 |
 | MO-24 | Chỉ đường A* theo lối đi, vẽ trên map 3D, ước tính thời gian | 2 | Should | MO-07, MO-10, BE-32 |
 | MO-25 | Nút xác nhận đã gặp hoặc vắng mặt trong chat của giảng viên | 0.5 | Must | MO-16, BE-49 |
-| MO-26 | Ước lượng tầng bằng barometer, cho phép chỉnh tay | 1 | Could | MO-09 |
+| MO-26 | Ước lượng tầng bằng barometer (mốc lúc vào block), chỉnh tay, ghi `floor` và `floorSource` vào `/bookingLive` | 1 | Could | MO-09 |
 
 ### M6 — AI
 

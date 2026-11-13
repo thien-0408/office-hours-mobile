@@ -48,7 +48,7 @@ Tick task cùng commit với code. Mã `BE-xx` là task trong [checklist backend
 - [ ] MO-23 Gắn chia sẻ vị trí vào booking thật, nhắc khi đến giờ (Must, chờ MO-14, MO-18, BE-31)
 - [ ] MO-24 Chỉ đường A* theo lối đi, vẽ trên map 3D, ước tính thời gian (Should, chờ MO-07, MO-10, BE-32)
 - [ ] MO-25 Nút xác nhận đã gặp hoặc vắng mặt trong chat của giảng viên (Must, chờ MO-16, BE-49)
-- [ ] MO-26 Ước lượng tầng bằng barometer, cho phép chỉnh tay (Could, chờ MO-09)
+- [ ] MO-26 Ước lượng tầng bằng barometer (mốc lúc vào block), chỉnh tay, ghi `floor` và `floorSource` vào `/bookingLive` (Could, chờ MO-09)
 
 ## M6 — AI
 

@@ -87,3 +87,6 @@ web-build/
 
 # EIU floor plans from the virtual tour: local reference only, EIU owns them
 docs/campus/reference/
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
