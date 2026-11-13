@@ -54,3 +54,78 @@ jest.mock('expo-image', () => {
   const { View } = require('react-native');
   return { Image: props => React.createElement(View, props) };
 });
+
+// ---- MO-01 native modules ----
+jest.mock('expo-location', () => ({
+  requestForegroundPermissionsAsync: jest.fn(() =>
+    Promise.resolve({ granted: true, canAskAgain: true, status: 'granted' }),
+  ),
+  getForegroundPermissionsAsync: jest.fn(() =>
+    Promise.resolve({ granted: true, canAskAgain: true, status: 'granted' }),
+  ),
+  getCurrentPositionAsync: jest.fn(() =>
+    Promise.resolve({
+      coords: { latitude: 0, longitude: 0, accuracy: 5, altitude: 0 },
+      timestamp: 0,
+    }),
+  ),
+  watchPositionAsync: jest.fn(() => Promise.resolve({ remove: jest.fn() })),
+  Accuracy: { Balanced: 3, High: 4, Highest: 5 },
+}));
+jest.mock('expo-sensors', () => ({
+  Barometer: {
+    isAvailableAsync: jest.fn(() => Promise.resolve(true)),
+    setUpdateInterval: jest.fn(),
+    addListener: jest.fn(() => ({ remove: jest.fn() })),
+  },
+}));
+jest.mock('expo-camera', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  return {
+    CameraView: props => React.createElement(View, props),
+    Camera: {
+      requestCameraPermissionsAsync: jest.fn(() =>
+        Promise.resolve({ granted: true, canAskAgain: true, status: 'granted' }),
+      ),
+      getCameraPermissionsAsync: jest.fn(() =>
+        Promise.resolve({ granted: true, canAskAgain: true, status: 'granted' }),
+      ),
+    },
+    useCameraPermissions: jest.fn(() => [
+      { granted: true, canAskAgain: true },
+      jest.fn(),
+    ]),
+  };
+});
+jest.mock('@react-native-ml-kit/text-recognition', () => ({
+  __esModule: true,
+  default: {
+    recognize: jest.fn(() => Promise.resolve({ text: '', blocks: [] })),
+  },
+}));
+// expo-gl: GLView renders a plain View; onContextCreate is never called.
+jest.mock('expo-gl', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  return {
+    GLView: props => React.createElement(View, props),
+    ExpoWebGLRenderingContext: class {},
+  };
+});
+jest.mock('expo-asset', () => ({
+  Asset: {
+    fromModule: jest.fn(() => ({
+      downloadAsync: jest.fn(() => Promise.resolve()),
+      localUri: 'file:///mock',
+      uri: 'file:///mock',
+    })),
+    loadAsync: jest.fn(() => Promise.resolve([])),
+  },
+}));
+jest.mock('expo-file-system', () => ({
+  readAsStringAsync: jest.fn(() => Promise.resolve('')),
+  writeAsStringAsync: jest.fn(() => Promise.resolve()),
+  cacheDirectory: 'file:///cache/',
+  EncodingType: { UTF8: 'utf8', Base64: 'base64' },
+}));

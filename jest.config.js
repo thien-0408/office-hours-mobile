@@ -14,6 +14,6 @@ module.exports = {
     ),
   },
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|@react-native-masked-view|@react-navigation|react-native-reanimated|react-native-worklets|react-native-gesture-handler|react-native-screens|react-native-svg|react-native-safe-area-context|@shopify/flash-list|lucide-react-native|@expo-google-fonts|expo(nent)?|@expo(nent)?/.*|expo-.*)/)',
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|@react-native-masked-view|@react-navigation|react-native-reanimated|react-native-worklets|react-native-gesture-handler|react-native-screens|react-native-svg|react-native-safe-area-context|@shopify/flash-list|lucide-react-native|three|@react-three/.*|@expo-google-fonts|expo(nent)?|@expo(nent)?/.*|expo-.*)/)',
   ],
 };
