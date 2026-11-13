@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import {
   useNavigation,
   type NavigationProp,
@@ -13,16 +8,15 @@ import {
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { me, updateMe, changePassword } from '../../../api/users';
-import type { Locale, NotificationPrefs, UserProfile } from '../../../api/types';
+import type {
+  Locale,
+  NotificationPrefs,
+  UserProfile,
+} from '../../../api/types';
 import { getLocale, setLocale } from '../../../api/client';
 import { useGlass, type GlassQuality } from '../../../components/motion';
 import { useAppSession } from '../../../navigation/devSession';
-import {
-  Button,
-  Field,
-  Seg,
-  TopNav,
-} from '../../../components';
+import { Button, Field, Seg, TopNav } from '../../../components';
 import { colors, fonts, radius, space } from '../../../theme';
 import { ProfileGroup, SectionLabel } from '../components/ProfileGroup';
 import { ProfileRow } from '../components/ProfileRow';
@@ -63,8 +57,12 @@ export function SettingsScreen() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordErrors, setPasswordErrors] = useState<Record<string, string>>({});
-  const [generalPasswordError, setGeneralPasswordError] = useState<string | null>(null);
+  const [passwordErrors, setPasswordErrors] = useState<Record<string, string>>(
+    {},
+  );
+  const [generalPasswordError, setGeneralPasswordError] = useState<
+    string | null
+  >(null);
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
 
@@ -81,7 +79,10 @@ export function SettingsScreen() {
     reminders: true,
   };
 
-  const handleTogglePref = async (key: keyof NotificationPrefs, nextVal: boolean) => {
+  const handleTogglePref = async (
+    key: keyof NotificationPrefs,
+    nextVal: boolean,
+  ) => {
     setPrefError(null);
     const previousMe = queryClient.getQueryData<UserProfile>(['me']);
     if (!previousMe) {
@@ -181,10 +182,7 @@ export function SettingsScreen() {
 
   return (
     <SafeAreaView edges={['top']} style={styles.safeRoot}>
-      <TopNav
-        title="Cài đặt"
-        onBack={() => navigation.goBack()}
-      />
+      <TopNav title="Cài đặt" onBack={() => navigation.goBack()} />
 
       <ScrollView
         style={styles.scroll}
@@ -210,7 +208,9 @@ export function SettingsScreen() {
             />
           ))}
         </ProfileGroup>
-        <Text style={styles.prefNote}>* Chỉ áp dụng cho thông báo qua email</Text>
+        <Text style={styles.prefNote}>
+          * Chỉ áp dụng cho thông báo qua email
+        </Text>
         {prefError ? (
           <Text style={styles.prefErrorText}>{prefError}</Text>
         ) : null}
@@ -302,11 +302,15 @@ export function SettingsScreen() {
               />
 
               {generalPasswordError ? (
-                <Text style={styles.passwordErrorText}>{generalPasswordError}</Text>
+                <Text style={styles.passwordErrorText}>
+                  {generalPasswordError}
+                </Text>
               ) : null}
 
               {passwordSuccess ? (
-                <Text style={styles.passwordSuccessText}>{passwordSuccess}</Text>
+                <Text style={styles.passwordSuccessText}>
+                  {passwordSuccess}
+                </Text>
               ) : null}
 
               <View style={styles.passwordActions}>

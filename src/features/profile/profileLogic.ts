@@ -1,5 +1,6 @@
 import type { NotificationPrefs, UserRole } from '../../api/types';
 import { ApiError } from '../../api/errors';
+import { fieldErrorText } from '../../api/errorText';
 
 export type ProfileValidationResult = {
   isValid: boolean;
@@ -58,13 +59,19 @@ export function validatePasswordChange(payload: {
 
   if (!payload.newPassword) {
     errors.newPassword = 'Vui lòng nhập mật khẩu mới';
-  } else if (payload.newPassword.length < 8 || payload.newPassword.length > 72) {
+  } else if (
+    payload.newPassword.length < 8 ||
+    payload.newPassword.length > 72
+  ) {
     errors.newPassword = 'Mật khẩu mới phải từ 8 đến 72 ký tự';
   }
 
   if (!payload.confirmPassword) {
     errors.confirmPassword = 'Vui lòng xác nhận mật khẩu mới';
-  } else if (payload.newPassword && payload.newPassword !== payload.confirmPassword) {
+  } else if (
+    payload.newPassword &&
+    payload.newPassword !== payload.confirmPassword
+  ) {
     errors.confirmPassword = 'Mật khẩu nhập lại không khớp';
   }
 
@@ -134,7 +141,7 @@ export function resolvePasswordError(err: unknown): PasswordErrorResolution {
     if (err.fieldErrors && err.fieldErrors.length > 0) {
       const fieldErrors: Record<string, string> = {};
       for (const fe of err.fieldErrors) {
-        fieldErrors[fe.field] = fe.message || fe.error || 'Giá trị không hợp lệ';
+        fieldErrors[fe.field] = fieldErrorText(fe);
       }
       return { fieldErrors };
     }

@@ -79,7 +79,9 @@ describe('profileLogic', () => {
         confirmPassword: 'short',
       });
       expect(res.isValid).toBe(false);
-      expect(res.errors.newPassword).toBe('Mật khẩu mới phải từ 8 đến 72 ký tự');
+      expect(res.errors.newPassword).toBe(
+        'Mật khẩu mới phải từ 8 đến 72 ký tự',
+      );
     });
 
     it('fails when new password is too long (> 72 chars)', () => {
@@ -90,7 +92,9 @@ describe('profileLogic', () => {
         confirmPassword: longPass,
       });
       expect(res.isValid).toBe(false);
-      expect(res.errors.newPassword).toBe('Mật khẩu mới phải từ 8 đến 72 ký tự');
+      expect(res.errors.newPassword).toBe(
+        'Mật khẩu mới phải từ 8 đến 72 ký tự',
+      );
     });
 
     it('fails when confirm password does not match new password', () => {
@@ -122,10 +126,12 @@ describe('profileLogic', () => {
         message: 'Invalid email or password',
       });
       const resolved = resolvePasswordError(apiErr);
-      expect(resolved.fieldErrors?.oldPassword).toBe('Mật khẩu hiện tại không đúng');
+      expect(resolved.fieldErrors?.oldPassword).toBe(
+        'Mật khẩu hiện tại không đúng',
+      );
     });
 
-    it('maps fieldErrors from details when present', () => {
+    it('maps fieldErrors to Vietnamese text, never the English backend message', () => {
       const apiErr = new ApiError({
         status: 400,
         error: 'VALIDATION_FAILED',
@@ -133,15 +139,13 @@ describe('profileLogic', () => {
         fieldErrors: [
           {
             field: 'newPassword',
-            error: 'SIZE',
+            error: 'FIELD_MIN_LENGTH:8',
             message: 'Size must be between 8 and 72',
           },
         ],
       });
       const resolved = resolvePasswordError(apiErr);
-      expect(resolved.fieldErrors?.newPassword).toBe(
-        'Size must be between 8 and 72',
-      );
+      expect(resolved.fieldErrors?.newPassword).toBe('Cần ít nhất 8 ký tự.');
     });
 
     it('returns general error for generic ApiError without field errors', () => {
@@ -151,7 +155,9 @@ describe('profileLogic', () => {
         message: 'Internal server error',
       });
       const resolved = resolvePasswordError(apiErr);
-      expect(resolved.generalError).toBe('Không thể đổi mật khẩu. Vui lòng thử lại.');
+      expect(resolved.generalError).toBe(
+        'Không thể đổi mật khẩu. Vui lòng thử lại.',
+      );
     });
 
     it('returns network error message for non-ApiError', () => {
@@ -188,9 +194,13 @@ describe('helpData', () => {
   it('defines privacy policy principles', () => {
     expect(PRIVACY_POINTS.length).toBeGreaterThanOrEqual(4);
     expect(
-      PRIVACY_POINTS.some(p => p.includes('15 phút') && p.includes('khung giờ hẹn')),
+      PRIVACY_POINTS.some(
+        p => p.includes('15 phút') && p.includes('khung giờ hẹn'),
+      ),
     ).toBe(true);
-    expect(PRIVACY_POINTS.some(p => p.includes('Realtime Database'))).toBe(true);
+    expect(PRIVACY_POINTS.some(p => p.includes('Realtime Database'))).toBe(
+      true,
+    );
   });
 
   it('defines correct app info and OpenStreetMap copyright', () => {

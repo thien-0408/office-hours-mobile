@@ -41,21 +41,11 @@ export function ProfileRow({
   const isInteractive = Boolean(onPress) && !disabled;
 
   const content = (
-    <View
-      style={[
-        styles.row,
-        divider && styles.divider,
-        style,
-      ]}
-    >
+    <View style={[styles.row, divider && styles.divider, style]}>
       <View style={styles.leftCol}>
         {typeof label === 'string' ? (
           <Text
-            style={[
-              styles.label,
-              danger && styles.dangerLabel,
-              labelStyle,
-            ]}
+            style={[styles.label, danger && styles.dangerLabel, labelStyle]}
           >
             {label}
           </Text>

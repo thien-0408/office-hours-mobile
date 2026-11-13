@@ -19,3 +19,4 @@ export * from './chat';
 export * from './admin';
 export * from './realtime';
 export * from './hooks';
+export * from './errorText';

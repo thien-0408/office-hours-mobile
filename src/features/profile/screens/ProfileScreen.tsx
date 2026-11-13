@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import {
   useIsFocused,
   useNavigation,
@@ -16,13 +11,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { me, updateMe } from '../../../api/users';
 import type { UpdateProfilePayload, UserProfile } from '../../../api/types';
 import { ApiError } from '../../../api/errors';
+import { errorText, fieldErrorMap } from '../../../api/errorText';
+import { useSession } from '../../auth/session';
+import { Avatar, Button, Field, TopNav } from '../../../components';
 import {
-  Avatar,
-  Button,
-  Field,
-  TopNav,
-} from '../../../components';
-import { BlurTarget, Skeleton, useTabBarSpace } from '../../../components/motion';
+  BlurTarget,
+  Skeleton,
+  useTabBarSpace,
+} from '../../../components/motion';
 import { colors, fonts, radius, space, text } from '../../../theme';
 import { ProfileGroup, SectionLabel } from '../components/ProfileGroup';
 import { ProfileRow } from '../components/ProfileRow';
@@ -33,6 +29,7 @@ export function ProfileScreen() {
   const isFocused = useIsFocused();
   const tabBarSpace = useTabBarSpace();
   const queryClient = useQueryClient();
+  const { reloadUser } = useSession();
 
   const [isEditing, setIsEditing] = useState(false);
   const [fullName, setFullName] = useState('');
@@ -62,6 +59,8 @@ export function ProfileScreen() {
     mutationFn: (payload: UpdateProfilePayload) => updateMe(payload),
     onSuccess: updated => {
       queryClient.setQueryData(['me'], updated);
+      // keep the session's copy (greeting, role) in sync; no-op failure in dev-role mode
+      reloadUser().catch(() => {});
       setIsEditing(false);
       setFieldErrors({});
       setGeneralError(null);
@@ -69,14 +68,10 @@ export function ProfileScreen() {
     onError: (err: unknown) => {
       if (err instanceof ApiError) {
         if (err.fieldErrors && err.fieldErrors.length > 0) {
-          const map: Record<string, string> = {};
-          for (const fe of err.fieldErrors) {
-            map[fe.field] = fe.message || fe.error || 'Giá trị không hợp lệ';
-          }
-          setFieldErrors(map);
+          setFieldErrors(fieldErrorMap(err));
           return;
         }
-        setGeneralError(err.message || 'Không thể cập nhật hồ sơ');
+        setGeneralError('Không thể cập nhật hồ sơ. Thử lại sau.');
       } else {
         setGeneralError('Lỗi kết nối. Vui lòng thử lại.');
       }
@@ -151,9 +146,24 @@ export function ProfileScreen() {
           <View style={styles.loadingContainer}>
             <View style={styles.skeletonHero}>
               <Skeleton width={88} height={88} borderRadius={18} />
-              <Skeleton width={90} height={16} borderRadius={8} style={styles.mt12} />
-              <Skeleton width={200} height={32} borderRadius={8} style={styles.mt8} />
-              <Skeleton width={150} height={18} borderRadius={8} style={styles.mt8} />
+              <Skeleton
+                width={90}
+                height={16}
+                borderRadius={8}
+                style={styles.mt12}
+              />
+              <Skeleton
+                width={200}
+                height={32}
+                borderRadius={8}
+                style={styles.mt8}
+              />
+              <Skeleton
+                width={150}
+                height={18}
+                borderRadius={8}
+                style={styles.mt8}
+              />
             </View>
             <View style={styles.mt24}>
               <Skeleton width="100%" height={160} borderRadius={radius.card} />
@@ -165,9 +175,7 @@ export function ProfileScreen() {
         ) : isError || !user ? (
           <View style={styles.errorContainer}>
             <Text style={styles.errorTitle}>Không thể tải hồ sơ</Text>
-            <Text style={styles.errorSubtitle}>
-              {error?.message || 'Vui lòng kiểm tra lại kết nối mạng.'}
-            </Text>
+            <Text style={styles.errorSubtitle}>{errorText(error)}</Text>
             <Button
               variant="primary"
               title="Thử lại"
@@ -251,10 +259,7 @@ export function ProfileScreen() {
             {/* Nhóm thông tin chi tiết */}
             <SectionLabel title="Thông tin tài khoản" />
             <ProfileGroup>
-              <ProfileRow
-                label="Email"
-                value={user.email}
-              />
+              <ProfileRow label="Email" value={user.email} />
 
               {user.role === 'LECTURER' ? (
                 // TODO(MO-05): Chọn phòng làm việc từ /campus/rooms
