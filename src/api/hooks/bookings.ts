@@ -63,6 +63,9 @@ function useAfterBookingChange() {
     if (booking) {
       qc.setQueryData(queryKeys.bookings.detail(booking.id), booking);
       qc.invalidateQueries({
+        queryKey: queryKeys.bookings.detail(booking.id),
+      });
+      qc.invalidateQueries({
         queryKey: queryKeys.bookings.timeline(booking.id),
       });
     }

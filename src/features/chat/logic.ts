@@ -5,6 +5,7 @@ import type {
 } from '../../api/domainTypes';
 import type { UserRole } from '../../api/types';
 import { formatVnDate, formatVnDayTime, formatVnTime, vnParts } from '../../api/time';
+import { canConfirmAttendance } from '../booking/attendanceLogic';
 
 // ---- wire frames (backend chat/model/responses) ----
 export type MessageFrame = ChatMessage & { kind: 'MESSAGE' };
@@ -294,14 +295,14 @@ export function showActionBar(args: {
   now: number;
   closedFrame?: boolean;
 }): boolean {
-  if (args.role !== 'LECTURER' || args.status !== 'CONFIRMED' || args.closedFrame) {
+  if (args.closedFrame || !args.status || !args.startAt) {
     return false;
   }
-  if (!args.startAt) {
-    return false;
-  }
-  const start = Date.parse(args.startAt);
-  return !Number.isNaN(start) && args.now >= start;
+  return canConfirmAttendance(
+    { status: args.status, startAt: args.startAt },
+    args.role,
+    args.now,
+  );
 }
 
 // ---- list model (inverted list: index 0 = newest) ----

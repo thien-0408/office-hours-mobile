@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -29,19 +28,19 @@ import {
   Screen,
   TopNav,
 } from '../../../components';
-import { useBooking, useCompleteBooking, useMarkNoShow } from '../../../api/hooks/bookings';
+import { useBooking } from '../../../api/hooks/bookings';
 import { useLecturer } from '../../../api/hooks/lecturers';
 import { formatVnDayTime, formatVnTime } from '../../../api/time';
 import { useAppSession } from '../../../navigation/devSession';
 import { useSession } from '../../auth/session/SessionProvider';
 import type { ScreenParams } from '../../../navigation/types';
-import { bookingErrorMessage, otherParty, useNow } from '../../booking/detail';
+import { AttendanceActions } from '../../booking/components/AttendanceActions';
+import { otherParty, useNow } from '../../booking/detail';
 import { colors, fonts, space } from '../../../theme';
 import {
   buildListItems,
   closedNotice,
   isRoomClosed,
-  showActionBar,
   type ListItem,
 } from '../logic';
 import { useChatRoom } from '../useChatRoom';
@@ -63,9 +62,6 @@ export function ChatScreen() {
   const lecturerQ = useLecturer(
     booking && role !== 'LECTURER' ? booking.lecturerId : undefined,
   );
-
-  const complete = useCompleteBooking();
-  const noShow = useMarkNoShow();
 
   // Closed by status is known only once the booking loaded; a frame closes it at once.
   const [text, setText] = useState('');
@@ -97,38 +93,6 @@ export function ChatScreen() {
     () => buildListItems(room.messages, selfId, now),
     [room.messages, selfId, now],
   );
-
-  const actionBar = showActionBar({
-    role,
-    status: booking?.status,
-    startAt: booking?.startAt,
-    now,
-    closedFrame: room.closedFrame,
-  });
-
-  const act = (kind: 'complete' | 'noShow') => {
-    if (!booking) {
-      return;
-    }
-    const isDone = kind === 'complete';
-    Alert.alert(
-      isDone ? 'Đánh dấu đã gặp?' : 'Đánh dấu vắng mặt?',
-      isDone
-        ? 'Buổi hẹn sẽ chuyển sang hoàn thành và phòng chat đóng lại.'
-        : 'Sinh viên sẽ bị ghi nhận vắng mặt và phòng chat đóng lại.',
-      [
-        { text: 'Hủy', style: 'cancel' },
-        {
-          text: isDone ? 'Đã gặp' : 'Vắng mặt',
-          style: isDone ? 'default' : 'destructive',
-          onPress: () =>
-            (isDone ? complete : noShow).mutate(booking.id, {
-              onError: e => Alert.alert('Không thực hiện được', bookingErrorMessage(e)),
-            }),
-        },
-      ],
-    );
-  };
 
   const submit = () => {
     const body = text.trim();
@@ -268,33 +232,20 @@ export function ChatScreen() {
         keyboardVerticalOffset={0}
       >
         {header}
-        {actionBar ? (
-          <View style={styles.actbar}>
-            <AppText variant="sm" color={colors.fg} style={styles.flex}>
-              Đã tới giờ hẹn
-            </AppText>
-            <Button
-              variant="ghost"
-              title="Vắng mặt"
-              style={styles.actBtn}
-              disabled={complete.isPending || noShow.isPending}
-              onPress={() => act('noShow')}
-            />
-            <Button
-              title="Đã gặp"
-              style={styles.actBtn}
-              loading={complete.isPending}
-              disabled={noShow.isPending}
-              onPress={() => act('complete')}
-            />
-          </View>
-        ) : null}
         {!room.connected && !room.loading ? (
           <AppText variant="xs" center style={styles.offline}>
             Đang kết nối lại…
           </AppText>
         ) : null}
         <View style={styles.flex}>{body}</View>
+        {!room.closedFrame ? (
+          <AttendanceActions
+            booking={booking}
+            role={role}
+            now={now}
+            variant="bar"
+          />
+        ) : null}
         {closed && booking ? (
           <View
             style={[styles.closed, { paddingBottom: Math.max(insets.bottom, space.md) }]}
@@ -358,21 +309,6 @@ const styles = StyleSheet.create({
     paddingLeft: 48,
   },
   whoText: { flex: 1 },
-  actbar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginHorizontal: space.md,
-    marginBottom: space.sm,
-    paddingVertical: 8,
-    paddingLeft: 16,
-    paddingRight: 8,
-    borderRadius: 22,
-    backgroundColor: 'rgba(19,19,19,0.94)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.05)',
-  },
-  actBtn: { height: 38, paddingHorizontal: 14 },
   offline: { paddingVertical: 4 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   listContent: { paddingHorizontal: space.gutter, paddingVertical: space.md },
