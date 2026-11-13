@@ -10,6 +10,7 @@ import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import * as Haptics from 'expo-haptics';
 import { colors, glass, iconOpacity, radius, size, springs } from '../../theme';
 import { Glass } from './Glass';
+import { useFloatingSpace } from './floatingSpace';
 
 const SIDE = 16; // pill margin from screen edges
 const PAD = 8; // pill inner horizontal padding
@@ -25,11 +26,17 @@ const LABEL_X = ICON_X + ICON + 8;
 /** Bottom padding (excluding safe-area inset) screens need above the pill. */
 export const TAB_BAR_SPACE = size.navBar + BOTTOM_GAP + CONTENT_GAP;
 
-/** Full bottom padding including the safe-area inset. */
+/**
+ * Full bottom padding including the safe-area inset, plus the floating now-card's height
+ * while that card is shown (so existing screens need no change).
+ */
 export function useTabBarSpace() {
   const { bottom } = useSafeAreaInsets();
-  return TAB_BAR_SPACE + bottom;
+  return TAB_BAR_SPACE + bottom + useFloatingSpace();
 }
+
+/** Distance from the screen bottom to the pill's top edge (where the now-card sits above). */
+export const NAV_PILL_TOP = size.navBar + BOTTOM_GAP;
 
 /**
  * Geometry of the tabs for a (possibly fractional) active position `pos`.

@@ -18,6 +18,12 @@ import {
 import type { UserRole } from '../api/types';
 import { NavPill } from '../components/motion';
 import { colors } from '../theme';
+import {
+  FloatingMeeting,
+  badgeText,
+  usePendingCount,
+  useUnreadCount,
+} from '../features/dashboard';
 import { ROLE_SPECS, type TabIconName } from './roleConfig';
 import { SCREEN_COMPONENTS } from './screenComponents';
 import type { AnyStackParamList, AnyTabParamList } from './types';
@@ -50,10 +56,44 @@ const styles = StyleSheet.create({
 const Stack = createNativeStackNavigator<AnyStackParamList>();
 const Tab = createBottomTabNavigator<AnyTabParamList>();
 
-const renderTabBar = (props: BottomTabBarProps) => <NavPill {...props} />;
+/** NavPill with the floating "next meeting" card above it (hidden on the Map tab). */
+function tabBarFor(role: UserRole) {
+  function TabBar(props: BottomTabBarProps) {
+    const { navigation, state } = props;
+    const open = (screen: string, bookingId: string) =>
+      (navigation.navigate as (n: string, p: object) => void)(screen, {
+        bookingId,
+      });
+    return (
+      <>
+        <FloatingMeeting
+          role={role}
+          hidden={state.routes[state.index]?.name === 'Map'}
+          onOpenBooking={id => open('BookingDetail', id)}
+          onOpenChat={id => open('Chat', id)}
+          onOpenLive={id => open('LiveMeeting', id)}
+        />
+        <NavPill {...props} />
+      </>
+    );
+  }
+  return TabBar;
+}
+
+/** Badge text per tab name: lecturer "Review" = pending bookings, admin "Notifications" = unread. */
+function useTabBadges(role: UserRole): Record<string, string | undefined> {
+  const pending = usePendingCount(role === 'LECTURER');
+  const unread = useUnreadCount(role === 'ADMIN');
+  return {
+    Review: badgeText(pending.data),
+    Notifications: badgeText(unread.data),
+  };
+}
 
 function tabsFor(role: UserRole) {
+  const renderTabBar = tabBarFor(role);
   function Tabs() {
+    const badges = useTabBadges(role);
     return (
       <Tab.Navigator
         tabBar={renderTabBar}
@@ -71,6 +111,7 @@ function tabsFor(role: UserRole) {
               options={{
                 title: tab.label,
                 tabBarIcon: TAB_ICON_RENDERERS[tab.icon],
+                tabBarBadge: badges[tab.name],
               }}
             />
           );

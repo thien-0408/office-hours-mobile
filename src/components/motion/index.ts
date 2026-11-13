@@ -11,6 +11,16 @@ export type { GlassLevel, GlassQuality } from './GlassProvider';
 export { PressableCard } from './PressableCard';
 export type { PressableCardProps } from './PressableCard';
 export { NavPill, TAB_BAR_SPACE, navPillTabX, useTabBarSpace } from './NavPill';
+export { NowCard } from './NowCard';
+export type { NowCardProps } from './NowCard';
+export {
+  NOW_CARD_GAP,
+  NOW_CARD_HEIGHT,
+  NOW_CARD_SPACE,
+  isNowCardVisible,
+  setNowCardVisible,
+  useFloatingSpace,
+} from './floatingSpace';
 export { Odometer, splitOdometer } from './Odometer';
 export type { OdometerFormat, OdometerProps, OdometerToken } from './Odometer';
 export {
