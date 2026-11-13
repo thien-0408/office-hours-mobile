@@ -16,7 +16,7 @@ import {
 
 // pageInfiniteOptions is spread untyped, so the page param type widens to unknown.
 const flat = (data: unknown): Booking[] =>
-  flattenPages(data as InfiniteData<Page<Booking>, number> | undefined);
+  flattenPages(data);
 
 /**
  * Infinite list for a tab. Tabs with two statuses run two queries (both use the shared

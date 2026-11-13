@@ -6,7 +6,8 @@ export const DEFAULT_PAGE_SIZE = 20;
 
 export const pageInfiniteOptions = {
   initialPageParam: 0,
-  getNextPageParam: (last: Page<unknown>): number | undefined =>
+  // generic so useInfiniteQuery keeps the page item type (no casts at call sites)
+  getNextPageParam: <T,>(last: Page<T>): number | undefined =>
     last.page + 1 < last.totalPages ? last.page + 1 : undefined,
 };
 
