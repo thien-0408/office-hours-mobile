@@ -13,7 +13,7 @@ Sinh viên đặt lịch gặp giảng viên. Khi đến giờ hẹn, nếu cả
 | Yêu cầu trong đề | Cách đáp ứng | Task |
 |---|---|---|
 | Chủ đề realtime hoặc dữ liệu lớn | Vị trí trực tiếp, chat, trạng thái booking | MO-14, MO-16, MO-20 |
-| Tối thiểu 20 màn hình | 24 màn hình (mục 7) | Nhiều task |
+| Tối thiểu 20 màn hình | 27 màn hình (mục 7) | Nhiều task |
 | API realtime hai chiều, tối ưu băng thông | Realtime Database, Firestore, WebSocket; giới hạn tần suất ghi GPS | MO-14, MO-16, MO-20 |
 | Firebase làm database chính | Hybrid: vị trí và trạng thái online thuộc Firebase, booking là bản sao từ Postgres, chat ở backend | MO-12 đến MO-15, MO-20, BE-26 |
 | Query có filter, index, phân trang | Booking và thông báo trên Firestore, lịch sử chat, user | MO-06, MO-16, MO-20, MO-30 |
@@ -227,20 +227,22 @@ MO-12 cần bật Firebase ở backend (`FIREBASE_ENABLED=true`) nhưng không c
 | MO-30 | FlashList, phân trang cursor, cache offline, đo pin | 1.5 | Must | MO-16, MO-20 |
 | MO-31 | Slide 10–15 trang, ảnh chụp, biểu đồ hiệu năng, video demo | 1.5 | Must | MO-29, MO-30 |
 
-## 7. Danh sách 24 màn hình
+## 7. Danh sách 27 màn hình
+
+Số màn dùng chung cho cả 3 tài liệu: danh sách này, [SCREENS-FIREBASE.md](SCREENS-FIREBASE.md) (API của từng màn), và mock ở `docs/mockups-mochy/`. Màn 0 không tính vào 27 màn.
 
 | Nhóm | Màn hình |
 |---|---|
-| Tài khoản | 1. Đăng nhập · 2. Đăng ký · 3. Quên mật khẩu |
-| Chung | 4. Dashboard realtime · 5. Hồ sơ · 6. Cài đặt · 7. Thông báo · 8. Trợ giúp và Giới thiệu |
-| Booking | 9. Tìm giảng viên · 10. Chi tiết giảng viên và slot · 11. Đặt lịch · 12. Danh sách booking · 13. Chi tiết booking · 14. Waitlist |
-| Lịch | 15. Quét thời khóa biểu |
-| Chat | 16. Phòng chat, mở từ chi tiết booking |
-| Campus | 17. Map 3D · 18. Xin phép vị trí · 19. Buổi hẹn trực tiếp |
-| Giảng viên | 20. Availability · 21. Hàng đợi duyệt · 22. Biên bản họp và tóm tắt AI |
-| Admin | 23. Quản lý user · 24. Sơ đồ hoạt động campus (ẩn danh) |
+| Tài khoản | 0. Chào mừng (chỉ hiện lần mở đầu) · 1. Đăng nhập · 2. Đăng ký · 3. Quên mật khẩu · 4. Đặt lại mật khẩu |
+| Chung | 5. Dashboard realtime · 6. Hồ sơ · 7. Cài đặt · 8. Thông báo · 9. Trợ giúp và Giới thiệu |
+| Booking | 10. Tìm giảng viên · 11. Chi tiết giảng viên và slot · 12. Đặt lịch · 13. Danh sách booking · 14. Chi tiết booking · 15. Đổi lịch · 16. Waitlist |
+| Lịch | 17. Lịch bận của tôi · 18. Quét thời khóa biểu |
+| Chat | 19. Phòng chat, mở từ chi tiết booking |
+| Campus | 20. Map 3D · 21. Xin phép vị trí · 22. Buổi hẹn trực tiếp |
+| Giảng viên | 23. Availability · 24. Hàng đợi duyệt · 25. Biên bản họp và tóm tắt AI |
+| Admin | 26. Quản lý user · 27. Sơ đồ hoạt động campus (ẩn danh) |
 
-Nếu thiếu thời gian, có thể bỏ 14, 20 và 24 mà vẫn đạt 20 màn hình trở lên.
+Nếu thiếu thời gian: gộp 12 và 15 thành bottom sheet, bỏ 16, 23 và 27. Khi đó vẫn còn trên 20 màn hình.
 
 ## 8. Khối lượng
 

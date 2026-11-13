@@ -2,7 +2,9 @@
 
 > Nguồn: [realidkroo/Mochy-Music](https://github.com/realidkroo/Mochy-Music), commit `ca10089` (12/11/2026). Mochy là app nghe nhạc Android viết bằng Kotlin và Jetpack Compose, giấy phép **GPL-3.0**. Tài liệu này chỉ ghi lại **ý tưởng thiết kế và thông số**, không chép code. Code Kotlin cũng không dùng thẳng được cho React Native; chép nguyên văn còn kéo theo nghĩa vụ GPL.
 >
-> Đọc kèm: `docs/mockups/index.html` (design hiện tại lấy từ web), `SCREENS-FIREBASE.md`, `MOBILE-PLAN.md`.
+> Đọc kèm: `docs/mockups-mochy/index.html` (mock đã chốt), `SCREENS-FIREBASE.md`, `MOBILE-PLAN.md`. Số màn trong file này theo MOBILE-PLAN §7.
+>
+> **Đọc §8 trước.** §1–7 là ghi chép lúc khảo sát, có chỗ đã bị §8 thay: app dark-first (không phải sáng làm mặc định), font Inter (không phải Plus Jakarta Sans). Giá trị token chuẩn nằm ở `:root` trong `docs/mockups-mochy/mochy.css`, không phải các số ở §6.
 
 ---
 
@@ -157,7 +159,7 @@ Ký hiệu độ khó: 🟢 dễ (< ½ ngày) · 🟡 trung bình (1–2 ngày) 
 
 ## 5. Thư viện cần thêm
 
-So với bảng ở `docs/mockups/index.html`, cần thêm:
+So với bảng thư viện ở MOBILE-PLAN §5, cần thêm:
 
 | Gói | Dùng cho | Bắt buộc? |
 |---|---|---|

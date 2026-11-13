@@ -8,9 +8,12 @@ Tick màn hình khi đã nối API thật (không còn dữ liệu giả), cùng
 
 ## 1. Màn hình và tính năng
 
-Ký hiệu vai trò: **SV** sinh viên, **GV** giảng viên, **AD** admin. Đường dẫn API tính từ `/api/v1`. Dấu ➕ là màn hình chưa có trong 24 màn hình của MOBILE-PLAN §7, nhưng backend đã có API.
+Ký hiệu vai trò: **SV** sinh viên, **GV** giảng viên, **AD** admin. Đường dẫn API tính từ `/api/v1`. Số màn khớp với MOBILE-PLAN §7 và mock ở `docs/mockups-mochy/`. Dấu ➕ là màn được thêm sau bản 24 màn đầu tiên, vì backend đã có API.
 
 ### Tài khoản
+
+- [ ] **0. Chào mừng** `WelcomeScreen` · tất cả · MO-04
+  - [ ] Chỉ hiện ở lần mở app đầu tiên (lưu cờ trên máy), sau đó vào thẳng Đăng nhập. Không gọi API
 
 - [ ] **1. Đăng nhập** `LoginScreen` · tất cả · MO-04
   - [ ] `POST /auth/login`, lưu `accessToken` và `refreshToken` bằng `expo-secure-store`
