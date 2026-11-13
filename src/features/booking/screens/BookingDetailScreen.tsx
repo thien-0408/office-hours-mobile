@@ -31,6 +31,7 @@ import { useLecturer } from '../../../api/hooks/lecturers';
 import { space } from '../../../theme';
 import {
   AddToCalendarButton,
+  AttendanceActions,
   bookingActions,
   bookingErrorMessage,
   DateBlock,
@@ -210,6 +211,12 @@ export function BookingDetailScreen() {
           />
         </View>
       ) : null}
+      <AttendanceActions
+        booking={booking}
+        role={role}
+        now={now}
+        style={styles.attendanceActions}
+      />
       {act.cancel || act.reschedule ? (
         <View style={styles.actions}>
           {act.reschedule ? (
@@ -297,5 +304,6 @@ const styles = StyleSheet.create({
   stack: { marginTop: space.xl, gap: 10 },
   section: { marginTop: space.xxl, marginBottom: space.md },
   actions: { flexDirection: 'row', gap: space.sm, marginTop: space.xl },
+  attendanceActions: { marginTop: space.xl },
   grow: { flex: 1 },
 });
