@@ -21,6 +21,7 @@ import { colors, fonts, radius, space } from '../../../theme';
 import { ProfileGroup, SectionLabel } from '../components/ProfileGroup';
 import { ProfileRow } from '../components/ProfileRow';
 import { Toggle } from '../components/Toggle';
+import { useLocationConsent } from '../../../campus/consent';
 import {
   NOTIFICATION_PREF_ITEMS,
   resolvePasswordError,
@@ -46,8 +47,17 @@ export function SettingsScreen() {
   const { quality, setQuality } = useGlass();
 
   const [currentLocale, setCurrentLocale] = useState<Locale>(getLocale());
-  // TODO(MO-09): Nối API chia sẻ vị trí
-  const [locationSharing, setLocationSharing] = useState(false);
+  const locationConsent = useLocationConsent();
+  const locationSharing = locationConsent.status === 'granted';
+  const onLocationSharingChange = (next: boolean) => {
+    if (next) {
+      // the consent screen explains what is shared, then asks the OS permission
+      navigation.navigate('LocationConsent');
+    } else {
+      // TODO(MO-14): also remove own /bookingLive entries once Firebase is wired
+      locationConsent.revoke().catch(() => {});
+    }
+  };
 
   // Pref update state
   const [prefError, setPrefError] = useState<string | null>(null);
@@ -224,7 +234,7 @@ export function SettingsScreen() {
             trailing={
               <Toggle
                 value={locationSharing}
-                onValueChange={setLocationSharing}
+                onValueChange={onLocationSharingChange}
                 accessibilityLabel="Chia sẻ vị trí"
               />
             }

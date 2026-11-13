@@ -11,7 +11,7 @@ import {
   resetConsentCache,
   setConsent,
   useLocationConsent,
-} from '../src/features/campus/consent';
+} from '../src/campus/consent';
 import { LocationConsentScreen } from '../src/features/campus/screens/LocationConsentScreen';
 import * as permissions from '../src/platform/permissions';
 

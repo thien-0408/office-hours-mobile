@@ -18,7 +18,7 @@ import {
   nextStepFor,
   type NextStep,
   setConsent,
-} from '../consent';
+} from '../../../campus/consent';
 
 interface FactItem {
   key: string;

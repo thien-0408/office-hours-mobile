@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useSyncExternalStore } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import type { PermissionResult } from '../../../platform/permissions';
+import type { PermissionResult } from '../../platform/permissions';
 
 export const LOCATION_CONSENT_KEY = 'locationSharingConsent';
 
