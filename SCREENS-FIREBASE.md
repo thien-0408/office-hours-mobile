@@ -241,48 +241,20 @@ await auth().signInWithCustomToken(firebaseToken);
 
 ### 2.7 Realtime Database rules và emulator (MO-13)
 
-Backend chưa có rules cho Realtime Database; repo mobile giữ file này. Bản nháp `database.rules.json`:
-
-```json
-{
-  "rules": {
-    ".read": false,
-    ".write": false,
-    "activeBookings": {
-      "$bookingId": {
-        ".read": "auth != null && (data.child('studentId').val() === auth.uid || data.child('lecturerId').val() === auth.uid)",
-        ".write": false
-      }
-    },
-    "bookingLive": {
-      "$bookingId": {
-        ".read": "auth != null && (root.child('activeBookings').child($bookingId).child('studentId').val() === auth.uid || root.child('activeBookings').child($bookingId).child('lecturerId').val() === auth.uid)",
-        "$uid": {
-          ".write": "auth != null && auth.uid === $uid && (root.child('activeBookings').child($bookingId).child('studentId').val() === auth.uid || root.child('activeBookings').child($bookingId).child('lecturerId').val() === auth.uid) && (!newData.exists() || (now >= root.child('activeBookings').child($bookingId).child('startAtMs').val() && now <= root.child('activeBookings').child($bookingId).child('endAtMs').val() + 900000))",
-          ".validate": "newData.hasChildren(['building', 'x', 'z', 'acc', 'updatedAt']) && (!newData.child('floor').exists() || (newData.child('floor').isNumber() && newData.child('floor').val() >= -2 && newData.child('floor').val() <= 20)) && (!newData.child('floorSource').exists() || newData.child('floorSource').val().matches(/^(baro|manual|room)$/))"
-        }
-      }
-    },
-    "presence": {
-      ".read": "auth != null",
-      "$uid": {
-        ".write": "auth != null && auth.uid === $uid && auth.token.role === 'LECTURER'"
-      }
-    }
-  }
-}
-```
+Backend chưa có rules cho Realtime Database; repo mobile giữ file [`database.rules.json`](database.rules.json). Lý do của từng rule nằm ở [`firebase/README.md`](firebase/README.md). Payload `/bookingLive/{bookingId}/{uid}`: `building` (chuỗi 1–16 ký tự), `x`, `z` (số, ±1000 m), `acc` (0–200), `updatedAt` (epoch ms, lệch `now` tối đa 60 s), `floor` (số nguyên −2..20, tùy chọn), `floorSource` (`baro` | `manual` | `room`, tùy chọn); field khác bị từ chối. Payload `/presence/{uid}`: `{ status: IN_ROOM | ON_CAMPUS | AWAY, updatedAt }` (đề xuất của mobile, chờ chốt).
 
 **Khung giờ:** chỉ ghi được vị trí từ `startAtMs` đến `endAtMs` + 15 phút (900000 ms), lấy từ `/activeBookings` do backend ghi. Xóa vị trí của chính mình (`onDisconnect().remove()`) thì luôn được, miễn booking còn trong `/activeBookings`. Muốn cho chia sẻ sớm hơn giờ bắt đầu (ví dụ để đi tới phòng) thì đổi `now >= startAtMs` thành `now >= startAtMs - 900000`. App vẫn nên tự tắt chia sẻ ngoài khung giờ để không bị rules từ chối liên tục.
 
-- [ ] `firebase init emulators`: chọn Auth, Firestore, Database; tạo `firebase.json` ở repo mobile
-- [ ] Test rules bằng `@firebase/rules-unit-testing`:
-  - [ ] Không ghi được `/bookingLive/{id}/{uid người khác}`
-  - [ ] Không ghi được vị trí trước `startAtMs` hoặc sau `endAtMs` + 15 phút
-  - [ ] Người ngoài booking không đọc được `/bookingLive/{id}`
-  - [ ] Sinh viên không ghi được `/presence`
-  - [ ] Không ai ghi được `/activeBookings`
-- [ ] Deploy: `firebase deploy --only database --project <project-id>`
+- [x] `firebase.json` và `.firebaserc` (project `demo-officehours`, chỉ chạy offline) đã có. Chạy `npm run test:rules`; chỉ cần Database emulator (cần Java)
+- [x] Test rules bằng `@firebase/rules-unit-testing` (`firebase/tests/database.rules.test.ts`, 34 test):
+  - [x] Không ghi được `/bookingLive/{id}/{uid người khác}`
+  - [x] Không ghi được vị trí trước `startAtMs` hoặc sau `endAtMs` + 15 phút
+  - [x] Người ngoài booking không đọc được `/bookingLive/{id}`
+  - [x] Sinh viên không ghi được `/presence`
+  - [x] Không ai ghi được `/activeBookings`
+- [ ] Deploy: `npx firebase deploy --only database --project <project-id>`
+
+Lưu ý: backend xóa `/activeBookings/{id}` khi booking bị hủy hoặc đã kết thúc, và bỏ qua hẳn nếu `FIREBASE_DATABASE_URL` trống. Khi node đã bị xóa thì mọi lần ghi vị trí đều bị từ chối, nên 15 phút gia hạn chỉ có tác dụng khi node vẫn còn.
 
 ### 2.8 Kiểm tra toàn luồng
 
