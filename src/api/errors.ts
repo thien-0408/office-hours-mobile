@@ -85,7 +85,11 @@ export function parseFieldErrors(details: unknown): FieldError[] {
       continue;
     }
     let field = typeof entry.field === 'string' ? entry.field : undefined;
-    if (!field && isRecord(entry.context) && Array.isArray(entry.context.errors)) {
+    if (
+      !field &&
+      isRecord(entry.context) &&
+      Array.isArray(entry.context.errors)
+    ) {
       const inner = entry.context.errors.find(
         (e: unknown) => isRecord(e) && typeof e.field === 'string',
       ) as { field: string } | undefined;
@@ -120,7 +124,8 @@ export function buildApiError(
   return new ApiError({
     status,
     error,
-    message: typeof body?.message === 'string' ? body.message : `HTTP ${status}`,
+    message:
+      typeof body?.message === 'string' ? body.message : `HTTP ${status}`,
     fieldErrors: parseFieldErrors(body?.details),
     retryAfterSeconds,
     requestId: headers.get('X-Request-Id') ?? undefined,

@@ -71,5 +71,9 @@ export function resetPassword(
   token: string,
   newPassword: string,
 ): Promise<void> {
-  return api.post('/auth/reset-password', { token, newPassword }, { auth: false });
+  return api.post(
+    '/auth/reset-password',
+    { token, newPassword },
+    { auth: false },
+  );
 }
