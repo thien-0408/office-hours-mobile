@@ -9,6 +9,7 @@ import type {
 } from '../../../api/domainTypes';
 import type { UserRole } from '../../../api/types';
 import { formatVnDayTime } from '../../../api/time';
+import { isWithinJoinWindow } from '../../../api/bookingTime';
 
 // ---- list tabs (screen 13) ----
 export type BookingTab = 'upcoming' | 'pending' | 'past' | 'cancelled';
@@ -88,22 +89,12 @@ export function bookingSubtitle(
 }
 
 // ---- action availability (screen 14) ----
-const MIN = 60_000;
-export const LIVE_WINDOW_BEFORE_MIN = 15;
-export const LIVE_WINDOW_AFTER_MIN = 15;
-
-/** Within [start - 15 min, end + 15 min]. */
-export function isInLiveWindow(
-  booking: Pick<Booking, 'startAt' | 'endAt'>,
-  now: number = Date.now(),
-): boolean {
-  const start = Date.parse(booking.startAt);
-  const end = Date.parse(booking.endAt);
-  return (
-    now >= start - LIVE_WINDOW_BEFORE_MIN * MIN &&
-    now <= end + LIVE_WINDOW_AFTER_MIN * MIN
-  );
-}
+// Single source for the live-meeting window lives in src/api/bookingTime.ts.
+export {
+  MEETING_JOIN_BEFORE_MIN as LIVE_WINDOW_BEFORE_MIN,
+  MEETING_JOIN_AFTER_MIN as LIVE_WINDOW_AFTER_MIN,
+  isWithinJoinWindow as isInLiveWindow,
+} from '../../../api/bookingTime';
 
 export type BookingActions = {
   cancel: boolean;
@@ -141,7 +132,8 @@ export function bookingActions(
   const open = status === 'PENDING' || status === 'CONFIRMED';
   const finished = status === 'COMPLETED' || status === 'NO_SHOW';
   const chat = status === 'CONFIRMED' || finished;
-  const liveMeeting = status === 'CONFIRMED' && isInLiveWindow(booking, now);
+  const liveMeeting =
+    status === 'CONFIRMED' && isWithinJoinWindow(booking, now);
 
   if (role === 'STUDENT') {
     return {
