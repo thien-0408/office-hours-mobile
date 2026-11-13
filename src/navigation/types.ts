@@ -33,7 +33,7 @@ export type ScreenParams = {
   Chat: { bookingId: string }; // 19
   // Campus
   CampusMap: { roomId?: string } | undefined; // 20
-  LocationConsent: undefined; // 21
+  LocationConsent: { next?: string } | undefined; // 21
   LiveMeeting: { bookingId: string }; // 22
   // Giang vien
   Availability: undefined; // 23
