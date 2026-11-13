@@ -1,4 +1,9 @@
-import { campus as defaultCampus, type LatLng, type Block, type XZ } from './campusData';
+import {
+  campus as defaultCampus,
+  type LatLng,
+  type Block,
+  type XZ,
+} from './campusData';
 
 /**
  * Floor height in meters, pending physical survey in MO-07.
@@ -7,14 +12,8 @@ export const DEFAULT_FLOOR_HEIGHT_M = 3.6;
 
 export type PointXZ = XZ | { x: number; z: number };
 
-export interface HybridXZPoint {
-  x: number;
-  z: number;
-  0: number;
-  1: number;
-  length: 2;
-  [Symbol.iterator](): IterableIterator<number>;
-}
+/** A point on the campus plane, metres from the origin (x east, z north). */
+export type CampusPoint = { x: number; z: number };
 
 export type LocationReading = {
   lat: number;
@@ -66,24 +65,21 @@ function getCoords(p: PointXZ): [number, number] {
   return [p.x, p.z];
 }
 
-function makeHybridPoint(x: number, z: number): HybridXZPoint {
-  const arr = [x, z] as unknown as HybridXZPoint;
-  (arr as unknown as { x: number; z: number }).x = x;
-  (arr as unknown as { x: number; z: number }).z = z;
-  return arr;
-}
-
 /**
  * Converts GPS (lat, lng) to local campus coordinates (x, z) in meters relative to origin.
  * Formula from seed projection:
  * x = (lng - lng0) * 111320 * cos(lat0)
  * z = (lat - lat0) * 110540
  */
-export function toXZ(lat: number, lng: number, origin: LatLng = defaultCampus.origin): HybridXZPoint {
+export function toXZ(
+  lat: number,
+  lng: number,
+  origin: LatLng = defaultCampus.origin,
+): CampusPoint {
   const lat0Rad = (origin.lat * Math.PI) / 180;
   const x = (lng - origin.lng) * 111320 * Math.cos(lat0Rad);
   const z = (lat - origin.lat) * 110540;
-  return makeHybridPoint(x, z);
+  return { x, z };
 }
 
 /**
@@ -92,7 +88,7 @@ export function toXZ(lat: number, lng: number, origin: LatLng = defaultCampus.or
 export function toLatLng(
   xOrPoint: number | PointXZ,
   zOrOrigin?: number | LatLng,
-  maybeOrigin?: LatLng
+  maybeOrigin?: LatLng,
 ): LatLng {
   let x: number;
   let z: number;
@@ -128,10 +124,10 @@ export function distanceM(a: PointXZ, b: PointXZ): number {
 }
 
 function getEdges(
-  polygon: (XZ | { x: number; z: number })[]
+  polygon: (XZ | { x: number; z: number })[],
 ): Array<[[number, number], [number, number]]> {
   const pts: [number, number][] = polygon.map(p =>
-    Array.isArray(p) ? [p[0], p[1]] : [p.x, p.z]
+    Array.isArray(p) ? [p[0], p[1]] : [p.x, p.z],
   );
   if (pts.length < 3) {
     return [];
@@ -156,11 +152,11 @@ function getEdges(
  */
 export function pointInPolygon(
   p: PointXZ,
-  polygon: (XZ | { x: number; z: number })[]
+  polygon: (XZ | { x: number; z: number })[],
 ): boolean {
   const [px, pz] = getCoords(p);
   const pts: [number, number][] = polygon.map(pt =>
-    Array.isArray(pt) ? [pt[0], pt[1]] : [pt.x, pt.z]
+    Array.isArray(pt) ? [pt[0], pt[1]] : [pt.x, pt.z],
   );
   if (pts.length < 3) {
     return false;
@@ -192,7 +188,7 @@ function distanceToSegment(
   x1: number,
   z1: number,
   x2: number,
-  z2: number
+  z2: number,
 ): number {
   const dx = x2 - x1;
   const dz = z2 - z1;
@@ -213,7 +209,7 @@ function distanceToSegment(
  */
 export function distanceToPolygonM(
   p: PointXZ,
-  polygon: (XZ | { x: number; z: number })[]
+  polygon: (XZ | { x: number; z: number })[],
 ): number {
   if (pointInPolygon(p, polygon)) {
     return 0;
@@ -238,7 +234,7 @@ export function distanceToPolygonM(
  */
 export function isOnCampus(
   p: PointXZ | LatLng,
-  boundary: (XZ | { x: number; z: number })[] = defaultCampus.boundary
+  boundary: (XZ | { x: number; z: number })[] = defaultCampus.boundary,
 ): boolean {
   if ('lat' in p && 'lng' in p) {
     const xz = toXZ(p.lat, p.lng);
@@ -253,7 +249,7 @@ export function isOnCampus(
 export function findBlock(
   p: PointXZ,
   blocks: Block[] = defaultCampus.blocks,
-  marginM = 3
+  marginM = 3,
 ): Block | null {
   for (const block of blocks) {
     if (pointInPolygon(p, block.outline)) {
@@ -300,7 +296,7 @@ export function createLocationFilter(options?: LocationFilterOptions) {
 
   function step(
     state: FilterState,
-    reading: LocationReading
+    reading: LocationReading,
   ): { state: FilterState; fix: LocationFix | null } {
     if (
       reading.accuracy > maxAccuracyM ||
@@ -332,14 +328,23 @@ export function createLocationFilter(options?: LocationFilterOptions) {
       smoothedZ = rawXZ.z;
     } else {
       // EMA smoothing; alpha can slightly increase when accuracy is excellent
-      const accuracyBoost = Math.max(0, (maxAccuracyM - reading.accuracy) / maxAccuracyM);
+      const accuracyBoost = Math.max(
+        0,
+        (maxAccuracyM - reading.accuracy) / maxAccuracyM,
+      );
       const effectiveAlpha = Math.min(0.7, alpha * (1 + 0.5 * accuracyBoost));
-      smoothedX = effectiveAlpha * rawXZ.x + (1 - effectiveAlpha) * state.lastFix.x;
-      smoothedZ = effectiveAlpha * rawXZ.z + (1 - effectiveAlpha) * state.lastFix.z;
+      smoothedX =
+        effectiveAlpha * rawXZ.x + (1 - effectiveAlpha) * state.lastFix.x;
+      smoothedZ =
+        effectiveAlpha * rawXZ.z + (1 - effectiveAlpha) * state.lastFix.z;
     }
 
     // Detect block on smoothed coordinates
-    const detectedBlock = findBlock({ x: smoothedX, z: smoothedZ }, blocks, marginM);
+    const detectedBlock = findBlock(
+      { x: smoothedX, z: smoothedZ },
+      blocks,
+      marginM,
+    );
     const rawBlock = detectedBlock ? detectedBlock.code : null;
 
     let confirmedBlock = state.confirmedBlock;
@@ -384,7 +389,8 @@ export function createLocationFilter(options?: LocationFilterOptions) {
     return { state: nextState, fix };
   }
 
-  const filterFn = (state: FilterState, reading: LocationReading) => step(state, reading);
+  const filterFn = (state: FilterState, reading: LocationReading) =>
+    step(state, reading);
   filterFn.step = step;
   filterFn.getInitialState = () => ({ ...initialState });
   filterFn.initialState = initialState;
@@ -403,7 +409,7 @@ export function createLocationFilter(options?: LocationFilterOptions) {
 export function shouldPublish(
   last: PublishPoint | null | undefined,
   next: PublishPoint,
-  nowMs?: number
+  nowMs?: number,
 ): boolean {
   if (!last) {
     return true;
@@ -572,7 +578,7 @@ export function roomBlock(code: string | null | undefined): string | null {
  */
 export function floorLabel(
   floor: number | null | undefined,
-  source?: FloorSource | string
+  source?: FloorSource | string,
 ): string {
   if (floor == null) {
     return 'Tầng ?';
@@ -597,7 +603,7 @@ export function locationLabel(
   block: string | null | undefined,
   floor?: number | null,
   source?: FloorSource | string,
-  room?: string | null
+  room?: string | null,
 ): string {
   if (room && room.trim()) {
     const trimmed = room.trim();

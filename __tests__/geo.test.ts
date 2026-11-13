@@ -23,12 +23,6 @@ describe('geo.ts — EIU Campus GPS & Geometry', () => {
       const pt = toXZ(defaultCampus.origin.lat, defaultCampus.origin.lng);
       expect(pt.x).toBeCloseTo(0, 5);
       expect(pt.z).toBeCloseTo(0, 5);
-      expect(pt[0]).toBeCloseTo(0, 5);
-      expect(pt[1]).toBeCloseTo(0, 5);
-
-      const [x, z] = pt;
-      expect(x).toBeCloseTo(0, 5);
-      expect(z).toBeCloseTo(0, 5);
     });
 
     it('roundtrip (lat, lng) -> toXZ -> toLatLng has error < 0.01 m', () => {
@@ -363,7 +357,9 @@ describe('geo.ts — EIU Campus GPS & Geometry', () => {
     });
 
     it('changes floor only after diff > 60% floor height for >= 3000 ms continuously', () => {
-      const estimator = createFloorEstimator({ floorHeightM: DEFAULT_FLOOR_HEIGHT_M });
+      const estimator = createFloorEstimator({
+        floorHeightM: DEFAULT_FLOOR_HEIGHT_M,
+      });
       estimator.onEnterBlock(1013.25, 4);
 
       // Climb 1 floor: 3.6 m height diff requires pressure drop of 3.6 / 8.3 ≈ 0.4337 hPa.
@@ -372,13 +368,22 @@ describe('geo.ts — EIU Campus GPS & Geometry', () => {
       const pFloor2 = 1013.25 - 0.43;
 
       // At t = 0 ms: detected change, but timer just started -> floor remains 1
-      expect(estimator.onPressure(pFloor2, 0)).toEqual({ floor: 1, source: 'baro' });
+      expect(estimator.onPressure(pFloor2, 0)).toEqual({
+        floor: 1,
+        source: 'baro',
+      });
 
       // At t = 2000 ms (< 3000 ms) -> floor still 1
-      expect(estimator.onPressure(pFloor2, 2000)).toEqual({ floor: 1, source: 'baro' });
+      expect(estimator.onPressure(pFloor2, 2000)).toEqual({
+        floor: 1,
+        source: 'baro',
+      });
 
       // At t = 3000 ms (>= 3000 ms) -> floor confirms to 2!
-      expect(estimator.onPressure(pFloor2, 3000)).toEqual({ floor: 2, source: 'baro' });
+      expect(estimator.onPressure(pFloor2, 3000)).toEqual({
+        floor: 2,
+        source: 'baro',
+      });
       expect(estimator.floor).toBe(2);
     });
 
@@ -392,10 +397,16 @@ describe('geo.ts — EIU Campus GPS & Geometry', () => {
       estimator.onPressure(pFloor2, 0);
 
       // Noise spike returns to normal at t = 1000 ms
-      expect(estimator.onPressure(1013.25, 1000)).toEqual({ floor: 1, source: 'baro' });
+      expect(estimator.onPressure(1013.25, 1000)).toEqual({
+        floor: 1,
+        source: 'baro',
+      });
 
       // Check later at t = 4000 ms: floor is still 1
-      expect(estimator.onPressure(1013.25, 4000)).toEqual({ floor: 1, source: 'baro' });
+      expect(estimator.onPressure(1013.25, 4000)).toEqual({
+        floor: 1,
+        source: 'baro',
+      });
     });
 
     it('manual selection overrides barometer until exiting block', () => {
@@ -409,8 +420,14 @@ describe('geo.ts — EIU Campus GPS & Geometry', () => {
       expect(estimator.source).toBe('manual');
 
       // Even if pressure is at floor 1 or floor 4, manual wins
-      expect(estimator.onPressure(1013.25, 10000)).toEqual({ floor: 3, source: 'manual' });
-      expect(estimator.onPressure(990.0, 20000)).toEqual({ floor: 3, source: 'manual' });
+      expect(estimator.onPressure(1013.25, 10000)).toEqual({
+        floor: 3,
+        source: 'manual',
+      });
+      expect(estimator.onPressure(990.0, 20000)).toEqual({
+        floor: 3,
+        source: 'manual',
+      });
     });
 
     it('resets baseline and manual override on onExitBlock', () => {
@@ -434,12 +451,24 @@ describe('geo.ts — EIU Campus GPS & Geometry', () => {
       estimator.onEnterBlock(1013.25, 3); // 3 floors total
 
       // Huge pressure drop (e.g. 5 floors up)
-      expect(estimator.onPressure(990.0, 0)).toEqual({ floor: 1, source: 'baro' });
-      expect(estimator.onPressure(990.0, 3500)).toEqual({ floor: 3, source: 'baro' }); // clamped to 3
+      expect(estimator.onPressure(990.0, 0)).toEqual({
+        floor: 1,
+        source: 'baro',
+      });
+      expect(estimator.onPressure(990.0, 3500)).toEqual({
+        floor: 3,
+        source: 'baro',
+      }); // clamped to 3
 
       // High pressure (below ground)
-      expect(estimator.onPressure(1030.0, 4000)).toEqual({ floor: 3, source: 'baro' });
-      expect(estimator.onPressure(1030.0, 7500)).toEqual({ floor: 1, source: 'baro' }); // clamped to 1
+      expect(estimator.onPressure(1030.0, 4000)).toEqual({
+        floor: 3,
+        source: 'baro',
+      });
+      expect(estimator.onPressure(1030.0, 7500)).toEqual({
+        floor: 1,
+        source: 'baro',
+      }); // clamped to 1
     });
   });
 
@@ -478,9 +507,15 @@ describe('geo.ts — EIU Campus GPS & Geometry', () => {
 
     it('locationLabel formats strings per STYLE-MOCHY §8.10', () => {
       // Room takes highest priority: "tại phòng 306.B11"
-      expect(locationLabel('B11', 2, 'baro', '306.B11')).toBe('tại phòng 306.B11');
-      expect(locationLabel('B11', null, null, '306.B11')).toBe('tại phòng 306.B11');
-      expect(locationLabel(null, null, null, 'tại phòng 306.B11')).toBe('tại phòng 306.B11');
+      expect(locationLabel('B11', 2, 'baro', '306.B11')).toBe(
+        'tại phòng 306.B11',
+      );
+      expect(locationLabel('B11', null, null, '306.B11')).toBe(
+        'tại phòng 306.B11',
+      );
+      expect(locationLabel(null, null, null, 'tại phòng 306.B11')).toBe(
+        'tại phòng 306.B11',
+      );
 
       // Block with estimated floor
       expect(locationLabel('B11', 2, 'baro')).toBe('B11 · tầng 2 (ước lượng)');

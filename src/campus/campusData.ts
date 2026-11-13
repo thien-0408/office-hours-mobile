@@ -51,7 +51,9 @@ type EstimatedBuilding = {
   approxSizeM: [number, number] | null;
 };
 
-function normalizeCodeAndName(rawCode: string): { code: string; name: string } | null {
+function normalizeCodeAndName(
+  rawCode: string,
+): { code: string; name: string } | null {
   const trimmed = rawCode.trim();
   if (/^b\d+$/i.test(trimmed)) {
     const num = trimmed.replace(/^b/i, '');
@@ -72,7 +74,7 @@ function resolveFloors(
   rawCode: string,
   code: string,
   levelsOrFloors: number | null | undefined,
-  confirmed: Record<string, number>
+  confirmed: Record<string, number>,
 ): number {
   if (confirmed[name] !== undefined) {
     return confirmed[name];
@@ -91,7 +93,7 @@ function resolveFloors(
 
 function createEstimatedOutline(
   centerXZ: [number, number],
-  approxSizeM: [number, number] | null
+  approxSizeM: [number, number] | null,
 ): XZ[] {
   // Default footprint for buildings without approxSizeM (Block 9 & Block 10)
   const [cx, cz] = centerXZ;
@@ -108,7 +110,10 @@ function createEstimatedOutline(
 }
 
 function buildCampus(): Campus {
-  const confirmed = (seedData.floorsConfirmedByTeam || {}) as Record<string, number>;
+  const confirmed = (seedData.floorsConfirmedByTeam || {}) as Record<
+    string,
+    number
+  >;
   const blocks: Block[] = [];
 
   // 1. Process OSM buildings
@@ -122,7 +127,13 @@ function buildCampus(): Campus {
     if (!normalized) {
       continue;
     }
-    const floors = resolveFloors(normalized.name, b.code, normalized.code, b.levels, confirmed);
+    const floors = resolveFloors(
+      normalized.name,
+      b.code,
+      normalized.code,
+      b.levels,
+      confirmed,
+    );
     blocks.push({
       code: normalized.code,
       name: normalized.name,
@@ -133,7 +144,8 @@ function buildCampus(): Campus {
   }
 
   // 2. Process planEstimates buildings (Block 8, 9, 10, 11)
-  const estimates = ((seedData.planEstimates?.buildings || []) as unknown) as EstimatedBuilding[];
+  const estimates = (seedData.planEstimates?.buildings ||
+    []) as unknown as EstimatedBuilding[];
   for (const est of estimates) {
     const normalized = normalizeCodeAndName(est.code);
     if (!normalized) {
@@ -143,7 +155,13 @@ function buildCampus(): Campus {
     if (blocks.some(existing => existing.code === normalized.code)) {
       continue;
     }
-    const floors = resolveFloors(normalized.name, est.code, normalized.code, est.floors, confirmed);
+    const floors = resolveFloors(
+      normalized.name,
+      est.code,
+      normalized.code,
+      est.floors,
+      confirmed,
+    );
     const outline = createEstimatedOutline(est.centerXZ, est.approxSizeM);
     blocks.push({
       code: normalized.code,
@@ -155,7 +173,7 @@ function buildCampus(): Campus {
   }
 
   // 3. Process rooms from eiu-rooms.json
-  const rooms: Room[] = ((roomsData.rooms || []) as unknown) as Room[];
+  const rooms: Room[] = (roomsData.rooms || []) as unknown as Room[];
 
   return {
     origin: seedData.origin as LatLng,
