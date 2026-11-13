@@ -523,6 +523,9 @@ describe('geo.ts — EIU Campus GPS & Geometry', () => {
       // Block with manual floor
       expect(locationLabel('B11', 2, 'manual')).toBe('B11 · tầng 2 (tự chọn)');
 
+      // Floor from a real room
+      expect(locationLabel('B11', 2, 'room')).toBe('B11 · tầng 2');
+
       // Block only (no floor)
       expect(locationLabel('B11', null, null)).toBe('B11');
       expect(locationLabel('B11')).toBe('B11');

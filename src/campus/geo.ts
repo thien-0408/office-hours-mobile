@@ -574,6 +574,7 @@ export function roomBlock(code: string | null | undefined): string | null {
  * Formats floor and source for UI:
  * - "tầng 2 (ước lượng)"
  * - "tầng 2 (tự chọn)"
+ * - "tầng 2" (source 'room')
  * - "Tầng ?"
  */
 export function floorLabel(
@@ -588,6 +589,10 @@ export function floorLabel(
   }
   if (source === 'baro') {
     return `tầng ${floor} (ước lượng)`;
+  }
+  if (source === 'room') {
+    // Floor known from a real room (peer inside the destination room): solid, no qualifier.
+    return `tầng ${floor}`;
   }
   return 'Tầng ?';
 }
