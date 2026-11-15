@@ -11,7 +11,7 @@ import {
   useFonts,
 } from '@expo-google-fonts/inter';
 import { queryClient } from './src/api/queryClient';
-import { GlassProvider } from './src/components/motion';
+import { GlassProvider, SheetRecede } from './src/components/motion';
 import { SessionProvider } from './src/features/auth/session/SessionProvider';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { colors } from './src/theme';
@@ -37,9 +37,11 @@ function App() {
           <QueryClientProvider client={queryClient}>
             <SessionProvider>
               <GlassProvider>
-                <NavigationContainer theme={navTheme}>
-                  <RootNavigator />
-                </NavigationContainer>
+                <SheetRecede>
+                  <NavigationContainer theme={navTheme}>
+                    <RootNavigator />
+                  </NavigationContainer>
+                </SheetRecede>
               </GlassProvider>
             </SessionProvider>
           </QueryClientProvider>

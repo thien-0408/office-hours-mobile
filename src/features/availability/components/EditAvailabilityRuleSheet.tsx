@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
-  KeyboardAvoidingView,
-  Modal,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   useDeleteAvailabilityRule,
   useUpdateAvailabilityRule,
@@ -17,7 +13,8 @@ import {
 import type { AvailabilityRule } from '../../../api/domainTypes';
 import { Button } from '../../../components/Button';
 import { Field } from '../../../components/Field';
-import { colors, fonts, radius, space } from '../../../theme';
+import { Sheet, useSheetItem } from '../../../components/motion';
+import { colors, fonts, space } from '../../../theme';
 import {
   availabilityErrorMessage,
   dayOfWeekName,
@@ -32,11 +29,12 @@ export interface EditAvailabilityRuleSheetProps {
 }
 
 export function EditAvailabilityRuleSheet({
-  rule,
+  rule: ruleProp,
   visible,
   onClose,
 }: EditAvailabilityRuleSheetProps) {
-  const insets = useSafeAreaInsets();
+  // Keeps the rule on screen while the sheet slides away after close.
+  const rule = useSheetItem(ruleProp);
   const updateMutation = useUpdateAvailabilityRule();
   const deleteMutation = useDeleteAvailabilityRule();
 
@@ -130,117 +128,65 @@ export function EditAvailabilityRuleSheet({
   };
 
   return (
-    <Modal
+    <Sheet
       visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={handleClose}
+      onClose={handleClose}
+      dismissable={!isBusy}
+      backdropLabel="Đóng bảng sửa khung giờ"
+      title={`Khung giờ ${dayOfWeekName(rule.dayOfWeek)}`}
     >
-      <KeyboardAvoidingView behavior="padding" style={styles.overlay}>
-        <Pressable
-          style={styles.backdrop}
-          onPress={isBusy ? undefined : handleClose}
-          accessibilityLabel="Đóng bảng sửa khung giờ"
-        />
-
-        <View
-          style={[
-            styles.sheet,
-            { paddingBottom: Math.max(insets.bottom, 16) + space.md },
-          ]}
-        >
-          <View style={styles.handle} />
-
-          <Text style={styles.title}>
-            Khung giờ {dayOfWeekName(rule.dayOfWeek)}
-          </Text>
-
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-            contentContainerStyle={styles.scrollContent}
-          >
-            {/* Time range */}
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Thời gian rảnh</Text>
-              <TimeSelector
-                startTime={startTime}
-                endTime={endTime}
-                onChangeStartTime={setStartTime}
-                onChangeEndTime={setEndTime}
-                error={errors.endTime || errors.startTime}
-              />
-            </View>
-
-            {/* Meeting link */}
-            <View style={styles.formGroup}>
-              <Field
-                label="Link phòng họp online (tuỳ chọn)"
-                placeholder="https://zoom.us/j/... hoặc để trống nếu trực tiếp"
-                value={meetingUrl}
-                onChangeText={setMeetingUrl}
-                error={errors.meetingUrl}
-              />
-            </View>
-
-            {/* Actions */}
-            <View style={styles.actionButtons}>
-              <Button
-                variant="primary"
-                title="Lưu thay đổi"
-                loading={updateMutation.isPending}
-                disabled={isBusy}
-                onPress={handleSave}
-              />
-              <Button
-                variant="quiet"
-                title="Xóa khung giờ này"
-                loading={deleteMutation.isPending}
-                disabled={isBusy}
-                onPress={handleDelete}
-                textStyle={styles.deleteButtonText}
-              />
-            </View>
-          </ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* Time range */}
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Thời gian rảnh</Text>
+          <TimeSelector
+            startTime={startTime}
+            endTime={endTime}
+            onChangeStartTime={setStartTime}
+            onChangeEndTime={setEndTime}
+            error={errors.endTime || errors.startTime}
+          />
         </View>
-      </KeyboardAvoidingView>
-    </Modal>
+
+        {/* Meeting link */}
+        <View style={styles.formGroup}>
+          <Field
+            label="Link phòng họp online (tuỳ chọn)"
+            placeholder="https://zoom.us/j/... hoặc để trống nếu trực tiếp"
+            value={meetingUrl}
+            onChangeText={setMeetingUrl}
+            error={errors.meetingUrl}
+          />
+        </View>
+
+        {/* Actions */}
+        <View style={styles.actionButtons}>
+          <Button
+            variant="primary"
+            title="Lưu thay đổi"
+            loading={updateMutation.isPending}
+            disabled={isBusy}
+            onPress={handleSave}
+          />
+          <Button
+            variant="quiet"
+            title="Xóa khung giờ này"
+            loading={deleteMutation.isPending}
+            disabled={isBusy}
+            onPress={handleDelete}
+            textStyle={styles.deleteButtonText}
+          />
+        </View>
+      </ScrollView>
+    </Sheet>
   );
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.64)',
-  },
-  backdrop: {
-    ...StyleSheet.absoluteFill,
-  },
-  sheet: {
-    maxHeight: '90%',
-    backgroundColor: colors.s1,
-    borderTopLeftRadius: radius.sheet,
-    borderTopRightRadius: radius.sheet,
-    borderWidth: 1,
-    borderColor: colors.line2,
-    paddingHorizontal: space.gutter,
-    paddingTop: space.md,
-  },
-  handle: {
-    width: 40,
-    height: 5,
-    borderRadius: 5,
-    backgroundColor: colors.fg4,
-    alignSelf: 'center',
-    marginBottom: space.md,
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: fonts.bold,
-    color: colors.fg,
-    marginBottom: space.md,
-  },
   scrollContent: {
     gap: space.md,
     paddingBottom: space.lg,

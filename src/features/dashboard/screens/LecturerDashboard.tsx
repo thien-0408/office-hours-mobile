@@ -18,6 +18,7 @@ import {
   StatusPill,
 } from '../../../components';
 import {
+  Loadable,
   BlurTarget,
   Glow,
   Reveal,
@@ -121,41 +122,46 @@ export function LecturerDashboard() {
               title="Hôm nay"
               onPress={() => go(navigation, 'Calendar')}
             />
-            {today.isLoading ? (
-              <View style={styles.skeletons}>
-                <Skeleton height={48} borderRadius={14} />
-                <Skeleton height={48} borderRadius={14} />
-              </View>
-            ) : today.isError ? (
-              <View style={styles.msg}>
-                <AppText variant="sm">{errorText(today.error)}</AppText>
-                <Button
-                  variant="ghost"
-                  title="Thử lại"
-                  onPress={() => today.refetch()}
-                />
-              </View>
-            ) : rows.length === 0 ? (
-              <AppText variant="sm">Hôm nay chưa có buổi hẹn nào.</AppText>
-            ) : (
-              rows.map((b, i) => {
-                const pill = todayRowPill(b);
-                return (
-                  <ListRow
-                    key={b.id}
-                    title={b.studentName}
-                    subtitle={todayRowSubtitle(b)}
-                    avatarId={b.studentId}
-                    avatarShape="round"
-                    divider={i > 0}
-                    trailing={<StatusPill status={pill.status} label={pill.label} />}
-                    onPress={() =>
-                      go(navigation, 'BookingDetail', { bookingId: b.id })
-                    }
+            <Loadable
+              loading={today.isLoading}
+              skeleton={
+                <View style={styles.skeletons}>
+                  <Skeleton height={48} borderRadius={14} />
+                  <Skeleton height={48} borderRadius={14} />
+                </View>
+              }
+            >
+              {today.isError ? (
+                <View style={styles.msg}>
+                  <AppText variant="sm">{errorText(today.error)}</AppText>
+                  <Button
+                    variant="ghost"
+                    title="Thử lại"
+                    onPress={() => today.refetch()}
                   />
-                );
-              })
-            )}
+                </View>
+              ) : rows.length === 0 ? (
+                <AppText variant="sm">Hôm nay chưa có buổi hẹn nào.</AppText>
+              ) : (
+                rows.map((b, i) => {
+                  const pill = todayRowPill(b);
+                  return (
+                    <ListRow
+                      key={b.id}
+                      title={b.studentName}
+                      subtitle={todayRowSubtitle(b)}
+                      avatarId={b.studentId}
+                      avatarShape="round"
+                      divider={i > 0}
+                      trailing={<StatusPill status={pill.status} label={pill.label} />}
+                      onPress={() =>
+                        go(navigation, 'BookingDetail', { bookingId: b.id })
+                      }
+                    />
+                  );
+                })
+              )}
+            </Loadable>
           </Reveal>
         </ScrollView>
       </BlurTarget>

@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import {
   Alert,
-  KeyboardAvoidingView,
-  Modal,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCreateAvailabilityException } from '../../../api/hooks';
 import type { AvailabilityExceptionType } from '../../../api/domainTypes';
 import { Button } from '../../../components/Button';
 import { Field } from '../../../components/Field';
 import { Seg, type SegOption } from '../../../components/Seg';
-import { colors, fonts, radius, space } from '../../../theme';
+import { Sheet } from '../../../components/motion';
+import { colors, fonts, space } from '../../../theme';
 import {
   availabilityErrorMessage,
   validateExceptionInput,
@@ -38,7 +35,6 @@ export function AddExceptionSheet({
   lecturerId,
   onClose,
 }: AddExceptionSheetProps) {
-  const insets = useSafeAreaInsets();
   const createMutation = useCreateAvailabilityException(lecturerId);
 
   // Default date to tomorrow in YYYY-MM-DD
@@ -105,154 +101,104 @@ export function AddExceptionSheet({
   };
 
   return (
-    <Modal
+    <Sheet
       visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={handleClose}
+      onClose={handleClose}
+      dismissable={!createMutation.isPending}
+      backdropLabel="Đóng bảng thêm ngoại lệ"
+      title="Thêm ngoại lệ"
     >
-      <KeyboardAvoidingView behavior="padding" style={styles.overlay}>
-        <Pressable
-          style={styles.backdrop}
-          onPress={createMutation.isPending ? undefined : handleClose}
-          accessibilityLabel="Đóng bảng thêm ngoại lệ"
-        />
-
-        <View
-          style={[
-            styles.sheet,
-            { paddingBottom: Math.max(insets.bottom, 16) + space.md },
-          ]}
-        >
-          <View style={styles.handle} />
-
-          <Text style={styles.title}>Thêm ngoại lệ</Text>
-
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-            contentContainerStyle={styles.scrollContent}
-          >
-            {/* Type: Nghỉ / Thêm giờ */}
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Loại ngoại lệ</Text>
-              <Seg
-                options={TYPE_OPTIONS}
-                value={type}
-                onChange={val => setType(val as AvailabilityExceptionType)}
-              />
-            </View>
-
-            {/* Date input */}
-            <View style={styles.formGroup}>
-              <Field
-                label="Ngày áp dụng (YYYY-MM-DD)"
-                placeholder="VD: 2026-11-20"
-                value={date}
-                onChangeText={text => {
-                  setDate(text);
-                  if (errors.date) {
-                    setErrors(prev => ({ ...prev, date: '' }));
-                  }
-                }}
-                error={errors.date}
-              />
-            </View>
-
-            {/* Time range */}
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>
-                {isAdd ? 'Khung giờ thêm' : 'Khung giờ nghỉ'}
-              </Text>
-              <TimeSelector
-                startTime={startTime}
-                endTime={endTime}
-                onChangeStartTime={setStartTime}
-                onChangeEndTime={setEndTime}
-                error={errors.endTime || errors.startTime}
-              />
-            </View>
-
-            {/* Reason */}
-            <View style={styles.formGroup}>
-              <Field
-                label="Lý do"
-                placeholder={isAdd ? 'VD: Ôn thi cuối kỳ, bù lịch...' : 'VD: Họp khoa, bận việc đột xuất...'}
-                value={reason}
-                onChangeText={setReason}
-                error={errors.reason}
-              />
-            </View>
-
-            {/* Meeting URL if ADD */}
-            {isAdd ? (
-              <View style={styles.formGroup}>
-                <Field
-                  label="Link họp online (tuỳ chọn)"
-                  placeholder="https://zoom.us/j/... hoặc để trống nếu trực tiếp"
-                  value={meetingUrl}
-                  onChangeText={setMeetingUrl}
-                  error={errors.meetingUrl}
-                />
-              </View>
-            ) : null}
-
-            {/* Action buttons */}
-            <View style={styles.actionButtons}>
-              <Button
-                variant="primary"
-                title="Lưu ngoại lệ"
-                loading={createMutation.isPending}
-                disabled={createMutation.isPending}
-                onPress={handleSave}
-              />
-              <Button
-                variant="quiet"
-                title="Hủy"
-                disabled={createMutation.isPending}
-                onPress={handleClose}
-              />
-            </View>
-          </ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* Type: Nghỉ / Thêm giờ */}
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Loại ngoại lệ</Text>
+          <Seg
+            options={TYPE_OPTIONS}
+            value={type}
+            onChange={val => setType(val as AvailabilityExceptionType)}
+          />
         </View>
-      </KeyboardAvoidingView>
-    </Modal>
+
+        {/* Date input */}
+        <View style={styles.formGroup}>
+          <Field
+            label="Ngày áp dụng (YYYY-MM-DD)"
+            placeholder="VD: 2026-11-20"
+            value={date}
+            onChangeText={text => {
+              setDate(text);
+              if (errors.date) {
+                setErrors(prev => ({ ...prev, date: '' }));
+              }
+            }}
+            error={errors.date}
+          />
+        </View>
+
+        {/* Time range */}
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>
+            {isAdd ? 'Khung giờ thêm' : 'Khung giờ nghỉ'}
+          </Text>
+          <TimeSelector
+            startTime={startTime}
+            endTime={endTime}
+            onChangeStartTime={setStartTime}
+            onChangeEndTime={setEndTime}
+            error={errors.endTime || errors.startTime}
+          />
+        </View>
+
+        {/* Reason */}
+        <View style={styles.formGroup}>
+          <Field
+            label="Lý do"
+            placeholder={isAdd ? 'VD: Ôn thi cuối kỳ, bù lịch...' : 'VD: Họp khoa, bận việc đột xuất...'}
+            value={reason}
+            onChangeText={setReason}
+            error={errors.reason}
+          />
+        </View>
+
+        {/* Meeting URL if ADD */}
+        {isAdd ? (
+          <View style={styles.formGroup}>
+            <Field
+              label="Link họp online (tuỳ chọn)"
+              placeholder="https://zoom.us/j/... hoặc để trống nếu trực tiếp"
+              value={meetingUrl}
+              onChangeText={setMeetingUrl}
+              error={errors.meetingUrl}
+            />
+          </View>
+        ) : null}
+
+        {/* Action buttons */}
+        <View style={styles.actionButtons}>
+          <Button
+            variant="primary"
+            title="Lưu ngoại lệ"
+            loading={createMutation.isPending}
+            disabled={createMutation.isPending}
+            onPress={handleSave}
+          />
+          <Button
+            variant="quiet"
+            title="Hủy"
+            disabled={createMutation.isPending}
+            onPress={handleClose}
+          />
+        </View>
+      </ScrollView>
+    </Sheet>
   );
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.64)',
-  },
-  backdrop: {
-    ...StyleSheet.absoluteFill,
-  },
-  sheet: {
-    maxHeight: '90%',
-    backgroundColor: colors.s1,
-    borderTopLeftRadius: radius.sheet,
-    borderTopRightRadius: radius.sheet,
-    borderWidth: 1,
-    borderColor: colors.line2,
-    paddingHorizontal: space.gutter,
-    paddingTop: space.md,
-  },
-  handle: {
-    width: 40,
-    height: 5,
-    borderRadius: 5,
-    backgroundColor: colors.fg4,
-    alignSelf: 'center',
-    marginBottom: space.md,
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: fonts.bold,
-    color: colors.fg,
-    marginBottom: space.md,
-  },
   scrollContent: {
     gap: space.md,
     paddingBottom: space.lg,

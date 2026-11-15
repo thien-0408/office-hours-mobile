@@ -30,6 +30,7 @@ import {
 } from '../../../components';
 import { useDepartmentLabel } from '../../../api/hooks/departments';
 import {
+  Loadable,
   BlurTarget,
   Skeleton,
   useTabBarSpace,
@@ -173,171 +174,177 @@ export function ProfileScreen() {
           }
         />
 
-        {isLoading ? (
-          <View style={styles.loadingContainer}>
-            <View style={styles.skeletonHero}>
-              <Skeleton width={88} height={88} borderRadius={18} />
-              <Skeleton
-                width={90}
-                height={16}
-                borderRadius={8}
-                style={styles.mt12}
-              />
-              <Skeleton
-                width={200}
-                height={32}
-                borderRadius={8}
-                style={styles.mt8}
-              />
-              <Skeleton
-                width={150}
-                height={18}
-                borderRadius={8}
-                style={styles.mt8}
+        <Loadable
+          loading={isLoading}
+          style={styles.scroll}
+          skeleton={
+            <View style={styles.loadingContainer}>
+              <View style={styles.skeletonHero}>
+                <Skeleton width={88} height={88} borderRadius={18} />
+                <Skeleton
+                  width={90}
+                  height={16}
+                  borderRadius={8}
+                  style={styles.mt12}
+                />
+                <Skeleton
+                  width={200}
+                  height={32}
+                  borderRadius={8}
+                  style={styles.mt8}
+                />
+                <Skeleton
+                  width={150}
+                  height={18}
+                  borderRadius={8}
+                  style={styles.mt8}
+                />
+              </View>
+              <View style={styles.mt24}>
+                <Skeleton width="100%" height={160} borderRadius={radius.card} />
+              </View>
+              <View style={styles.mt16}>
+                <Skeleton width="100%" height={160} borderRadius={radius.card} />
+              </View>
+            </View>
+          }
+        >
+          {isError || !user ? (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorTitle}>Không thể tải hồ sơ</Text>
+              <Text style={styles.errorSubtitle}>{errorText(error)}</Text>
+              <Button
+                variant="primary"
+                title="Thử lại"
+                onPress={() => refetch()}
+                style={styles.retryButton}
               />
             </View>
-            <View style={styles.mt24}>
-              <Skeleton width="100%" height={160} borderRadius={radius.card} />
-            </View>
-            <View style={styles.mt16}>
-              <Skeleton width="100%" height={160} borderRadius={radius.card} />
-            </View>
-          </View>
-        ) : isError || !user ? (
-          <View style={styles.errorContainer}>
-            <Text style={styles.errorTitle}>Không thể tải hồ sơ</Text>
-            <Text style={styles.errorSubtitle}>{errorText(error)}</Text>
-            <Button
-              variant="primary"
-              title="Thử lại"
-              onPress={() => refetch()}
-              style={styles.retryButton}
-            />
-          </View>
-        ) : (
-          <ScrollView
-            style={styles.scroll}
-            contentContainerStyle={[
-              styles.scrollContent,
-              { paddingBottom: tabBarSpace + 32 },
-            ]}
-            keyboardShouldPersistTaps="handled"
-          >
-            {/* Header thông tin người dùng */}
-            <View style={styles.heroSection}>
-              <Avatar
-                id={user.id}
-                size={88}
-                shape="squircle"
-                style={styles.avatar}
-              />
+          ) : (
+            <ScrollView
+              style={styles.scroll}
+              contentContainerStyle={[
+                styles.scrollContent,
+                { paddingBottom: tabBarSpace + 32 },
+              ]}
+              keyboardShouldPersistTaps="handled"
+            >
+              {/* Header thông tin người dùng */}
+              <View style={styles.heroSection}>
+                <Avatar
+                  id={user.id}
+                  size={88}
+                  shape="squircle"
+                  style={styles.avatar}
+                />
 
-              <Text style={styles.eyebrow}>{formatRole(user.role)}</Text>
-              <Text style={styles.fullName}>{user.fullName}</Text>
-              <Text style={styles.department}>
-                {deptLabel(user.department) ?? 'Chưa cập nhật khoa'}
-              </Text>
-            </View>
+                <Text style={styles.eyebrow}>{formatRole(user.role)}</Text>
+                <Text style={styles.fullName}>{user.fullName}</Text>
+                <Text style={styles.department}>
+                  {deptLabel(user.department) ?? 'Chưa cập nhật khoa'}
+                </Text>
+              </View>
 
-            {/* Khối chỉnh sửa hồ sơ */}
-            {isEditing ? (
-              <View style={styles.editSection}>
-                <SectionLabel title="Chỉnh sửa thông tin" />
-                <View style={styles.editCard}>
-                  <Field
-                    label="Họ và tên"
-                    value={fullName}
-                    onChangeText={setFullName}
-                    error={fieldErrors.fullName}
-                    autoCapitalize="words"
-                    placeholder="Nguyễn Văn A"
-                  />
-
-                  <View style={styles.fieldSpacer} />
-
-                  <DepartmentPicker
-                    label="Khoa"
-                    value={department}
-                    onChange={code => setDepartment(code ?? '')}
-                    error={fieldErrors.department}
-                  />
-
-                  {generalError ? (
-                    <Text style={styles.generalErrorText}>{generalError}</Text>
-                  ) : null}
-
-                  <View style={styles.editActions}>
-                    <Button
-                      variant="ghost"
-                      title="Hủy"
-                      disabled={updateMutation.isPending}
-                      onPress={handleCancelEdit}
-                      style={styles.flexBtn}
+              {/* Khối chỉnh sửa hồ sơ */}
+              {isEditing ? (
+                <View style={styles.editSection}>
+                  <SectionLabel title="Chỉnh sửa thông tin" />
+                  <View style={styles.editCard}>
+                    <Field
+                      label="Họ và tên"
+                      value={fullName}
+                      onChangeText={setFullName}
+                      error={fieldErrors.fullName}
+                      autoCapitalize="words"
+                      placeholder="Nguyễn Văn A"
                     />
-                    <Button
-                      variant="primary"
-                      title="Lưu"
-                      loading={updateMutation.isPending}
-                      onPress={handleSave}
-                      style={styles.flexBtn}
+
+                    <View style={styles.fieldSpacer} />
+
+                    <DepartmentPicker
+                      label="Khoa"
+                      value={department}
+                      onChange={code => setDepartment(code ?? '')}
+                      error={fieldErrors.department}
                     />
+
+                    {generalError ? (
+                      <Text style={styles.generalErrorText}>{generalError}</Text>
+                    ) : null}
+
+                    <View style={styles.editActions}>
+                      <Button
+                        variant="ghost"
+                        title="Hủy"
+                        disabled={updateMutation.isPending}
+                        onPress={handleCancelEdit}
+                        style={styles.flexBtn}
+                      />
+                      <Button
+                        variant="primary"
+                        title="Lưu"
+                        loading={updateMutation.isPending}
+                        onPress={handleSave}
+                        style={styles.flexBtn}
+                      />
+                    </View>
                   </View>
                 </View>
-              </View>
-            ) : null}
+              ) : null}
 
-            {/* Nhóm thông tin chi tiết */}
-            <SectionLabel title="Thông tin tài khoản" />
-            <ProfileGroup>
-              <ProfileRow label="Email" value={user.email} />
+              {/* Nhóm thông tin chi tiết */}
+              <SectionLabel title="Thông tin tài khoản" />
+              <ProfileGroup>
+                <ProfileRow label="Email" value={user.email} />
 
-              {user.role === 'LECTURER' ? (
-                // TODO(MO-05): Chọn phòng làm việc từ /campus/rooms
+                {user.role === 'LECTURER' ? (
+                  // TODO(MO-05): Chọn phòng làm việc từ /campus/rooms
+                  <ProfileRow
+                    divider
+                    label="Phòng làm việc"
+                    value="Chưa chọn"
+                    description="TODO(MO-05)"
+                  />
+                ) : null}
+              </ProfileGroup>
+
+              {/* Nhóm điều hướng các màn liên quan */}
+              <SectionLabel title="Tùy chọn" />
+              <ProfileGroup>
+                {user.role !== 'ADMIN' ? (
+                  <ProfileRow
+                    label="Lịch bận của tôi"
+                    showChevron
+                    onPress={() => navigation.navigate('MySchedule')}
+                  />
+                ) : null}
+
+                <ProfileRow
+                  divider={user.role !== 'ADMIN'}
+                  label="Cài đặt"
+                  showChevron
+                  onPress={() => navigation.navigate('Settings')}
+                />
+
                 <ProfileRow
                   divider
-                  label="Phòng làm việc"
-                  value="Chưa chọn"
-                  description="TODO(MO-05)"
-                />
-              ) : null}
-            </ProfileGroup>
-
-            {/* Nhóm điều hướng các màn liên quan */}
-            <SectionLabel title="Tùy chọn" />
-            <ProfileGroup>
-              {user.role !== 'ADMIN' ? (
-                <ProfileRow
-                  label="Lịch bận của tôi"
+                  label="Trợ giúp và Giới thiệu"
                   showChevron
-                  onPress={() => navigation.navigate('MySchedule')}
+                  onPress={() => navigation.navigate('Help')}
                 />
-              ) : null}
+              </ProfileGroup>
 
-              <ProfileRow
-                divider={user.role !== 'ADMIN'}
-                label="Cài đặt"
-                showChevron
-                onPress={() => navigation.navigate('Settings')}
-              />
-
-              <ProfileRow
-                divider
-                label="Trợ giúp và Giới thiệu"
-                showChevron
-                onPress={() => navigation.navigate('Help')}
-              />
-            </ProfileGroup>
-
-            <ProfileGroup style={styles.mt24}>
-              <ProfileRow
-                testID="profile-sign-out"
-                label="Đăng xuất"
-                danger
-                onPress={handleSignOut}
-              />
-            </ProfileGroup>
-          </ScrollView>
-        )}
+              <ProfileGroup style={styles.mt24}>
+                <ProfileRow
+                  testID="profile-sign-out"
+                  label="Đăng xuất"
+                  danger
+                  onPress={handleSignOut}
+                />
+              </ProfileGroup>
+            </ScrollView>
+          )}
+        </Loadable>
       </BlurTarget>
       </KeyboardAvoidingView>
     </SafeAreaView>

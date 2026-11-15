@@ -22,7 +22,13 @@ import type { ScheduleBlock } from '../../../api/domainTypes';
 import { Button } from '../../../components/Button';
 import { IconButton } from '../../../components/IconButton';
 import { Screen } from '../../../components/Screen';
-import { BlurTarget, Skeleton, useTabBarSpace } from '../../../components/motion';
+import {
+  BlurTarget,
+  Loadable,
+  Reveal,
+  Skeleton,
+  useTabBarSpace,
+} from '../../../components/motion';
 import { colors, fonts, ls, radius, space } from '../../../theme';
 import { AddScheduleEntrySheet } from '../components/AddScheduleEntrySheet';
 import { ScheduleImportHistorySheet } from '../components/ScheduleImportHistorySheet';
@@ -165,64 +171,73 @@ export function MyScheduleScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.agendaList}
         >
-          {isLoading ? (
-            <View style={styles.loadingContainer}>
-              <Skeleton width="100%" height={68} borderRadius={radius.md} />
-              <Skeleton width="100%" height={68} borderRadius={radius.md} />
-              <Skeleton width="100%" height={68} borderRadius={radius.md} />
-            </View>
-          ) : isError ? (
-            <View style={styles.errorContainer}>
-              <Text style={styles.emptyText}>
-                Không thể tải lịch bận. Kiểm tra mạng rồi thử lại.
-              </Text>
-              <Button variant="ghost" title="Thử lại" onPress={() => refetch()} />
-            </View>
-          ) : dayBlocks.length === 0 ? (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>
-                Không có lịch bận trong ngày này.
-              </Text>
-            </View>
-          ) : (
-            dayBlocks.map(block => {
-              const details = [
-                `${block.startTime} – ${block.endTime}`,
-                block.room ? block.room : null,
-                formatScheduleSource(block.source),
-              ]
-                .filter(Boolean)
-                .join(' · ');
+          <Loadable
+            loading={isLoading}
+            rise={false}
+            style={styles.loadingContainer}
+            skeleton={
+              <View style={styles.loadingContainer}>
+                <Skeleton width="100%" height={68} borderRadius={radius.md} />
+                <Skeleton width="100%" height={68} borderRadius={radius.md} />
+                <Skeleton width="100%" height={68} borderRadius={radius.md} />
+              </View>
+            }
+          >
+            {isError ? (
+              <View style={styles.errorContainer}>
+                <Text style={styles.emptyText}>
+                  Không thể tải lịch bận. Kiểm tra mạng rồi thử lại.
+                </Text>
+                <Button variant="ghost" title="Thử lại" onPress={() => refetch()} />
+              </View>
+            ) : dayBlocks.length === 0 ? (
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>
+                  Không có lịch bận trong ngày này.
+                </Text>
+              </View>
+            ) : (
+              dayBlocks.map(block => {
+                const details = [
+                  `${block.startTime} – ${block.endTime}`,
+                  block.room ? block.room : null,
+                  formatScheduleSource(block.source),
+                ]
+                  .filter(Boolean)
+                  .join(' · ');
 
-              return (
-                <View key={block.id} style={styles.blockCard}>
-                  <View style={styles.blockInfo}>
-                    <Text style={styles.blockTitle} numberOfLines={1}>
-                      {block.title}
-                    </Text>
-                    <Text style={styles.blockDetails} numberOfLines={1}>
-                      {details}
-                    </Text>
-                    {block.lecturerName ? (
-                      <Text style={styles.blockSubNote} numberOfLines={1}>
-                        GV: {block.lecturerName}
-                      </Text>
-                    ) : null}
-                  </View>
+                return (
+                  <Reveal key={block.id} id={`schedule-${block.id}`}>
+                    <View style={styles.blockCard}>
+                      <View style={styles.blockInfo}>
+                        <Text style={styles.blockTitle} numberOfLines={1}>
+                          {block.title}
+                        </Text>
+                        <Text style={styles.blockDetails} numberOfLines={1}>
+                          {details}
+                        </Text>
+                        {block.lecturerName ? (
+                          <Text style={styles.blockSubNote} numberOfLines={1}>
+                            GV: {block.lecturerName}
+                          </Text>
+                        ) : null}
+                      </View>
 
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityLabel={`Xóa ${block.title}`}
-                    onPress={() => handleDelete(block)}
-                    style={styles.deleteButton}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                  >
-                    <Text style={styles.deleteButtonText}>Xóa</Text>
-                  </Pressable>
-                </View>
-              );
-            })
-          )}
+                      <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel={`Xóa ${block.title}`}
+                        onPress={() => handleDelete(block)}
+                        style={styles.deleteButton}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                      >
+                        <Text style={styles.deleteButtonText}>Xóa</Text>
+                      </Pressable>
+                    </View>
+                  </Reveal>
+                );
+              })
+            )}
+          </Loadable>
         </ScrollView>
 
         {/* Sheets */}

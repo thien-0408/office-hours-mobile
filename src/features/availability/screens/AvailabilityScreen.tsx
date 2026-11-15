@@ -23,7 +23,13 @@ import { Button } from '../../../components/Button';
 import { Icon } from '../../../components/Icon';
 import { IconButton } from '../../../components/IconButton';
 import { Screen } from '../../../components/Screen';
-import { BlurTarget, Skeleton, useTabBarSpace } from '../../../components/motion';
+import {
+  BlurTarget,
+  Loadable,
+  Reveal,
+  Skeleton,
+  useTabBarSpace,
+} from '../../../components/motion';
 import { colors, fonts, ls, radius, space } from '../../../theme';
 import { useSession } from '../../auth/session';
 import {
@@ -134,58 +140,66 @@ export function AvailabilityScreen() {
           </View>
 
           {/* Availability rules grouped by day */}
-          {rulesLoading ? (
-            <View style={styles.loadingContainer}>
-              <Skeleton width="100%" height={56} borderRadius={radius.card} />
-              <Skeleton width="100%" height={56} borderRadius={radius.card} />
-            </View>
-          ) : rulesError ? (
-            <View style={styles.errorContainer}>
-              <Text style={styles.emptyText}>
-                Không thể tải danh sách lịch rảnh.
-              </Text>
-              <Button variant="ghost" title="Thử lại" onPress={() => refetchRules()} />
-            </View>
-          ) : ruleGroups.length === 0 ? (
-            <View style={styles.emptyGroup}>
-              <Text style={styles.emptyText}>
-                Chưa có khung giờ rảnh nào. Bấm dấu + để thêm khung giờ.
-              </Text>
-            </View>
-          ) : (
-            ruleGroups.map(group => (
-              <View key={group.dayOfWeek} style={styles.daySection}>
-                <Text style={styles.subLabel}>{group.dayLabel}</Text>
-                <View style={styles.groupCard}>
-                  {group.rules.map((rule, idx) => {
-                    const formatted = formatRuleLabel(rule);
-                    const isLast = idx === group.rules.length - 1;
-
-                    return (
-                      <Pressable
-                        key={rule.id}
-                        accessibilityRole="button"
-                        accessibilityLabel={`${formatted.timeRange}, ${formatted.subtitle}, ${formatted.slotCount} slot`}
-                        onPress={() => setEditingRule(rule)}
-                        style={[styles.lineRow, !isLast && styles.lineDivider]}
-                      >
-                        <View style={styles.lineInfo}>
-                          <Text style={styles.lineTime}>{formatted.timeRange}</Text>
-                          <Text style={styles.lineSubtitle}>{formatted.subtitle}</Text>
-                        </View>
-                        <View style={styles.lineVal}>
-                          <Text style={styles.lineValText}>
-                            {formatted.slotCount} slot
-                          </Text>
-                          <Icon as={ChevronRight} size={14} level="muted" />
-                        </View>
-                      </Pressable>
-                    );
-                  })}
-                </View>
+          <Loadable
+            loading={rulesLoading}
+            style={styles.ruleStack}
+            skeleton={
+              <View style={styles.loadingContainer}>
+                <Skeleton width="100%" height={56} borderRadius={radius.card} />
+                <Skeleton width="100%" height={56} borderRadius={radius.card} />
               </View>
-            ))
-          )}
+            }
+          >
+            {rulesError ? (
+              <View style={styles.errorContainer}>
+                <Text style={styles.emptyText}>
+                  Không thể tải danh sách lịch rảnh.
+                </Text>
+                <Button variant="ghost" title="Thử lại" onPress={() => refetchRules()} />
+              </View>
+            ) : ruleGroups.length === 0 ? (
+              <View style={styles.emptyGroup}>
+                <Text style={styles.emptyText}>
+                  Chưa có khung giờ rảnh nào. Bấm dấu + để thêm khung giờ.
+                </Text>
+              </View>
+            ) : (
+              ruleGroups.map(group => (
+                <Reveal key={group.dayOfWeek} id={`availability-day-${group.dayOfWeek}`}>
+                  <View style={styles.daySection}>
+                    <Text style={styles.subLabel}>{group.dayLabel}</Text>
+                    <View style={styles.groupCard}>
+                      {group.rules.map((rule, idx) => {
+                        const formatted = formatRuleLabel(rule);
+                        const isLast = idx === group.rules.length - 1;
+
+                        return (
+                          <Pressable
+                            key={rule.id}
+                            accessibilityRole="button"
+                            accessibilityLabel={`${formatted.timeRange}, ${formatted.subtitle}, ${formatted.slotCount} slot`}
+                            onPress={() => setEditingRule(rule)}
+                            style={[styles.lineRow, !isLast && styles.lineDivider]}
+                          >
+                            <View style={styles.lineInfo}>
+                              <Text style={styles.lineTime}>{formatted.timeRange}</Text>
+                              <Text style={styles.lineSubtitle}>{formatted.subtitle}</Text>
+                            </View>
+                            <View style={styles.lineVal}>
+                              <Text style={styles.lineValText}>
+                                {formatted.slotCount} slot
+                              </Text>
+                              <Icon as={ChevronRight} size={14} level="muted" />
+                            </View>
+                          </Pressable>
+                        );
+                      })}
+                    </View>
+                  </View>
+                </Reveal>
+              ))
+            )}
+          </Loadable>
 
           {/* Exceptions section */}
           <View style={styles.exceptionSection}>
@@ -201,53 +215,58 @@ export function AvailabilityScreen() {
               </Pressable>
             </View>
 
-            {exceptionsLoading ? (
-              <Skeleton width="100%" height={56} borderRadius={radius.card} />
-            ) : exceptionsError ? (
-              <View style={styles.errorContainer}>
-                <Text style={styles.emptyText}>
-                  Không thể tải danh sách ngoại lệ.
-                </Text>
-                <Button
-                  variant="ghost"
-                  title="Thử lại"
-                  onPress={() => refetchExceptions()}
-                />
-              </View>
-            ) : !exceptions || exceptions.length === 0 ? (
-              <View style={styles.emptyCard}>
-                <Text style={styles.emptyText}>
-                  Chưa có ngày nghỉ hoặc giờ thêm nào.
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.groupCard}>
-                {exceptions.map((ex, idx) => {
-                  const summary = formatExceptionSummary(ex);
-                  const isLast = idx === exceptions.length - 1;
+            <Loadable
+              loading={exceptionsLoading}
+              skeleton={
+                <Skeleton width="100%" height={56} borderRadius={radius.card} />
+              }
+            >
+              {exceptionsError ? (
+                <View style={styles.errorContainer}>
+                  <Text style={styles.emptyText}>
+                    Không thể tải danh sách ngoại lệ.
+                  </Text>
+                  <Button
+                    variant="ghost"
+                    title="Thử lại"
+                    onPress={() => refetchExceptions()}
+                  />
+                </View>
+              ) : !exceptions || exceptions.length === 0 ? (
+                <View style={styles.emptyCard}>
+                  <Text style={styles.emptyText}>
+                    Chưa có ngày nghỉ hoặc giờ thêm nào.
+                  </Text>
+                </View>
+              ) : (
+                <View style={styles.groupCard}>
+                  {exceptions.map((ex, idx) => {
+                    const summary = formatExceptionSummary(ex);
+                    const isLast = idx === exceptions.length - 1;
 
-                  return (
-                    <Pressable
-                      key={ex.id}
-                      accessibilityRole="button"
-                      accessibilityLabel={`${summary.title}, ${summary.subtitle}`}
-                      onPress={() => handleDeleteException(ex)}
-                      style={[styles.lineRow, !isLast && styles.lineDivider]}
-                    >
-                      <View style={styles.lineInfo}>
-                        <Text style={styles.lineTime}>{summary.title}</Text>
-                        {summary.subtitle ? (
-                          <Text style={styles.lineSubtitle}>{summary.subtitle}</Text>
-                        ) : null}
-                      </View>
-                      <View style={styles.lineVal}>
-                        <Icon as={ChevronRight} size={14} level="muted" />
-                      </View>
-                    </Pressable>
-                  );
-                })}
-              </View>
-            )}
+                    return (
+                      <Pressable
+                        key={ex.id}
+                        accessibilityRole="button"
+                        accessibilityLabel={`${summary.title}, ${summary.subtitle}`}
+                        onPress={() => handleDeleteException(ex)}
+                        style={[styles.lineRow, !isLast && styles.lineDivider]}
+                      >
+                        <View style={styles.lineInfo}>
+                          <Text style={styles.lineTime}>{summary.title}</Text>
+                          {summary.subtitle ? (
+                            <Text style={styles.lineSubtitle}>{summary.subtitle}</Text>
+                          ) : null}
+                        </View>
+                        <View style={styles.lineVal}>
+                          <Icon as={ChevronRight} size={14} level="muted" />
+                        </View>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              )}
+            </Loadable>
           </View>
         </ScrollView>
 
@@ -406,6 +425,9 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     gap: space.sm,
+  },
+  ruleStack: {
+    gap: space.md,
   },
   errorContainer: {
     paddingVertical: space.lg,

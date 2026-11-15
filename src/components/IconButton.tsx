@@ -29,6 +29,7 @@ export function IconButton({
 }: IconButtonProps) {
   return (
     <PressableScale
+      feedback="icon"
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       disabled={disabled}

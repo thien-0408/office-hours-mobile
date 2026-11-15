@@ -318,3 +318,13 @@ Ngoài đen, trắng và các sắc xám, màu chỉ xuất hiện ở:
 - Tầng ước lượng hiện nhãn viền nét đứt; tầng chọn tay hoặc phòng thật hiện nhãn viền liền.
 - Chấm người trên map là ảnh tròn có viền trắng, không phải chấm màu. Vòng sai số là vòng tròn trắng 8% theo `acc`.
 - Phòng đích là khối trắng sáng duy nhất trên map; mọi block khác xám.
+
+### 8.11 Chuyển động
+Thông số lấy từ code Compose của Mochy Music (`PopupSheet.kt`, `Press3D.kt`, `RevealOnAppear.kt`, `ContainerTransform.kt`). Giá trị thật nằm ở `springs` và `motion` trong `src/theme/tokens.ts`; §6 chỉ là bản đề xuất ban đầu.
+- **Bottom sheet:** mọi sheet dùng `<Sheet>` (`src/components/motion/Sheet.tsx`), không dùng `Modal animationType="slide"`. Một spring không nảy (damping 1.0, độ cứng 200) cho mọi chuyển động. Kéo thanh nắm hoặc tiêu đề xuống quá 35% chiều cao, hoặc vuốt nhanh hơn 1200 px/s, thì sheet đóng và spring nhận luôn vận tốc ngón tay. Nền mờ theo vị trí sheet, app phía sau thu nhỏ 6% và bo góc (`SheetRecede`). Sheet mở từ trong một sheet khác thì không làm app thu nhỏ thêm.
+- **Nhấn:** nút, hàng và thẻ thu còn 0.97 (spring không nảy độ cứng 420, nhả ra nảy nhẹ). Thẻ nghiêng tối đa 6° theo ngón tay. Nút icon tròn thu còn 0.86 rồi nảy lại (damping 0.54, độ cứng 720).
+- **Tải nội dung:** dùng `<Loadable>`. Khung xương mờ đi trong 240 ms, nghỉ một nhịp, rồi nội dung hiện ra và trượt lên 16 dp trong 520 ms theo đường cong `(0.2, 0, 0, 1)`. Chỉ lần chuyển từ đang tải sang đã tải mới có hiệu ứng; dữ liệu có sẵn trong cache thì hiện ngay.
+- **Danh sách:** bọc mỗi hàng trong `<Reveal id>`. Các hàng xuất hiện cùng lúc chạy lần lượt cách nhau 55 ms, tối đa 6 bước. Mỗi id chỉ chạy một lần trong phiên.
+- **Chuyển màn:** stack dùng `ios_from_right`, nên màn phía dưới lùi lại theo kiểu parallax. Quầng sáng nền chỉ chạy ở màn đang được focus.
+- **Rung:** dùng `haptic` (`src/components/motion/haptics.ts`) và giữ ít: rung nhẹ khi đổi lựa chọn (Seg, tab, công tắc, picker), khi chạm thẻ, và khi đặt hoặc đổi lịch thành công.
+- Khi bật "giảm chuyển động" của hệ thống: sheet mở và đóng tức thì, `Reveal` và `Loadable` không chạy, quầng sáng đứng yên.

@@ -47,6 +47,15 @@ jest.mock('../src/components/motion', () => {
     BlurTarget: ({ children }: { children: React.ReactNode }) => (
       <View>{children}</View>
     ),
+    Loadable: ({
+      loading,
+      skeleton,
+      children,
+    }: {
+      loading: boolean;
+      skeleton: React.ReactNode;
+      children: React.ReactNode;
+    }) => <View>{loading ? skeleton : children}</View>,
     Skeleton: () => null,
     useTabBarSpace: () => 0,
   };

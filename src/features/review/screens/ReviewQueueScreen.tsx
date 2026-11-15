@@ -14,7 +14,7 @@ import {
   Screen,
   Seg,
 } from '../../../components';
-import { useTabBarSpace } from '../../../components/motion';
+import { Reveal, useTabBarSpace } from '../../../components/motion';
 import {
   useDeclineBooking,
   useConfirmBooking,
@@ -119,41 +119,43 @@ export function ReviewQueueScreen() {
             data={items}
             keyExtractor={b => b.id}
             renderItem={({ item }) => (
-              <Card style={styles.card}>
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() => open(item)}
-                  style={styles.head}
-                >
-                  <Avatar id={item.studentId} size={48} shape="squircle" />
-                  <View style={styles.headText}>
-                    <AppText variant="t3" numberOfLines={1}>
-                      {item.studentName}
+              <Reveal id={`review-${item.id}`}>
+                <Card style={styles.card}>
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => open(item)}
+                    style={styles.head}
+                  >
+                    <Avatar id={item.studentId} size={48} shape="squircle" />
+                    <View style={styles.headText}>
+                      <AppText variant="t3" numberOfLines={1}>
+                        {item.studentName}
+                      </AppText>
+                      <AppText variant="xs">
+                        {formatVnDayTime(item.startAt)}
+                      </AppText>
+                    </View>
+                  </Pressable>
+                  {item.topic ? (
+                    <AppText variant="sm" color={colors.fg} style={styles.topic}>
+                      {`"${item.topic}"`}
                     </AppText>
-                    <AppText variant="xs">
-                      {formatVnDayTime(item.startAt)}
-                    </AppText>
+                  ) : null}
+                  <View style={styles.actions}>
+                    <Button
+                      variant="ghost"
+                      title="Từ chối"
+                      style={styles.grow}
+                      onPress={() => setDeclining(item)}
+                    />
+                    <Button
+                      title="Duyệt"
+                      style={styles.grow}
+                      onPress={() => approve(item)}
+                    />
                   </View>
-                </Pressable>
-                {item.topic ? (
-                  <AppText variant="sm" color={colors.fg} style={styles.topic}>
-                    {`"${item.topic}"`}
-                  </AppText>
-                ) : null}
-                <View style={styles.actions}>
-                  <Button
-                    variant="ghost"
-                    title="Từ chối"
-                    style={styles.grow}
-                    onPress={() => setDeclining(item)}
-                  />
-                  <Button
-                    title="Duyệt"
-                    style={styles.grow}
-                    onPress={() => approve(item)}
-                  />
-                </View>
-              </Card>
+                </Card>
+              </Reveal>
             )}
             onEndReached={() => {
               pendingQ.fetchNextPage();
@@ -181,14 +183,16 @@ export function ReviewQueueScreen() {
           data={queueQ.data ?? []}
           keyExtractor={s => s.slotId}
           renderItem={({ item }) => (
-            <View style={styles.group}>
-              <AppText variant="t3">{item.slotLabel}</AppText>
-              {item.entries.map(e => (
-                <AppText key={e.id} variant="sm">
-                  {queueEntryLabel(e)}
-                </AppText>
-              ))}
-            </View>
+            <Reveal id={`queue-${item.slotId}`}>
+              <View style={styles.group}>
+                <AppText variant="t3">{item.slotLabel}</AppText>
+                {item.entries.map(e => (
+                  <AppText key={e.id} variant="sm">
+                    {queueEntryLabel(e)}
+                  </AppText>
+                ))}
+              </View>
+            </Reveal>
           )}
           refreshing={queueQ.isRefetching}
           onRefresh={() => queueQ.refetch()}

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Modal, Pressable, StyleSheet, View } from 'react-native';
-import { AppText, Button, Field } from '../../../components';
-import { colors, radius, space } from '../../../theme';
+import { StyleSheet, View } from 'react-native';
+import { Button, Field } from '../../../components';
+import { Sheet } from '../../../components/motion';
+import { space } from '../../../theme';
 
 /** Bottom sheet with one text field: decline reason, meeting link. */
 export function TextPromptSheet({
@@ -49,67 +50,44 @@ export function TextPromptSheet({
   };
 
   return (
-    <Modal
+    <Sheet
       visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={onClose}
+      onClose={onClose}
+      dismissable={!busy}
+      title={title}
+      style={styles.sheet}
     >
-      <KeyboardAvoidingView
-        behavior="padding"
-        style={styles.fill}
-      >
-        <Pressable
-          style={styles.backdrop}
+      <Field
+        label={label}
+        placeholder={placeholder}
+        value={value}
+        onChangeText={setValue}
+        error={error ?? undefined}
+        multiline={multiline}
+        autoCapitalize={multiline ? 'sentences' : 'none'}
+        autoCorrect={false}
+        containerStyle={styles.field}
+      />
+      <View style={styles.row}>
+        <Button
+          variant="ghost"
+          title="Hủy"
           onPress={onClose}
-          accessibilityLabel="Đóng"
+          style={styles.grow}
         />
-        <View style={styles.sheet}>
-          <AppText variant="t2">{title}</AppText>
-          <Field
-            label={label}
-            placeholder={placeholder}
-            value={value}
-            onChangeText={setValue}
-            error={error ?? undefined}
-            multiline={multiline}
-            autoCapitalize={multiline ? 'sentences' : 'none'}
-            autoCorrect={false}
-            containerStyle={styles.field}
-          />
-          <View style={styles.row}>
-            <Button
-              variant="ghost"
-              title="Hủy"
-              onPress={onClose}
-              style={styles.grow}
-            />
-            <Button
-              title={confirmLabel}
-              onPress={submit}
-              loading={busy}
-              style={styles.grow}
-            />
-          </View>
-        </View>
-      </KeyboardAvoidingView>
-    </Modal>
+        <Button
+          title={confirmLabel}
+          onPress={submit}
+          loading={busy}
+          style={styles.grow}
+        />
+      </View>
+    </Sheet>
   );
 }
 
 const styles = StyleSheet.create({
-  fill: { flex: 1, justifyContent: 'flex-end' },
-  backdrop: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(0,0,0,0.6)' },
-  sheet: {
-    backgroundColor: colors.s1,
-    borderTopLeftRadius: radius.sheet,
-    borderTopRightRadius: radius.sheet,
-    padding: space.gutter,
-    paddingBottom: space.xxxl,
-    gap: space.lg,
-    borderWidth: 1,
-    borderColor: colors.line,
-  },
+  sheet: { gap: space.lg },
   field: { marginTop: space.xs },
   row: { flexDirection: 'row', gap: space.sm },
   grow: { flex: 1 },

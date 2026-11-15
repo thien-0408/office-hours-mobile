@@ -22,7 +22,13 @@ import {
 } from '../../../api/hooks/notifications';
 import { Avatar } from '../../../components/Avatar';
 import { Button } from '../../../components/Button';
-import { BlurTarget, Skeleton, useTabBarSpace } from '../../../components/motion';
+import {
+  BlurTarget,
+  Loadable,
+  Reveal,
+  Skeleton,
+  useTabBarSpace,
+} from '../../../components/motion';
 import { Seg, type SegOption } from '../../../components/Seg';
 import { TopNav } from '../../../components/TopNav';
 import { resolveTarget } from '../../../navigation/roleConfig';
@@ -96,70 +102,70 @@ export function NotificationsScreen() {
       const isUnread = !item.read;
 
       return (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={`${item.title}, ${isUnread ? 'chưa đọc' : 'đã đọc'}`}
-          onPress={() => handleNotificationPress(item)}
-          style={({ pressed }) => [
-            styles.notificationRow,
-            pressed && styles.notificationRowPressed,
-          ]}
-        >
-          <Avatar
-            id={item.bookingId ?? item.id}
-            size={44}
-            shape="round"
-            style={styles.avatar}
-          />
-          <View style={styles.textContainer}>
-            <Text
-              style={[
-                styles.title,
-                isUnread ? styles.titleUnread : styles.titleRead,
-              ]}
-              numberOfLines={2}
-            >
-              {item.title}
-            </Text>
-            {item.body ? (
+        <Reveal id={`notif-${item.id}`}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`${item.title}, ${isUnread ? 'chưa đọc' : 'đã đọc'}`}
+            onPress={() => handleNotificationPress(item)}
+            style={({ pressed }) => [
+              styles.notificationRow,
+              pressed && styles.notificationRowPressed,
+            ]}
+          >
+            <Avatar
+              id={item.bookingId ?? item.id}
+              size={44}
+              shape="round"
+              style={styles.avatar}
+            />
+            <View style={styles.textContainer}>
               <Text
                 style={[
-                  styles.body,
-                  isUnread ? styles.bodyUnread : styles.bodyRead,
+                  styles.title,
+                  isUnread ? styles.titleUnread : styles.titleRead,
                 ]}
                 numberOfLines={2}
               >
-                {item.body}
+                {item.title}
               </Text>
-            ) : null}
-          </View>
-          <Text style={styles.timeText}>
-            {formatNotificationRelativeTime(item.createdAt)}
-          </Text>
-        </Pressable>
+              {item.body ? (
+                <Text
+                  style={[
+                    styles.body,
+                    isUnread ? styles.bodyUnread : styles.bodyRead,
+                  ]}
+                  numberOfLines={2}
+                >
+                  {item.body}
+                </Text>
+              ) : null}
+            </View>
+            <Text style={styles.timeText}>
+              {formatNotificationRelativeTime(item.createdAt)}
+            </Text>
+          </Pressable>
+        </Reveal>
       );
     },
     [handleNotificationPress],
   );
 
-  const renderContent = () => {
-    if (isLoading) {
-      return (
-        <View style={styles.skeletonContainer}>
-          {[0, 1, 2, 3, 4, 5].map(idx => (
-            <View key={idx} style={styles.skeletonRow}>
-              <Skeleton width={44} height={44} borderRadius={22} />
-              <View style={styles.skeletonTextCol}>
-                <Skeleton width="80%" height={14} borderRadius={4} />
-                <Skeleton width="55%" height={12} borderRadius={4} />
-              </View>
-              <Skeleton width={36} height={12} borderRadius={4} />
-            </View>
-          ))}
+  const renderSkeleton = () => (
+    <View style={styles.skeletonContainer}>
+      {[0, 1, 2, 3, 4, 5].map(idx => (
+        <View key={idx} style={styles.skeletonRow}>
+          <Skeleton width={44} height={44} borderRadius={22} />
+          <View style={styles.skeletonTextCol}>
+            <Skeleton width="80%" height={14} borderRadius={4} />
+            <Skeleton width="55%" height={12} borderRadius={4} />
+          </View>
+          <Skeleton width={36} height={12} borderRadius={4} />
         </View>
-      );
-    }
+      ))}
+    </View>
+  );
 
+  const renderContent = () => {
     if (isError) {
       return (
         <View style={styles.centerContainer}>
@@ -242,7 +248,14 @@ export function NotificationsScreen() {
         />
       </View>
 
-      <View style={styles.content}>{renderContent()}</View>
+      <Loadable
+        loading={isLoading}
+        skeleton={renderSkeleton()}
+        rise={false}
+        style={styles.content}
+      >
+        {renderContent()}
+      </Loadable>
     </View>
   );
 

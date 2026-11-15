@@ -90,22 +90,31 @@ export const spring = (ratio: number, stiffness: number, mass = 1) => ({
   mass,
 });
 
+// Values follow Mochy Music's Compose motion (ui/component/PopupSheet.kt,
+// Press3D.kt, RevealOnAppear.kt, ContainerTransform.kt). Compose's
+// `spring(dampingRatio, stiffness)` maps 1:1 onto `spring()` above.
 export const springs = {
-  /** Finger down: quick, no bounce. */
-  press: spring(1.0, 520),
-  /** Finger up: ~4% overshoot, only on press release. */
+  /** Finger down on surfaces (buttons, rows, cards): quick, no bounce. */
+  press: spring(1.0, 420),
+  /** Finger up on surfaces: ~4% overshoot. */
   release: spring(0.72, 320),
-  /** Active-tab pill glide: soft, no bounce. */
-  indicator: spring(0.92, 280),
-  /** Sheets, odometer, layout: Apple-like, settles in ~400 ms. */
-  sheet: spring(1.0, 240),
+  /** Icon buttons, both ways: lively, visible bounce on release. */
+  pressIcon: spring(0.54, 720),
+  /** Active-tab pill glide: a hint of overshoot so it lands, not stops. */
+  indicator: spring(0.82, 340),
+  /** Sheets: smooth, unhurried, no overshoot (Compose StiffnessLow). */
+  sheet: spring(1.0, 200),
+  /** Screen/container open: soft, ~0.6 s. */
+  container: spring(0.88, 150),
   bouncy: spring(0.4, 900),
 } as const;
 
 export const press3D = {
-  maxTilt: 4,
+  maxTilt: 6,
   pressedScale: 0.97,
   pressedOpacity: 0.9,
+  /** Round icon buttons shrink further, then bounce back. */
+  iconPressedScale: 0.86,
 } as const;
 
 /** Timings (ms) and distances shared by transitions and entering animations. */
@@ -116,13 +125,27 @@ export const motion = {
   modal: 300,
   /** Tab crossfade. */
   tabFade: 180,
-  /** Reveal: stagger per index, duration, rise distance (dp). */
-  stagger: 35,
-  revealDuration: 420,
-  revealOffsetY: 10,
-  /** Skeleton -> content crossfade. */
+  /**
+   * Reveal: items that mount together take turns `stagger` ms apart, at
+   * most `staggerMax` steps, then fade + rise `revealOffsetY` dp.
+   */
+  stagger: 55,
+  staggerMax: 6,
+  revealDuration: 520,
+  revealOffsetY: 16,
+  /** Skeleton -> content: skeleton fades out, short beat, content reveals. */
+  skeletonOut: 240,
+  contentGap: 90,
   contentFade: 220,
+  /** Sheet drag: close past this fraction, or on a fling faster than this (px/s). */
+  sheetDragClose: 0.35,
+  sheetFlingClose: 1200,
+  /** How far the app behind an open sheet zooms out. */
+  sheetRecede: 0.06,
 } as const;
+
+/** Material "emphasized decelerate" — the reveal curve. */
+export const revealEasing = [0.2, 0, 0, 1] as const;
 
 export type Colors = typeof colors;
 export type ColorName = keyof typeof colors;

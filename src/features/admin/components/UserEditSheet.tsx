@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
-  KeyboardAvoidingView,
-  Modal,
-  Pressable,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { AdminUser } from '../../../api/domainTypes';
 import { ERR } from '../../../api/errorCodes';
@@ -21,7 +17,8 @@ import { Avatar } from '../../../components/Avatar';
 import { Button } from '../../../components/Button';
 import { DepartmentPicker } from '../../../components/DepartmentPicker';
 import { Seg, type SegOption } from '../../../components/Seg';
-import { colors, fonts, ls, radius, space } from '../../../theme';
+import { Sheet, useSheetItem } from '../../../components/motion';
+import { colors, fonts, ls, space } from '../../../theme';
 import { canDeleteUser } from './userAdminLogic';
 
 const ROLE_OPTIONS: SegOption[] = [
@@ -38,12 +35,13 @@ export interface UserEditSheetProps {
 }
 
 export function UserEditSheet({
-  user,
+  user: userProp,
   currentUserId,
   visible,
   onClose,
 }: UserEditSheetProps) {
-  const insets = useSafeAreaInsets();
+  // Keeps the user on screen while the sheet slides away after close.
+  const user = useSheetItem(userProp);
   const updateMutation = useUpdateAdminUser();
   const deactivateMutation = useDeactivateUser();
 
@@ -145,113 +143,73 @@ export function UserEditSheet({
   const isBusy = updateMutation.isPending || deactivateMutation.isPending;
 
   return (
-    <Modal
+    <Sheet
       visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={onClose}
-    >
-      <KeyboardAvoidingView behavior="padding" style={styles.modalOverlay}>
-        <Pressable
-          style={styles.backdrop}
-          onPress={isBusy ? undefined : onClose}
-          accessibilityLabel="Đóng bảng chỉnh sửa"
-        />
-
-        <View
-          style={[
-            styles.sheetContainer,
-            { paddingBottom: Math.max(insets.bottom, 16) + space.md },
-          ]}
-        >
-          <View style={styles.handle} />
-
-          <View style={styles.userHeader}>
-            <Avatar id={user.id} size={50} shape="round" />
-            <View style={styles.userInfo}>
-              <Text style={styles.userName} numberOfLines={1}>
-                {user.fullName}
-              </Text>
-              <Text style={styles.userEmail} numberOfLines={1}>
-                {user.email}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.formGroup}>
-            <Text style={styles.fieldLabel}>Vai trò</Text>
-            <Seg
-              options={ROLE_OPTIONS}
-              value={role}
-              onChange={val => setRole(val as 'STUDENT' | 'LECTURER' | 'ADMIN')}
-            />
-          </View>
-
-          <View style={styles.formGroup}>
-            <DepartmentPicker
-              label="Khoa"
-              value={department}
-              onChange={code => setDepartment(code ?? '')}
-            />
-          </View>
-
-          <View style={styles.actionButtons}>
-            <Button
-              variant="primary"
-              title="Lưu thay đổi"
-              loading={updateMutation.isPending}
-              disabled={isBusy}
-              onPress={handleSave}
-            />
-
-            {!isSelf ? (
-              <Button
-                variant="quiet"
-                title="Xóa người dùng"
-                loading={deactivateMutation.isPending}
-                disabled={isBusy}
-                onPress={handleDelete}
-                textStyle={styles.deleteButtonText}
-              />
-            ) : (
-              <Text style={styles.selfNotice}>
-                Tài khoản của bạn (không thể xóa chính mình)
-              </Text>
-            )}
+      onClose={onClose}
+      dismissable={!isBusy}
+      backdropLabel="Đóng bảng chỉnh sửa"
+      style={styles.sheetContainer}
+      header={
+        <View style={styles.userHeader}>
+          <Avatar id={user.id} size={50} shape="round" />
+          <View style={styles.userInfo}>
+            <Text style={styles.userName} numberOfLines={1}>
+              {user.fullName}
+            </Text>
+            <Text style={styles.userEmail} numberOfLines={1}>
+              {user.email}
+            </Text>
           </View>
         </View>
-      </KeyboardAvoidingView>
-    </Modal>
+      }
+    >
+      <View style={styles.formGroup}>
+        <Text style={styles.fieldLabel}>Vai trò</Text>
+        <Seg
+          options={ROLE_OPTIONS}
+          value={role}
+          onChange={val => setRole(val as 'STUDENT' | 'LECTURER' | 'ADMIN')}
+        />
+      </View>
+
+      <View style={styles.formGroup}>
+        <DepartmentPicker
+          label="Khoa"
+          value={department}
+          onChange={code => setDepartment(code ?? '')}
+        />
+      </View>
+
+      <View style={styles.actionButtons}>
+        <Button
+          variant="primary"
+          title="Lưu thay đổi"
+          loading={updateMutation.isPending}
+          disabled={isBusy}
+          onPress={handleSave}
+        />
+
+        {!isSelf ? (
+          <Button
+            variant="quiet"
+            title="Xóa người dùng"
+            loading={deactivateMutation.isPending}
+            disabled={isBusy}
+            onPress={handleDelete}
+            textStyle={styles.deleteButtonText}
+          />
+        ) : (
+          <Text style={styles.selfNotice}>
+            Tài khoản của bạn (không thể xóa chính mình)
+          </Text>
+        )}
+      </View>
+    </Sheet>
   );
 }
 
 const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-  },
-  backdrop: {
-    ...StyleSheet.absoluteFill,
-  },
-  sheetContainer: {
-    backgroundColor: colors.s1,
-    borderTopLeftRadius: radius.sheet,
-    borderTopRightRadius: radius.sheet,
-    borderWidth: 1,
-    borderColor: colors.line,
-    paddingHorizontal: space.gutter,
-    paddingTop: space.md,
-    gap: space.lg,
-  },
-  handle: {
-    width: 36,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: colors.fg4,
-    alignSelf: 'center',
-    marginBottom: space.xs,
-  },
+  sheetContainer: { gap: space.lg },
   userHeader: {
     flexDirection: 'row',
     alignItems: 'center',

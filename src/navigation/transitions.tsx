@@ -12,10 +12,14 @@ import { motion } from '../theme';
  * previous one through it, and the screen roots themselves are transparent.
  */
 
-/** Stack: iOS-style push with swipe-back from anywhere on the screen. */
+/**
+ * Stack: iOS-style push. On Android `ios_from_right` also slides the screen
+ * underneath back with parallax, so the old page recedes instead of
+ * sitting still (closest native match to Mochy's receding container).
+ */
 export const stackScreenOptions: NativeStackNavigationOptions = {
   headerShown: false,
-  animation: 'slide_from_right',
+  animation: 'ios_from_right',
   animationDuration: motion.screen,
   gestureEnabled: true,
   fullScreenGestureEnabled: true,

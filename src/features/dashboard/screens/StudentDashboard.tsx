@@ -31,6 +31,7 @@ import {
   StatusPill,
 } from '../../../components';
 import {
+  Loadable,
   BlurTarget,
   Glass,
   Glow,
@@ -121,34 +122,39 @@ export function StudentDashboard() {
 
           <Reveal id="dash-student-next" index={1}>
             <SectionHeader title="Buổi hẹn tiếp theo" />
-            {upcoming.isLoading ? (
-              <Skeleton height={236} borderRadius={24} />
-            ) : upcoming.isError ? (
-              <View style={styles.msg}>
-                <AppText variant="sm">{errorText(upcoming.error)}</AppText>
-                <Button
-                  variant="ghost"
-                  title="Thử lại"
-                  onPress={() => upcoming.refetch()}
+            <Loadable
+              loading={upcoming.isLoading}
+              skeleton={
+                <Skeleton height={236} borderRadius={24} />
+              }
+            >
+              {upcoming.isError ? (
+                <View style={styles.msg}>
+                  <AppText variant="sm">{errorText(upcoming.error)}</AppText>
+                  <Button
+                    variant="ghost"
+                    title="Thử lại"
+                    onPress={() => upcoming.refetch()}
+                  />
+                </View>
+              ) : next ? (
+                <NextMeetingCard
+                  booking={next}
+                  onPress={() =>
+                    go(navigation, 'BookingDetail', { bookingId: next.id })
+                  }
                 />
-              </View>
-            ) : next ? (
-              <NextMeetingCard
-                booking={next}
-                onPress={() =>
-                  go(navigation, 'BookingDetail', { bookingId: next.id })
-                }
-              />
-            ) : (
-              <View style={styles.msg}>
-                <AppText variant="sm">Chưa có buổi hẹn nào sắp tới.</AppText>
-                <Button
-                  variant="ghost"
-                  title="Tìm giảng viên"
-                  onPress={() => go(navigation, 'Find')}
-                />
-              </View>
-            )}
+              ) : (
+                <View style={styles.msg}>
+                  <AppText variant="sm">Chưa có buổi hẹn nào sắp tới.</AppText>
+                  <Button
+                    variant="ghost"
+                    title="Tìm giảng viên"
+                    onPress={() => go(navigation, 'Find')}
+                  />
+                </View>
+              )}
+            </Loadable>
           </Reveal>
 
           <Reveal id="dash-student-suggest" index={2}>
@@ -156,45 +162,50 @@ export function StudentDashboard() {
               title="Gợi ý cho bạn"
               onPress={() => go(navigation, 'Find')}
             />
-            {suggested.isLoading ? (
-              <View style={styles.shelfRow}>
-                <Skeleton width={132} height={190} borderRadius={18} />
-                <Skeleton width={132} height={190} borderRadius={18} />
-              </View>
-            ) : suggested.isError ? (
-              <View style={styles.msg}>
-                <AppText variant="sm">{errorText(suggested.error)}</AppText>
-                <Button
-                  variant="ghost"
-                  title="Thử lại"
-                  onPress={() => suggested.refetch()}
-                />
-              </View>
-            ) : (suggested.data ?? []).length === 0 ? (
-              <AppText variant="sm">
-                Chưa có gợi ý phù hợp với lịch của bạn.
-              </AppText>
-            ) : (
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={styles.shelf}
-                contentContainerStyle={styles.shelfRow}
-              >
-                {(suggested.data ?? []).map(slot => (
-                  <SuggestionCard
-                    key={slot.id}
-                    slot={slot}
-                    onPress={() =>
-                      go(navigation, 'BookSlot', {
-                        lecturerId: slot.lecturerId,
-                        slotId: slot.id,
-                      })
-                    }
+            <Loadable
+              loading={suggested.isLoading}
+              skeleton={
+                <View style={styles.shelfRow}>
+                  <Skeleton width={132} height={190} borderRadius={18} />
+                  <Skeleton width={132} height={190} borderRadius={18} />
+                </View>
+              }
+            >
+              {suggested.isError ? (
+                <View style={styles.msg}>
+                  <AppText variant="sm">{errorText(suggested.error)}</AppText>
+                  <Button
+                    variant="ghost"
+                    title="Thử lại"
+                    onPress={() => suggested.refetch()}
                   />
-                ))}
-              </ScrollView>
-            )}
+                </View>
+              ) : (suggested.data ?? []).length === 0 ? (
+                <AppText variant="sm">
+                  Chưa có gợi ý phù hợp với lịch của bạn.
+                </AppText>
+              ) : (
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  style={styles.shelf}
+                  contentContainerStyle={styles.shelfRow}
+                >
+                  {(suggested.data ?? []).map(slot => (
+                    <SuggestionCard
+                      key={slot.id}
+                      slot={slot}
+                      onPress={() =>
+                        go(navigation, 'BookSlot', {
+                          lecturerId: slot.lecturerId,
+                          slotId: slot.id,
+                        })
+                      }
+                    />
+                  ))}
+                </ScrollView>
+              )}
+            </Loadable>
           </Reveal>
         </ScrollView>
       </BlurTarget>

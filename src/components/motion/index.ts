@@ -25,13 +25,16 @@ export { Odometer, splitOdometer } from './Odometer';
 export type { OdometerFormat, OdometerProps, OdometerToken } from './Odometer';
 export {
   ContentFade,
+  LOADABLE_DELAY,
+  Loadable,
   Reveal,
   Skeleton,
+  burstDelay,
   claimReveal,
   resetReveal,
   revealDelay,
 } from './Reveal';
-export type { RevealProps, SkeletonProps } from './Reveal';
+export type { LoadableProps, RevealProps, SkeletonProps } from './Reveal';
 export { Glow } from './Glow';
 export type { GlowPosition, GlowProps } from './Glow';
 export {
@@ -40,5 +43,8 @@ export {
   AmbientSurface,
 } from './AmbientBackground';
 export { PressableScale, usePressFeedback } from './PressableScale';
-export type { PressableScaleProps } from './PressableScale';
+export type { PressFeedbackKind, PressableScaleProps } from './PressableScale';
 export { useReduceMotion } from './reduceMotion';
+export { haptic } from './haptics';
+export { Sheet, SheetRecede, sheetPresence, useSheetItem } from './Sheet';
+export type { SheetProps } from './Sheet';

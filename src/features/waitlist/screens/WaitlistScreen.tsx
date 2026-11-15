@@ -26,7 +26,15 @@ import {
 import { Avatar } from '../../../components/Avatar';
 import { Button } from '../../../components/Button';
 import { Card } from '../../../components/Card';
-import { BlurTarget, Glow, Odometer, Skeleton, useTabBarSpace } from '../../../components/motion';
+import {
+  BlurTarget,
+  Glow,
+  Loadable,
+  Odometer,
+  Reveal,
+  Skeleton,
+  useTabBarSpace,
+} from '../../../components/motion';
 import { SectionHeader } from '../../../components/SectionHeader';
 import { StatusPill } from '../../../components/StatusPill';
 import { TopNav } from '../../../components/TopNav';
@@ -171,18 +179,16 @@ export function WaitlistScreen() {
     [leaveMutation],
   );
 
-  const renderContent = () => {
-    if (isLoading) {
-      return (
-        <View style={styles.skeletonContainer}>
-          <Skeleton height={200} borderRadius={radius.card} />
-          <Skeleton width="40%" height={20} borderRadius={4} />
-          <Skeleton height={64} borderRadius={radius.sm} />
-          <Skeleton height={64} borderRadius={radius.sm} />
-        </View>
-      );
-    }
+  const skeleton = (
+    <View style={styles.skeletonContainer}>
+      <Skeleton height={200} borderRadius={radius.card} />
+      <Skeleton width="40%" height={20} borderRadius={4} />
+      <Skeleton height={64} borderRadius={radius.sm} />
+      <Skeleton height={64} borderRadius={radius.sm} />
+    </View>
+  );
 
+  const renderContent = () => {
     if (isError) {
       return (
         <View style={styles.centerContainer}>
@@ -267,44 +273,46 @@ export function WaitlistScreen() {
             <SectionHeader title="Đang chờ" style={styles.sectionHeader} />
             <View style={styles.rowsContainer}>
               {waitingEntries.map(entry => (
-                <View key={entry.id} style={styles.waitRow}>
-                  <Avatar
-                    id={entry.slotId}
-                    size={44}
-                    shape="round"
-                    style={styles.waitAvatar}
-                  />
-                  <View style={styles.waitInfo}>
-                    <Text style={styles.waitName} numberOfLines={1}>
-                      {entry.lecturerName}
-                    </Text>
-                    <Text style={styles.waitSlot} numberOfLines={1}>
-                      {entry.desiredSlotLabel}
-                    </Text>
-                  </View>
-
-                  <View style={styles.waitMeta}>
-                    {entry.status === 'WAITING' && entry.position != null ? (
-                      <Text style={styles.positionText}>#{entry.position}</Text>
-                    ) : null}
-
-                    <StatusPill
-                      status={entry.status}
-                      label={waitlistStatusLabel(entry.status)}
+                <Reveal key={entry.id} id={`waitlist-${entry.id}`}>
+                  <View style={styles.waitRow}>
+                    <Avatar
+                      id={entry.slotId}
+                      size={44}
+                      shape="round"
+                      style={styles.waitAvatar}
                     />
+                    <View style={styles.waitInfo}>
+                      <Text style={styles.waitName} numberOfLines={1}>
+                        {entry.lecturerName}
+                      </Text>
+                      <Text style={styles.waitSlot} numberOfLines={1}>
+                        {entry.desiredSlotLabel}
+                      </Text>
+                    </View>
 
-                    {entry.status === 'WAITING' ? (
-                      <Button
-                        variant="quiet"
-                        title="Rời hàng"
-                        disabled={leaveMutation.isPending}
-                        onPress={() => handleLeaveWaitlist(entry)}
-                        style={styles.leaveButton}
-                        textStyle={styles.leaveButtonText}
+                    <View style={styles.waitMeta}>
+                      {entry.status === 'WAITING' && entry.position != null ? (
+                        <Text style={styles.positionText}>#{entry.position}</Text>
+                      ) : null}
+
+                      <StatusPill
+                        status={entry.status}
+                        label={waitlistStatusLabel(entry.status)}
                       />
-                    ) : null}
+
+                      {entry.status === 'WAITING' ? (
+                        <Button
+                          variant="quiet"
+                          title="Rời hàng"
+                          disabled={leaveMutation.isPending}
+                          onPress={() => handleLeaveWaitlist(entry)}
+                          style={styles.leaveButton}
+                          textStyle={styles.leaveButtonText}
+                        />
+                      ) : null}
+                    </View>
                   </View>
-                </View>
+                </Reveal>
               ))}
             </View>
           </View>
@@ -338,7 +346,9 @@ export function WaitlistScreen() {
         }
       >
         <Text style={text.t1}>Hàng đợi</Text>
-        {renderContent()}
+        <Loadable loading={isLoading} skeleton={skeleton}>
+          {renderContent()}
+        </Loadable>
       </ScrollView>
     </View>
   );

@@ -13,7 +13,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import * as Haptics from 'expo-haptics';
+import { haptic } from './haptics';
 import { press3D, springs } from '../../theme';
 
 const PERSPECTIVE = 700;
@@ -61,9 +61,7 @@ export function PressableCard({
   const onPressRef = useRef(onPress);
   onPressRef.current = onPress;
   const firePress = useCallback(() => onPressRef.current?.(), []);
-  const hapticIn = useCallback(() => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
-  }, []);
+  const hapticIn = useCallback(() => haptic.light(), []);
 
   const gesture = useManualGesture({
     enabled: !disabled,

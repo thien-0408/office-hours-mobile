@@ -7,9 +7,14 @@ import {
   type ParamListBase,
 } from '@react-navigation/native';
 import { AppText, Button, Screen, Seg } from '../../../components';
-import { useTabBarSpace } from '../../../components/motion';
+import {
+  Loadable,
+  Reveal,
+  Skeleton,
+  useTabBarSpace,
+} from '../../../components/motion';
 import { useAppSession } from '../../../navigation/devSession';
-import { colors, space } from '../../../theme';
+import { colors, radius, space } from '../../../theme';
 import type { Booking } from '../../../api/domainTypes';
 import {
   BOOKING_TABS,
@@ -48,48 +53,59 @@ export function BookingListScreen() {
         onChange={v => setTab(v as BookingTab)}
         style={styles.seg}
       />
-      {list.isLoading ? (
-        <View style={styles.center}>
-          <ActivityIndicator color={colors.fg2} />
-        </View>
-      ) : list.isError ? (
-        <View style={styles.center}>
-          <AppText center>Không tải được danh sách lịch hẹn.</AppText>
-          <Button variant="ghost" title="Thử lại" onPress={() => list.refetch()} />
-        </View>
-      ) : (
-        <FlashList
-          data={list.items}
-          keyExtractor={b => b.id}
-          renderItem={({ item, index }) => (
-            <BookingRow
-              booking={item}
-              role={role}
-              divider={index > 0}
-              onPress={() => open(item)}
-            />
-          )}
-          onEndReached={() => {
-            if (list.hasNextPage) {
-              list.fetchNextPage();
+      <Loadable
+        loading={list.isLoading}
+        rise={false}
+        style={styles.fill}
+        skeleton={
+          <View style={styles.skeleton}>
+            {[0, 1, 2, 3, 4].map(i => (
+              <Skeleton key={i} height={64} borderRadius={radius.md} />
+            ))}
+          </View>
+        }
+      >
+        {list.isError ? (
+          <View style={styles.center}>
+            <AppText center>Không tải được danh sách lịch hẹn.</AppText>
+            <Button variant="ghost" title="Thử lại" onPress={() => list.refetch()} />
+          </View>
+        ) : (
+          <FlashList
+            data={list.items}
+            keyExtractor={b => b.id}
+            renderItem={({ item, index }) => (
+              <Reveal id={`booking-${tab}-${item.id}`}>
+                <BookingRow
+                  booking={item}
+                  role={role}
+                  divider={index > 0}
+                  onPress={() => open(item)}
+                />
+              </Reveal>
+            )}
+            onEndReached={() => {
+              if (list.hasNextPage) {
+                list.fetchNextPage();
+              }
+            }}
+            onEndReachedThreshold={0.5}
+            refreshing={list.isRefetching}
+            onRefresh={() => list.refetch()}
+            ListEmptyComponent={
+              <AppText center style={styles.empty}>
+                {EMPTY_TEXT[tab]}
+              </AppText>
             }
-          }}
-          onEndReachedThreshold={0.5}
-          refreshing={list.isRefetching}
-          onRefresh={() => list.refetch()}
-          ListEmptyComponent={
-            <AppText center style={styles.empty}>
-              {EMPTY_TEXT[tab]}
-            </AppText>
-          }
-          ListFooterComponent={
-            list.isFetchingNextPage ? (
-              <ActivityIndicator color={colors.fg2} style={styles.footer} />
-            ) : null
-          }
-          contentContainerStyle={{ paddingBottom: tabSpace + space.lg }}
-        />
-      )}
+            ListFooterComponent={
+              list.isFetchingNextPage ? (
+                <ActivityIndicator color={colors.fg2} style={styles.footer} />
+              ) : null
+            }
+            contentContainerStyle={{ paddingBottom: tabSpace + space.lg }}
+          />
+        )}
+      </Loadable>
     </Screen>
   );
 }
@@ -97,6 +113,8 @@ export function BookingListScreen() {
 const styles = StyleSheet.create({
   title: { marginTop: space.md, marginBottom: space.md },
   seg: { marginBottom: space.md },
+  fill: { flex: 1 },
+  skeleton: { gap: space.sm },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 },
   empty: { marginTop: space.xxxl },
   footer: { paddingVertical: space.lg },

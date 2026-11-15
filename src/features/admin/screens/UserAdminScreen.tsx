@@ -19,7 +19,13 @@ import { useAdminUsers } from '../../../api/hooks/campusAdmin';
 import { Avatar } from '../../../components/Avatar';
 import { Button } from '../../../components/Button';
 import { Field } from '../../../components/Field';
-import { BlurTarget, Skeleton, useTabBarSpace } from '../../../components/motion';
+import {
+  BlurTarget,
+  Loadable,
+  Reveal,
+  Skeleton,
+  useTabBarSpace,
+} from '../../../components/motion';
 import { Seg, type SegOption } from '../../../components/Seg';
 import { TopNav } from '../../../components/TopNav';
 import { colors, fonts, ls, space } from '../../../theme';
@@ -82,52 +88,52 @@ export function UserAdminScreen() {
       const isLocked = !item.active;
 
       return (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={`${item.fullName}, ${item.role}`}
-          onPress={() => setEditingUser(item)}
-          style={({ pressed }) => [
-            styles.userRow,
-            isLocked && styles.lockedRow,
-            pressed && styles.rowPressed,
-          ]}
-        >
-          <Avatar id={item.id} size={44} shape="round" />
-          <View style={styles.userInfoCol}>
-            <Text style={styles.userName} numberOfLines={1}>
-              {item.fullName}
-            </Text>
-            <Text style={styles.userSubtitle} numberOfLines={1}>
-              {formatUserSubtitle(item)}
-            </Text>
-            <Text style={styles.userEmail} numberOfLines={1}>
-              {item.email}
-            </Text>
-          </View>
-        </Pressable>
+        <Reveal id={`admin-user-${item.id}`}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`${item.fullName}, ${item.role}`}
+            onPress={() => setEditingUser(item)}
+            style={({ pressed }) => [
+              styles.userRow,
+              isLocked && styles.lockedRow,
+              pressed && styles.rowPressed,
+            ]}
+          >
+            <Avatar id={item.id} size={44} shape="round" />
+            <View style={styles.userInfoCol}>
+              <Text style={styles.userName} numberOfLines={1}>
+                {item.fullName}
+              </Text>
+              <Text style={styles.userSubtitle} numberOfLines={1}>
+                {formatUserSubtitle(item)}
+              </Text>
+              <Text style={styles.userEmail} numberOfLines={1}>
+                {item.email}
+              </Text>
+            </View>
+          </Pressable>
+        </Reveal>
       );
     },
     [],
   );
 
-  const renderContent = () => {
-    if (isLoading) {
-      return (
-        <View style={styles.skeletonContainer}>
-          {[0, 1, 2, 3, 4, 5].map(idx => (
-            <View key={idx} style={styles.skeletonRow}>
-              <Skeleton width={44} height={44} borderRadius={22} />
-              <View style={styles.skeletonTextCol}>
-                <Skeleton width="60%" height={14} borderRadius={4} />
-                <Skeleton width="40%" height={12} borderRadius={4} />
-                <Skeleton width="50%" height={12} borderRadius={4} />
-              </View>
-            </View>
-          ))}
+  const renderSkeleton = () => (
+    <View style={styles.skeletonContainer}>
+      {[0, 1, 2, 3, 4, 5].map(idx => (
+        <View key={idx} style={styles.skeletonRow}>
+          <Skeleton width={44} height={44} borderRadius={22} />
+          <View style={styles.skeletonTextCol}>
+            <Skeleton width="60%" height={14} borderRadius={4} />
+            <Skeleton width="40%" height={12} borderRadius={4} />
+            <Skeleton width="50%" height={12} borderRadius={4} />
+          </View>
         </View>
-      );
-    }
+      ))}
+    </View>
+  );
 
+  const renderContent = () => {
     if (isError) {
       return (
         <View style={styles.centerContainer}>
@@ -208,7 +214,14 @@ export function UserAdminScreen() {
         />
       </View>
 
-      <View style={styles.content}>{renderContent()}</View>
+      <Loadable
+        loading={isLoading}
+        skeleton={renderSkeleton()}
+        rise={false}
+        style={styles.content}
+      >
+        {renderContent()}
+      </Loadable>
 
       <UserEditSheet
         user={editingUser}

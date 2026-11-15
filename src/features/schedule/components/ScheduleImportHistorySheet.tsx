@@ -2,18 +2,16 @@ import React from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  Modal,
-  Pressable,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useScheduleImports } from '../../../api/hooks';
 import type { ScheduleImport } from '../../../api/domainTypes';
 import { formatVnDayTime } from '../../../api/time';
 import { Button } from '../../../components/Button';
-import { colors, fonts, radius, space } from '../../../theme';
+import { Sheet } from '../../../components/motion';
+import { colors, fonts, space } from '../../../theme';
 
 export interface ScheduleImportHistorySheetProps {
   visible: boolean;
@@ -28,7 +26,6 @@ export function ScheduleImportHistorySheet({
   visible,
   onClose,
 }: ScheduleImportHistorySheetProps) {
-  const insets = useSafeAreaInsets();
   const { data: imports, isLoading, isError, refetch } = useScheduleImports();
 
   const renderItem = ({ item }: { item: ScheduleImport }) => {
@@ -59,95 +56,48 @@ export function ScheduleImportHistorySheet({
   };
 
   return (
-    <Modal
+    <Sheet
       visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={onClose}
+      onClose={onClose}
+      maxHeight="80%"
+      backdropLabel="Đóng lịch sử nhập"
+      title="Lịch sử nhập thời khóa biểu"
+      style={styles.sheet}
     >
-      <View style={styles.overlay}>
-        <Pressable
-          style={styles.backdrop}
-          onPress={onClose}
-          accessibilityLabel="Đóng lịch sử nhập"
-        />
-
-        <View
-          style={[
-            styles.sheet,
-            { paddingBottom: Math.max(insets.bottom, 16) + space.md },
-          ]}
-        >
-          <View style={styles.handle} />
-
-          <Text style={styles.title}>Lịch sử nhập thời khóa biểu</Text>
-
-          {isLoading ? (
-            <View style={styles.centerContainer}>
-              <ActivityIndicator color={colors.fg} />
-            </View>
-          ) : isError ? (
-            <View style={styles.centerContainer}>
-              <Text style={styles.emptyText}>
-                Không thể tải lịch sử nhập thời khóa biểu.
-              </Text>
-              <Button variant="ghost" title="Thử lại" onPress={() => refetch()} />
-            </View>
-          ) : !imports || imports.length === 0 ? (
-            <View style={styles.centerContainer}>
-              <Text style={styles.emptyText}>
-                Chưa có lịch sử nhập thời khóa biểu nào.
-              </Text>
-            </View>
-          ) : (
-            <FlatList
-              data={imports}
-              keyExtractor={item => item.id}
-              renderItem={renderItem}
-              ItemSeparatorComponent={HistorySeparator}
-              contentContainerStyle={styles.listContent}
-            />
-          )}
-
-          <Button variant="quiet" title="Đóng" onPress={onClose} />
+      {isLoading ? (
+        <View style={styles.centerContainer}>
+          <ActivityIndicator color={colors.fg} />
         </View>
-      </View>
-    </Modal>
+      ) : isError ? (
+        <View style={styles.centerContainer}>
+          <Text style={styles.emptyText}>
+            Không thể tải lịch sử nhập thời khóa biểu.
+          </Text>
+          <Button variant="ghost" title="Thử lại" onPress={() => refetch()} />
+        </View>
+      ) : !imports || imports.length === 0 ? (
+        <View style={styles.centerContainer}>
+          <Text style={styles.emptyText}>
+            Chưa có lịch sử nhập thời khóa biểu nào.
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={imports}
+          keyExtractor={item => item.id}
+          renderItem={renderItem}
+          ItemSeparatorComponent={HistorySeparator}
+          contentContainerStyle={styles.listContent}
+        />
+      )}
+
+      <Button variant="quiet" title="Đóng" onPress={onClose} />
+    </Sheet>
   );
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.64)',
-  },
-  backdrop: {
-    ...StyleSheet.absoluteFill,
-  },
-  sheet: {
-    maxHeight: '80%',
-    backgroundColor: colors.s1,
-    borderTopLeftRadius: radius.sheet,
-    borderTopRightRadius: radius.sheet,
-    borderWidth: 1,
-    borderColor: colors.line2,
-    paddingHorizontal: space.gutter,
-    paddingTop: space.md,
-    gap: space.md,
-  },
-  handle: {
-    width: 40,
-    height: 5,
-    borderRadius: 5,
-    backgroundColor: colors.fg4,
-    alignSelf: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: fonts.bold,
-    color: colors.fg,
-  },
+  sheet: { gap: space.md },
   listContent: {
     paddingVertical: space.xs,
   },

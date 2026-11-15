@@ -1,4 +1,13 @@
-import { memo, useEffect, useId, useState, type ReactNode } from 'react';
+import {
+  memo,
+  useContext,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
+import { NavigationContext } from '@react-navigation/native';
 import {
   AppState,
   StyleSheet,
@@ -102,13 +111,19 @@ function Blob({
   // Loop position, derived from wall-clock so every instance (one per screen
   // surface) drifts in sync and the surfaces stay seamless.
   const t = useSharedValue(0);
+  const started = useRef(false);
 
   useEffect(() => {
     if (!running) {
       cancelAnimation(t);
       return;
     }
-    const start = (Date.now() % spec.period) / spec.period;
+    // First start joins the wall-clock loop; a resume (screen focused
+    // again, app foregrounded) continues from where it paused, no jump.
+    const start = started.current
+      ? t.value % 1
+      : (Date.now() % spec.period) / spec.period;
+    started.current = true;
     t.value = start;
     t.value = withRepeat(
       withTiming(start + 1, { duration: spec.period, easing: Easing.linear }),
@@ -165,13 +180,36 @@ function Blob({
 }
 
 /**
+ * True while the surrounding navigator screen is focused (always true
+ * outside navigation). Screens covered by a pushed screen stop drifting.
+ */
+function useScreenFocused() {
+  const nav = useContext(NavigationContext);
+  const [focused, setFocused] = useState(() => nav?.isFocused() ?? true);
+  useEffect(() => {
+    if (!nav) {
+      return;
+    }
+    setFocused(nav.isFocused());
+    const offFocus = nav.addListener('focus', () => setFocused(true));
+    const offBlur = nav.addListener('blur', () => setFocused(false));
+    return () => {
+      offFocus();
+      offBlur();
+    };
+  }, [nav]);
+  return focused;
+}
+
+/**
  * Slowly drifting indigo / blue / violet glows. Fills its parent, never
  * takes touches. Drift runs on the UI thread, pauses while the app is
- * backgrounded and is static under "reduce motion".
+ * backgrounded or the screen is covered, and is static under "reduce motion".
  */
 export const AmbientBackground = memo(function AmbientBackgroundView() {
   const { width, height } = useWindowDimensions();
   const active = useAppActive();
+  const focused = useScreenFocused();
   const reduce = useReduceMotion();
   return (
     <View pointerEvents="none" style={styles.fill}>
@@ -179,7 +217,7 @@ export const AmbientBackground = memo(function AmbientBackgroundView() {
         <Blob
           key={spec.color}
           spec={spec}
-          running={active && !reduce}
+          running={active && focused && !reduce}
           width={width}
           height={height}
         />

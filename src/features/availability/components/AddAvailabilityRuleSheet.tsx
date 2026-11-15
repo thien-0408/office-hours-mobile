@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import {
   Alert,
-  KeyboardAvoidingView,
-  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCreateAvailabilityRule } from '../../../api/hooks';
 import type { Semester } from '../../../api/domainTypes';
 import { Button } from '../../../components/Button';
 import { Field } from '../../../components/Field';
 import { Seg, type SegOption } from '../../../components/Seg';
+import { Sheet } from '../../../components/motion';
 import { colors, fonts, radius, space } from '../../../theme';
 import {
   availabilityErrorMessage,
@@ -58,7 +56,6 @@ export function AddAvailabilityRuleSheet({
   activeSemester,
   onClose,
 }: AddAvailabilityRuleSheetProps) {
-  const insets = useSafeAreaInsets();
   const createMutation = useCreateAvailabilityRule(lecturerId);
 
   const [selectedDays, setSelectedDays] = useState<number[]>([3, 5]); // Default: T4, T6 like mock
@@ -149,175 +146,126 @@ export function AddAvailabilityRuleSheet({
   };
 
   return (
-    <Modal
+    <Sheet
       visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={handleClose}
+      onClose={handleClose}
+      dismissable={!isSubmitting}
+      maxHeight="92%"
+      backdropLabel="Đóng bảng thêm khung giờ"
+      title="Khung giờ mới"
     >
-      <KeyboardAvoidingView behavior="padding" style={styles.overlay}>
-        <Pressable
-          style={styles.backdrop}
-          onPress={isSubmitting ? undefined : handleClose}
-          accessibilityLabel="Đóng bảng thêm khung giờ"
-        />
-
-        <View
-          style={[
-            styles.sheet,
-            { paddingBottom: Math.max(insets.bottom, 16) + space.md },
-          ]}
-        >
-          <View style={styles.handle} />
-
-          <Text style={styles.title}>Khung giờ mới</Text>
-
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-            contentContainerStyle={styles.scrollContent}
-          >
-            {/* Days multi-chip selection */}
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Các ngày lặp lại</Text>
-              <View style={styles.chipsRow}>
-                {ALL_DAYS.map(d => {
-                  const isSelected = selectedDays.includes(d.value);
-                  return (
-                    <Pressable
-                      key={d.value}
-                      accessibilityRole="button"
-                      accessibilityState={{ selected: isSelected }}
-                      accessibilityLabel={d.label}
-                      onPress={() => toggleDay(d.value)}
-                      style={[styles.chip, isSelected && styles.chipActive]}
-                    >
-                      <Text
-                        style={[
-                          styles.chipText,
-                          isSelected && styles.chipTextActive,
-                        ]}
-                      >
-                        {d.label}
-                      </Text>
-                    </Pressable>
-                  );
-                })}
-              </View>
-              {errors.days ? (
-                <Text style={styles.errorText}>{errors.days}</Text>
-              ) : null}
-            </View>
-
-            {/* Time selection */}
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Thời gian rảnh</Text>
-              <TimeSelector
-                startTime={startTime}
-                endTime={endTime}
-                onChangeStartTime={setStartTime}
-                onChangeEndTime={setEndTime}
-                error={errors.endTime || errors.startTime}
-              />
-            </View>
-
-            {/* Slot Length */}
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Độ dài slot</Text>
-              <Seg
-                options={SLOT_LENGTH_OPTIONS}
-                value={String(slotLengthMinutes)}
-                onChange={val => setSlotLengthMinutes(parseInt(val, 10))}
-              />
-              {errors.slotLengthMinutes ? (
-                <Text style={styles.errorText}>{errors.slotLengthMinutes}</Text>
-              ) : null}
-            </View>
-
-            {/* Format: in person or online */}
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Hình thức</Text>
-              <Seg
-                options={FORMAT_OPTIONS}
-                value={meetingFormat}
-                onChange={val => setMeetingFormat(val as 'in_person' | 'online')}
-              />
-            </View>
-
-            {/* Meeting link field when Online */}
-            {isOnline ? (
-              <View style={styles.formGroup}>
-                <Field
-                  label="Link phòng họp online"
-                  placeholder="https://zoom.us/j/... hoặc Google Meet"
-                  value={meetingUrl}
-                  onChangeText={text => {
-                    setMeetingUrl(text);
-                    if (errors.meetingUrl) {
-                      setErrors(prev => ({ ...prev, meetingUrl: '' }));
-                    }
-                  }}
-                  error={errors.meetingUrl}
-                />
-              </View>
-            ) : null}
-
-            {/* Action buttons */}
-            <View style={styles.actionButtons}>
-              <Button
-                variant="primary"
-                title={submitButtonTitle}
-                loading={isSubmitting}
-                disabled={isSubmitting || selectedDays.length === 0}
-                onPress={handleCreate}
-              />
-              <Button
-                variant="quiet"
-                title="Hủy"
-                disabled={isSubmitting}
-                onPress={handleClose}
-              />
-            </View>
-          </ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* Days multi-chip selection */}
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Các ngày lặp lại</Text>
+          <View style={styles.chipsRow}>
+            {ALL_DAYS.map(d => {
+              const isSelected = selectedDays.includes(d.value);
+              return (
+                <Pressable
+                  key={d.value}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected: isSelected }}
+                  accessibilityLabel={d.label}
+                  onPress={() => toggleDay(d.value)}
+                  style={[styles.chip, isSelected && styles.chipActive]}
+                >
+                  <Text
+                    style={[
+                      styles.chipText,
+                      isSelected && styles.chipTextActive,
+                    ]}
+                  >
+                    {d.label}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+          {errors.days ? (
+            <Text style={styles.errorText}>{errors.days}</Text>
+          ) : null}
         </View>
-      </KeyboardAvoidingView>
-    </Modal>
+
+        {/* Time selection */}
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Thời gian rảnh</Text>
+          <TimeSelector
+            startTime={startTime}
+            endTime={endTime}
+            onChangeStartTime={setStartTime}
+            onChangeEndTime={setEndTime}
+            error={errors.endTime || errors.startTime}
+          />
+        </View>
+
+        {/* Slot Length */}
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Độ dài slot</Text>
+          <Seg
+            options={SLOT_LENGTH_OPTIONS}
+            value={String(slotLengthMinutes)}
+            onChange={val => setSlotLengthMinutes(parseInt(val, 10))}
+          />
+          {errors.slotLengthMinutes ? (
+            <Text style={styles.errorText}>{errors.slotLengthMinutes}</Text>
+          ) : null}
+        </View>
+
+        {/* Format: in person or online */}
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Hình thức</Text>
+          <Seg
+            options={FORMAT_OPTIONS}
+            value={meetingFormat}
+            onChange={val => setMeetingFormat(val as 'in_person' | 'online')}
+          />
+        </View>
+
+        {/* Meeting link field when Online */}
+        {isOnline ? (
+          <View style={styles.formGroup}>
+            <Field
+              label="Link phòng họp online"
+              placeholder="https://zoom.us/j/... hoặc Google Meet"
+              value={meetingUrl}
+              onChangeText={text => {
+                setMeetingUrl(text);
+                if (errors.meetingUrl) {
+                  setErrors(prev => ({ ...prev, meetingUrl: '' }));
+                }
+              }}
+              error={errors.meetingUrl}
+            />
+          </View>
+        ) : null}
+
+        {/* Action buttons */}
+        <View style={styles.actionButtons}>
+          <Button
+            variant="primary"
+            title={submitButtonTitle}
+            loading={isSubmitting}
+            disabled={isSubmitting || selectedDays.length === 0}
+            onPress={handleCreate}
+          />
+          <Button
+            variant="quiet"
+            title="Hủy"
+            disabled={isSubmitting}
+            onPress={handleClose}
+          />
+        </View>
+      </ScrollView>
+    </Sheet>
   );
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.64)',
-  },
-  backdrop: {
-    ...StyleSheet.absoluteFill,
-  },
-  sheet: {
-    maxHeight: '92%',
-    backgroundColor: colors.s1,
-    borderTopLeftRadius: radius.sheet,
-    borderTopRightRadius: radius.sheet,
-    borderWidth: 1,
-    borderColor: colors.line2,
-    paddingHorizontal: space.gutter,
-    paddingTop: space.md,
-  },
-  handle: {
-    width: 40,
-    height: 5,
-    borderRadius: 5,
-    backgroundColor: colors.fg4,
-    alignSelf: 'center',
-    marginBottom: space.md,
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: fonts.bold,
-    color: colors.fg,
-    marginBottom: space.md,
-  },
   scrollContent: {
     gap: space.md,
     paddingBottom: space.lg,

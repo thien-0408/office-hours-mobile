@@ -7,6 +7,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { haptic } from '../../../components/motion/haptics';
 import { colors, radius, springs } from '../../../theme';
 
 export interface ToggleProps {
@@ -65,7 +66,10 @@ export function Toggle({
       accessibilityState={{ checked: value, disabled }}
       accessibilityLabel={accessibilityLabel}
       disabled={disabled}
-      onPress={() => onValueChange(!value)}
+      onPress={() => {
+        haptic.selection();
+        onValueChange(!value);
+      }}
       style={[styles.container, disabled && styles.disabled, style]}
       hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
     >

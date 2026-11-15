@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -10,9 +9,10 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { ChevronDown } from 'lucide-react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDepartments } from '../api/hooks/departments';
 import { departmentLabel, FALLBACK_DEPARTMENTS } from '../api/departments';
+import { haptic } from './motion/haptics';
+import { Sheet } from './motion/Sheet';
 import { colors, fonts, iconOpacity, radius, size as themeSize, text } from '../theme';
 
 export interface DepartmentPickerProps {
@@ -39,13 +39,15 @@ export function DepartmentPicker({
   containerStyle,
 }: DepartmentPickerProps) {
   const [open, setOpen] = useState(false);
-  const insets = useSafeAreaInsets();
   const { data } = useDepartments();
   const list = data ?? FALLBACK_DEPARTMENTS;
   const shown = departmentLabel(value, list);
   const selected = value ? value.trim().toUpperCase() : null;
 
   const pick = (code: string | null) => {
+    if (code !== selected) {
+      haptic.selection();
+    }
     setOpen(false);
     onChange(code);
   };
@@ -80,44 +82,32 @@ export function DepartmentPicker({
       </Pressable>
       {error ? <Text style={styles.error}>{error}</Text> : null}
 
-      <Modal
+      <Sheet
         visible={open}
-        transparent
-        animationType="slide"
-        statusBarTranslucent
-        navigationBarTranslucent
-        onRequestClose={() => setOpen(false)}
+        onClose={() => setOpen(false)}
+        title={label}
+        maxHeight="70%"
+        style={styles.sheet}
       >
-        <Pressable
-          style={styles.backdrop}
-          accessibilityLabel="Đóng"
-          onPress={() => setOpen(false)}
-        />
-        <View
-          style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, 16) }]}
-        >
-          <View style={styles.grabber} />
-          <Text style={styles.sheetTitle}>{label}</Text>
-          <ScrollView style={styles.list}>
-            {allowNone ? (
-              <Row
-                text="Không chọn"
-                on={selected == null}
-                onPress={() => pick(null)}
-              />
-            ) : null}
-            {list.map(d => (
-              <Row
-                key={d.code}
-                text={d.labelVi}
-                sub={d.code}
-                on={selected === d.code}
-                onPress={() => pick(d.code)}
-              />
-            ))}
-          </ScrollView>
-        </View>
-      </Modal>
+        <ScrollView style={styles.list}>
+          {allowNone ? (
+            <Row
+              text="Không chọn"
+              on={selected == null}
+              onPress={() => pick(null)}
+            />
+          ) : null}
+          {list.map(d => (
+            <Row
+              key={d.code}
+              text={d.labelVi}
+              sub={d.code}
+              on={selected === d.code}
+              onPress={() => pick(d.code)}
+            />
+          ))}
+        </ScrollView>
+      </Sheet>
     </View>
   );
 }
@@ -175,31 +165,7 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     paddingHorizontal: 4,
   },
-  backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.55)' },
-  sheet: {
-    backgroundColor: colors.s1,
-    borderTopLeftRadius: radius.sheet,
-    borderTopRightRadius: radius.sheet,
-    borderCurve: 'continuous',
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    maxHeight: '70%',
-  },
-  grabber: {
-    alignSelf: 'center',
-    width: 36,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: colors.line2,
-    marginBottom: 12,
-  },
-  sheetTitle: {
-    fontSize: 17,
-    fontFamily: fonts.bold,
-    color: colors.fg,
-    paddingHorizontal: 4,
-    paddingBottom: 8,
-  },
+  sheet: { paddingHorizontal: 16 },
   list: { flexGrow: 0 },
   row: {
     minHeight: 52,

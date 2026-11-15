@@ -7,7 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import * as Haptics from 'expo-haptics';
+import { haptic } from './haptics';
 import {
   colors,
   glass,
@@ -211,7 +211,7 @@ export function NavPill({ state, descriptors, navigation }: BottomTabBarProps) {
             canPreventDefault: true,
           });
           if (!focused && !event.defaultPrevented) {
-            Haptics.selectionAsync().catch(() => {});
+            haptic.selection();
             navigation.navigate(route.name, route.params);
           }
         };

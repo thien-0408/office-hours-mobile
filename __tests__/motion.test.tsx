@@ -18,6 +18,8 @@ import {
   claimReveal,
   navPillTabX,
   resetReveal,
+  burstDelay,
+  Loadable,
   resolveGlassLevel,
   revealDelay,
   splitOdometer,
@@ -102,9 +104,17 @@ describe('Reveal', () => {
     expect(claimReveal('b')).toBe(true);
   });
 
-  it('staggers 35ms per index', () => {
+  it('staggers 55ms per index, capped at 6 steps', () => {
     expect(revealDelay(0)).toBe(0);
-    expect(revealDelay(3)).toBe(105);
+    expect(revealDelay(3)).toBe(165);
+    expect(revealDelay(40)).toBe(330);
+  });
+
+  it('cascades reveals that mount together, restarts after a pause', () => {
+    expect(burstDelay(1000)).toBe(0);
+    expect(burstDelay(1010)).toBe(55);
+    expect(burstDelay(1020)).toBe(110);
+    expect(burstDelay(2000)).toBe(0);
   });
 
   it('second mount with the same id skips the entering animation', async () => {
@@ -118,6 +128,30 @@ describe('Reveal', () => {
     const second = await render(<Reveal id="card-1" />);
     expect(second.root.findAll(n => n.props.entering != null).length).toBe(0);
     expect(entering(second)).toBeUndefined();
+  });
+});
+
+describe('Loadable', () => {
+  const texts = (r: ReactTestRenderer.ReactTestRenderer) =>
+    r.root.findAllByType(Text).map(t => t.props.children);
+  const view = (loading: boolean) => (
+    <Loadable loading={loading} skeleton={<Text>bones</Text>}>
+      <Text>data</Text>
+    </Loadable>
+  );
+
+  it('shows the skeleton, then reveals the content', async () => {
+    const r = await render(view(true));
+    expect(texts(r)).toEqual(['bones']);
+    await act(() => r.update(view(false)));
+    expect(texts(r)).toEqual(['data']);
+    expect(r.root.findAll(n => n.props.entering != null).length).toBeGreaterThan(0);
+  });
+
+  it('content cached at mount appears without animating', async () => {
+    const r = await render(view(false));
+    expect(texts(r)).toEqual(['data']);
+    expect(r.root.findAll(n => n.props.entering != null).length).toBe(0);
   });
 });
 

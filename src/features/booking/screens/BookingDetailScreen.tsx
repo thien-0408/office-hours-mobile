@@ -16,7 +16,7 @@ import {
   StatusPill,
   TopNav,
 } from '../../../components';
-import { Glow } from '../../../components/motion';
+import { Glow, Loadable } from '../../../components/motion';
 import { useAppSession } from '../../../navigation/devSession';
 import type { ScreenParams } from '../../../navigation/types';
 import {
@@ -188,13 +188,18 @@ export function BookingDetailScreen() {
       </View>
 
       <SectionHeader title="Diễn biến" style={styles.section} />
-      {timelineQ.isLoading ? (
-        <ActivityIndicator />
-      ) : timelineQ.data ? (
-        <Timeline events={timelineQ.data} />
-      ) : (
-        <AppText variant="sm">Không tải được diễn biến.</AppText>
-      )}
+      <Loadable
+        loading={timelineQ.isLoading}
+        skeleton={
+          <ActivityIndicator />
+        }
+      >
+        {timelineQ.data ? (
+          <Timeline events={timelineQ.data} />
+        ) : (
+          <AppText variant="sm">Không tải được diễn biến.</AppText>
+        )}
+      </Loadable>
 
       {showPrimaryRow ? (
         <View style={styles.actions}>
