@@ -72,6 +72,7 @@ export function Button({
           {leading}
           {title ? (
             <Text
+              numberOfLines={1}
               style={[
                 isQuiet ? styles.quietText : styles.normalText,
                 { color: resolvedTextColor },
@@ -96,6 +97,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
     gap: 8,
+    flexShrink: 0,
   },
   heightNormal: {
     height: themeSize.button, // 54
@@ -107,7 +109,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   ghostBg: {
-    backgroundColor: 'transparent',
+    backgroundColor: colors.s3,
+    borderWidth: 1,
+    borderColor: colors.line2,
   },
   quietBg: {
     backgroundColor: 'transparent',

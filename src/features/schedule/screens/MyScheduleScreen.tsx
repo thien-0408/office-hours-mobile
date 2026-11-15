@@ -13,7 +13,7 @@ import {
   type NavigationProp,
   type ParamListBase,
 } from '@react-navigation/native';
-import { Plus } from 'lucide-react-native';
+import { ChevronLeft, Plus } from 'lucide-react-native';
 import {
   useDeleteScheduleEntry,
   useScheduleEntries,
@@ -88,7 +88,16 @@ export function MyScheduleScreen() {
       <Screen contentContainerStyle={[styles.screenContent, { paddingBottom: tabSpace + 24 }]}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Lịch của tôi</Text>
+          <View style={styles.headerLeft}>
+            {navigation.canGoBack() ? (
+              <IconButton
+                icon={ChevronLeft}
+                accessibilityLabel="Quay lại"
+                onPress={() => navigation.goBack()}
+              />
+            ) : null}
+            <Text style={styles.headerTitle}>Lịch của tôi</Text>
+          </View>
           <IconButton
             icon={Plus}
             accessibilityLabel="Thêm lịch bận"
@@ -242,6 +251,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: space.xs,
+  },
+  headerLeft: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
   },
   headerTitle: {
     fontSize: 28,

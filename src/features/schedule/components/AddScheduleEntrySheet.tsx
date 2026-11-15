@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   Alert,
+  KeyboardAvoidingView,
   Modal,
   Pressable,
   ScrollView,
@@ -120,7 +121,7 @@ export function AddScheduleEntrySheet({
       animationType="slide"
       onRequestClose={handleClose}
     >
-      <View style={styles.overlay}>
+      <KeyboardAvoidingView behavior="padding" style={styles.overlay}>
         <Pressable
           style={styles.backdrop}
           onPress={addMutation.isPending ? undefined : handleClose}
@@ -222,7 +223,7 @@ export function AddScheduleEntrySheet({
             </View>
           </ScrollView>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

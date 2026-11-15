@@ -225,7 +225,7 @@ export function ChatScreen() {
   })();
 
   return (
-    <Screen edges={['top']} contentContainerStyle={styles.screen}>
+    <Screen edges={['top']} avoidKeyboard={false} contentContainerStyle={styles.screen}>
       <KeyboardAvoidingView
         style={styles.flex}
         behavior="padding"

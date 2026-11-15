@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   Alert,
+  KeyboardAvoidingView,
   Modal,
   Pressable,
   ScrollView,
@@ -154,7 +155,7 @@ export function AddAvailabilityRuleSheet({
       animationType="slide"
       onRequestClose={handleClose}
     >
-      <View style={styles.overlay}>
+      <KeyboardAvoidingView behavior="padding" style={styles.overlay}>
         <Pressable
           style={styles.backdrop}
           onPress={isSubmitting ? undefined : handleClose}
@@ -279,7 +280,7 @@ export function AddAvailabilityRuleSheet({
             </View>
           </ScrollView>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

@@ -177,7 +177,7 @@ export function UserAdminScreen() {
   };
 
   const body = (
-    <View style={styles.root}>
+    <View style={[styles.root, { paddingTop: insets.top }]}>
       <TopNav
         title="Người dùng"
         onBack={navigation.canGoBack() ? () => navigation.goBack() : undefined}

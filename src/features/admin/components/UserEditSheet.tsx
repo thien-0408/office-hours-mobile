@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
+  KeyboardAvoidingView,
   Modal,
   Pressable,
   StyleSheet,
@@ -150,7 +151,7 @@ export function UserEditSheet({
       animationType="slide"
       onRequestClose={onClose}
     >
-      <View style={styles.modalOverlay}>
+      <KeyboardAvoidingView behavior="padding" style={styles.modalOverlay}>
         <Pressable
           style={styles.backdrop}
           onPress={isBusy ? undefined : onClose}
@@ -220,7 +221,7 @@ export function UserEditSheet({
             )}
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

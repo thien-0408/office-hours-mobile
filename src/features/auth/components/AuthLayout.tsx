@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Screen, TopNav } from '../../../components';
 import { Glow, type GlowPosition } from '../../../components/motion';
 import { colors, glow } from '../../../theme';
@@ -25,26 +25,21 @@ export function AuthLayout({
   return (
     <View style={styles.root}>
       <Glow tone={tone} position={glowPosition} />
-      <KeyboardAvoidingView
-        style={styles.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      <Screen
+        scroll
+        style={styles.transparent}
+        edges={['top', 'bottom']}
+        contentContainerStyle={styles.content}
+        scrollViewProps={{ keyboardDismissMode: 'on-drag' }}
       >
-        <Screen
-          scroll
-          style={styles.transparent}
-          edges={['top', 'bottom']}
-          contentContainerStyle={styles.content}
-          scrollViewProps={{ keyboardDismissMode: 'on-drag' }}
-        >
-          <TopNav
-            onBack={onBack}
-            backAccessibilityLabel={backLabel}
-            right={right}
-            style={styles.nav}
-          />
-          {children}
-        </Screen>
-      </KeyboardAvoidingView>
+        <TopNav
+          onBack={onBack}
+          backAccessibilityLabel={backLabel}
+          right={right}
+          style={styles.nav}
+        />
+        {children}
+      </Screen>
     </View>
   );
 }
