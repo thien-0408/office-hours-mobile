@@ -77,7 +77,7 @@ describe('api client', () => {
     expect(headerOf(calls[0], 'X-Request-Id')).toMatch(
       /^[A-Za-z0-9._-]{8,64}$/,
     );
-    expect(calls[0].url).toBe('http://10.0.2.2:8080/api/v1/users/me');
+    expect(calls[0].url).toBe('http://localhost:8080/api/v1/users/me');
   });
 
   it('two concurrent 401s trigger exactly one refresh and both replay', async () => {

@@ -79,7 +79,7 @@ const fetchMock = jest.fn(async (url: string, init: RequestInit) => {
   return respond();
 });
 
-const BASE = 'http://10.0.2.2:8080/api/v1';
+const BASE = 'http://localhost:8080/api/v1';
 const last = () => calls[calls.length - 1];
 const bodyOf = (c: Call) => JSON.parse(c.init.body as string);
 
