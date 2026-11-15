@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {
   useIsFocused,
   useNavigation,
@@ -13,6 +20,7 @@ import type { UpdateProfilePayload, UserProfile } from '../../../api/types';
 import { ApiError } from '../../../api/errors';
 import { errorText, fieldErrorMap } from '../../../api/errorText';
 import { useSession } from '../../auth/session';
+import { useAppSession } from '../../../navigation/devSession';
 import { Avatar, Button, Field, TopNav } from '../../../components';
 import {
   BlurTarget,
@@ -30,6 +38,20 @@ export function ProfileScreen() {
   const tabBarSpace = useTabBarSpace();
   const queryClient = useQueryClient();
   const { reloadUser } = useSession();
+  const { signOut } = useAppSession();
+
+  const handleSignOut = () => {
+    Alert.alert('Đăng xuất', 'Bạn có chắc muốn đăng xuất khỏi OfficeHours?', [
+      { text: 'Hủy', style: 'cancel' },
+      {
+        text: 'Đăng xuất',
+        style: 'destructive',
+        onPress: () => {
+          signOut().catch(() => undefined);
+        },
+      },
+    ]);
+  };
 
   const [isEditing, setIsEditing] = useState(false);
   const [fullName, setFullName] = useState('');
@@ -127,6 +149,7 @@ export function ProfileScreen() {
 
   return (
     <SafeAreaView edges={['top']} style={styles.safeRoot}>
+      <KeyboardAvoidingView style={styles.flexOne} behavior="padding">
       <BlurTarget active={isFocused} style={styles.flexOne}>
         <TopNav
           title="Hồ sơ"
@@ -297,9 +320,19 @@ export function ProfileScreen() {
                 onPress={() => navigation.navigate('Help')}
               />
             </ProfileGroup>
+
+            <ProfileGroup style={styles.mt24}>
+              <ProfileRow
+                testID="profile-sign-out"
+                label="Đăng xuất"
+                danger
+                onPress={handleSignOut}
+              />
+            </ProfileGroup>
           </ScrollView>
         )}
       </BlurTarget>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

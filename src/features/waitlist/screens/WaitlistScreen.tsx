@@ -313,7 +313,7 @@ export function WaitlistScreen() {
   };
 
   const body = (
-    <View style={styles.root}>
+    <View style={[styles.root, { paddingTop: insets.top }]}>
       <Glow tone="brand" position="c" />
       <TopNav
         onBack={navigation.canGoBack() ? () => navigation.goBack() : undefined}

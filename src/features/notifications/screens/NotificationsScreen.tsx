@@ -214,7 +214,7 @@ export function NotificationsScreen() {
   };
 
   const body = (
-    <View style={styles.root}>
+    <View style={[styles.root, { paddingTop: insets.top }]}>
       <TopNav
         title="Thông báo"
         onBack={navigation.canGoBack() ? () => navigation.goBack() : undefined}

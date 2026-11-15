@@ -77,8 +77,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   sideSlot: {
-    width: themeSize.iconButton, // 40
+    minWidth: themeSize.iconButton, // 40
     height: themeSize.iconButton,
+    flexShrink: 0,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -87,6 +88,8 @@ const styles = StyleSheet.create({
   },
   centerSlot: {
     flex: 1,
+    flexShrink: 1,
+    minWidth: 0,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 8,

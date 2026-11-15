@@ -7,8 +7,8 @@ import {
   Text,
   View,
 } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
-import { ChevronRight, Plus } from 'lucide-react-native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react-native';
 import {
   useActiveSemester,
   useAvailabilityExceptions,
@@ -38,6 +38,7 @@ import { EditAvailabilityRuleSheet } from '../components/EditAvailabilityRuleShe
 
 export function AvailabilityScreen() {
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
   const tabSpace = useTabBarSpace();
   const { user } = useSession();
   const lecturerId = user?.id ?? '';
@@ -101,7 +102,16 @@ export function AvailabilityScreen() {
       <Screen contentContainerStyle={[styles.screenContent, { paddingBottom: tabSpace + 24 }]}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Lịch rảnh</Text>
+          <View style={styles.headerLeft}>
+            {navigation.canGoBack() ? (
+              <IconButton
+                icon={ChevronLeft}
+                accessibilityLabel="Quay lại"
+                onPress={() => navigation.goBack()}
+              />
+            ) : null}
+            <Text style={styles.headerTitle}>Lịch rảnh</Text>
+          </View>
           <IconButton
             icon={Plus}
             accessibilityLabel="Thêm khung giờ mới"
@@ -275,6 +285,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: space.xs,
+  },
+  headerLeft: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
   },
   headerTitle: {
     fontSize: 28,
