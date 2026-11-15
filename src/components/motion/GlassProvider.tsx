@@ -9,7 +9,13 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react';
-import { PixelRatio, Platform, View, type ViewProps } from 'react-native';
+import {
+  PixelRatio,
+  Platform,
+  StyleSheet,
+  View,
+  type ViewProps,
+} from 'react-native';
 import { BlurTargetView } from 'expo-blur';
 
 export type GlassLevel = 'high' | 'low' | 'solid';
@@ -128,6 +134,7 @@ export function useGlassLevel(forced?: GlassQuality): GlassLevel {
  */
 export function BlurTarget({
   active = true,
+  style,
   ...props
 }: ViewProps & { active?: boolean }) {
   const { attachTarget, detachTarget } = useGlass();
@@ -141,5 +148,9 @@ export function BlurTarget({
     },
     [active, attachTarget, detachTarget],
   );
-  return <BlurTargetView ref={ref} {...props} />;
+  // flex: 1 by default: a screen root that forgets the style collapses to 0 px
+  // and renders black (MySchedule / Availability did).
+  return <BlurTargetView ref={ref} style={[styles.fill, style]} {...props} />;
 }
+
+const styles = StyleSheet.create({ fill: { flex: 1 } });
