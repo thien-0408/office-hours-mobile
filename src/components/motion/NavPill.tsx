@@ -8,7 +8,15 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import * as Haptics from 'expo-haptics';
-import { colors, glass, iconOpacity, radius, size, springs } from '../../theme';
+import {
+  colors,
+  glass,
+  iconOpacity,
+  press3D,
+  radius,
+  size,
+  springs,
+} from '../../theme';
 import { Glass } from './Glass';
 import { useFloatingSpace } from './floatingSpace';
 
@@ -70,6 +78,8 @@ function TabVisual({
   index,
   count,
   pos,
+  pressed,
+  pressProgress,
   pillWidth,
   options,
 }: {
@@ -77,6 +87,9 @@ function TabVisual({
   index: number;
   count: number;
   pos: { value: number };
+  /** Index of the tab being pressed (-1 = none) and its 0..1 press progress. */
+  pressed: { value: number };
+  pressProgress: { value: number };
   pillWidth: number;
   options: BottomTabBarProps['descriptors'][string]['options'];
 }) {
@@ -86,11 +99,15 @@ function TabVisual({
       : options.title ?? route.name;
   const badge = options.tabBarBadge;
 
-  const wrap = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: navPillTabX(index, pos.value, count, pillWidth).x },
-    ],
-  }));
+  const wrap = useAnimatedStyle(() => {
+    const p = pressed.value === index ? pressProgress.value : 0;
+    return {
+      transform: [
+        { translateX: navPillTabX(index, pos.value, count, pillWidth).x },
+        { scale: 1 - (1 - press3D.pressedScale) * p },
+      ],
+    };
+  });
   const icon = useAnimatedStyle(() => {
     const a = Math.max(0, 1 - Math.abs(index - pos.value));
     return {
@@ -98,9 +115,14 @@ function TabVisual({
         iconOpacity.normal + (iconOpacity.active - iconOpacity.normal) * a,
     };
   });
-  const labelStyle = useAnimatedStyle(() => ({
-    opacity: Math.max(0, 1 - Math.abs(index - pos.value)),
-  }));
+  const labelStyle = useAnimatedStyle(() => {
+    const a = Math.max(0, 1 - Math.abs(index - pos.value));
+    // Fades in while sliding 8dp into place; only really visible past 50%.
+    return {
+      opacity: Math.max(0, (a - 0.35) / 0.65),
+      transform: [{ translateX: (1 - a) * 8 }],
+    };
+  });
   const badgeStyle = useAnimatedStyle(() => ({
     opacity: Math.min(1, Math.abs(index - pos.value)),
   }));
@@ -139,6 +161,8 @@ export function NavPill({ state, descriptors, navigation }: BottomTabBarProps) {
   const pillWidth = width - 2 * SIDE;
   const count = state.routes.length;
   const pos = useSharedValue(state.index);
+  const pressed = useSharedValue(-1);
+  const pressProgress = useSharedValue(0);
 
   useEffect(() => {
     pos.value = withSpring(state.index, springs.indicator);
@@ -170,6 +194,8 @@ export function NavPill({ state, descriptors, navigation }: BottomTabBarProps) {
           index={index}
           count={count}
           pos={pos}
+          pressed={pressed}
+          pressProgress={pressProgress}
           pillWidth={pillWidth}
           options={descriptors[route.key].options}
         />
@@ -197,6 +223,13 @@ export function NavPill({ state, descriptors, navigation }: BottomTabBarProps) {
             accessibilityLabel={options.tabBarAccessibilityLabel}
             testID={options.tabBarButtonTestID}
             onPress={onPress}
+            onPressIn={() => {
+              pressed.value = index;
+              pressProgress.value = withSpring(1, springs.press);
+            }}
+            onPressOut={() => {
+              pressProgress.value = withSpring(0, springs.release);
+            }}
             onLongPress={() =>
               navigation.emit({ type: 'tabLongPress', target: route.key })
             }

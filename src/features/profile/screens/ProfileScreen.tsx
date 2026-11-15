@@ -340,7 +340,7 @@ export function ProfileScreen() {
 const styles = StyleSheet.create({
   safeRoot: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: 'transparent',
   },
   flexOne: {
     flex: 1,

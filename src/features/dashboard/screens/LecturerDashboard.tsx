@@ -164,7 +164,7 @@ export function LecturerDashboard() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.bg },
+  root: { flex: 1, backgroundColor: 'transparent' },
   flex: { flex: 1 },
   content: { paddingHorizontal: space.gutter },
   title: { marginTop: space.sm },

@@ -24,6 +24,7 @@ export {
 export { Odometer, splitOdometer } from './Odometer';
 export type { OdometerFormat, OdometerProps, OdometerToken } from './Odometer';
 export {
+  ContentFade,
   Reveal,
   Skeleton,
   claimReveal,
@@ -33,3 +34,11 @@ export {
 export type { RevealProps, SkeletonProps } from './Reveal';
 export { Glow } from './Glow';
 export type { GlowPosition, GlowProps } from './Glow';
+export {
+  AMBIENT_BLOBS,
+  AmbientBackground,
+  AmbientSurface,
+} from './AmbientBackground';
+export { PressableScale, usePressFeedback } from './PressableScale';
+export type { PressableScaleProps } from './PressableScale';
+export { useReduceMotion } from './reduceMotion';

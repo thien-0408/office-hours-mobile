@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { colors } from '../theme';
+import { AmbientSurface } from '../components/motion';
+import { stackScreenOptions, withAmbient } from './transitions';
 import { useAppSession } from './devSession';
 import { AUTH_SCREENS, initialAuthRoute } from './roleConfig';
 import { RoleNavigator } from './RoleNavigator';
@@ -11,12 +11,8 @@ import { readWelcomeSeen } from './welcomeFlag';
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.bg },
-});
-
 function Splash() {
-  return <View style={styles.root} />;
+  return <AmbientSurface />;
 }
 
 function AuthNavigator() {
@@ -36,10 +32,8 @@ function AuthNavigator() {
   return (
     <AuthStack.Navigator
       initialRouteName={initialAuthRoute(flag)}
-      screenOptions={{
-        headerShown: false,
-        contentStyle: { backgroundColor: colors.bg },
-      }}
+      screenOptions={stackScreenOptions}
+      screenLayout={withAmbient}
     >
       {AUTH_SCREENS.map(name => (
         <AuthStack.Screen

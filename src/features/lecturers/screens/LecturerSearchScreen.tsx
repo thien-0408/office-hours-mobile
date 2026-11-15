@@ -224,7 +224,7 @@ export function LecturerSearchScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.bg },
+  root: { flex: 1, backgroundColor: 'transparent' },
   title: { marginTop: 12, marginBottom: 14 },
   search: {
     height: 48,

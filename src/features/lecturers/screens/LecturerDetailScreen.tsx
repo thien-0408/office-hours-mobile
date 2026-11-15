@@ -179,7 +179,7 @@ export function LecturerDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.bg },
+  root: { flex: 1, backgroundColor: 'transparent' },
   flex: { flex: 1 },
   nav: { paddingHorizontal: space.gutter, height: 52, justifyContent: 'center' },
   navBtn: { backgroundColor: 'rgba(0,0,0,0.38)' },

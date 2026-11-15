@@ -235,7 +235,7 @@ export function UserAdminScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: 'transparent',
   },
   controlsContainer: {
     paddingHorizontal: space.gutter,

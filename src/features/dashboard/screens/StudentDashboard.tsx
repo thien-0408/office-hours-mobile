@@ -288,7 +288,7 @@ function SuggestionCard({
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.bg },
+  root: { flex: 1, backgroundColor: 'transparent' },
   flex: { flex: 1 },
   content: { paddingHorizontal: space.gutter },
   greeting: { marginTop: space.sm, marginBottom: space.sm },

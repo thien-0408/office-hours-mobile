@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import type { ScrollViewProps, StyleProp, ViewProps, ViewStyle } from 'react-native';
 import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
 import { type Edge, SafeAreaView } from 'react-native-safe-area-context';
-import { colors, space } from '../theme';
+import { space } from '../theme';
 
 export interface ScreenProps extends ViewProps {
   children?: ReactNode;
@@ -53,7 +53,7 @@ export function Screen({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: 'transparent',
   },
   scroll: {
     flex: 1,

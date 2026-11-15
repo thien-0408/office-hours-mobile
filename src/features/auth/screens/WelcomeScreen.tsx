@@ -108,7 +108,7 @@ export function WelcomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.bg },
+  root: { flex: 1, backgroundColor: 'transparent' },
   transparent: { backgroundColor: 'transparent' },
   grow: { flex: 1 },
   brandRow: { height: 52, justifyContent: 'center' },

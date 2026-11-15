@@ -91,15 +91,37 @@ export const spring = (ratio: number, stiffness: number, mass = 1) => ({
 });
 
 export const springs = {
-  press: spring(1.0, 420),
-  indicator: spring(0.82, 700),
-  sheet: spring(1.0, 400),
+  /** Finger down: quick, no bounce. */
+  press: spring(1.0, 520),
+  /** Finger up: ~4% overshoot, only on press release. */
+  release: spring(0.72, 320),
+  /** Active-tab pill glide: soft, no bounce. */
+  indicator: spring(0.92, 280),
+  /** Sheets, odometer, layout: Apple-like, settles in ~400 ms. */
+  sheet: spring(1.0, 240),
   bouncy: spring(0.4, 900),
 } as const;
 
 export const press3D = {
   maxTilt: 4,
   pressedScale: 0.97,
+  pressedOpacity: 0.9,
+} as const;
+
+/** Timings (ms) and distances shared by transitions and entering animations. */
+export const motion = {
+  /** Stack push/pop. */
+  screen: 320,
+  /** Modal-like screens (fade_from_bottom). */
+  modal: 300,
+  /** Tab crossfade. */
+  tabFade: 180,
+  /** Reveal: stagger per index, duration, rise distance (dp). */
+  stagger: 35,
+  revealDuration: 420,
+  revealOffsetY: 10,
+  /** Skeleton -> content crossfade. */
+  contentFade: 220,
 } as const;
 
 export type Colors = typeof colors;
@@ -113,3 +135,4 @@ export type Space = typeof space;
 export type IconOpacity = typeof iconOpacity;
 export type Springs = typeof springs;
 export type Press3D = typeof press3D;
+export type Motion = typeof motion;

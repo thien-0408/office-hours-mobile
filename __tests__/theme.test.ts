@@ -6,8 +6,8 @@ describe('theme', () => {
   });
 
   test('spring converts dampingRatio to Reanimated damping', () => {
-    expect(springs.press.damping).toBeCloseTo(2 * Math.sqrt(420), 5);
-    expect(springs.indicator.damping).toBeCloseTo(0.82 * 2 * Math.sqrt(700), 5);
+    expect(springs.press.damping).toBeCloseTo(2 * Math.sqrt(520), 5);
+    expect(springs.indicator.damping).toBeCloseTo(0.92 * 2 * Math.sqrt(280), 5);
   });
 
   test('every color is a valid hex or rgba string', () => {
