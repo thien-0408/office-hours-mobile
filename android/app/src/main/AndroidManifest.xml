@@ -5,9 +5,6 @@
     <!-- Location is shared only while the app is open: foreground only, no ACCESS_BACKGROUND_LOCATION. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <!-- Camera is optional hardware (screen 18 degrades to gallery/manual entry). -->
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.location.gps" android:required="false" />
     <!-- Pulled in by libraries we do not use; strip from the merged manifest. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" tools:node="remove" />

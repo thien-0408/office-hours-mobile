@@ -79,30 +79,14 @@ jest.mock('expo-sensors', () => ({
     addListener: jest.fn(() => ({ remove: jest.fn() })),
   },
 }));
-jest.mock('expo-camera', () => {
-  const React = require('react');
-  const { View } = require('react-native');
-  return {
-    CameraView: props => React.createElement(View, props),
-    Camera: {
-      requestCameraPermissionsAsync: jest.fn(() =>
-        Promise.resolve({ granted: true, canAskAgain: true, status: 'granted' }),
-      ),
-      getCameraPermissionsAsync: jest.fn(() =>
-        Promise.resolve({ granted: true, canAskAgain: true, status: 'granted' }),
-      ),
-    },
-    useCameraPermissions: jest.fn(() => [
-      { granted: true, canAskAgain: true },
-      jest.fn(),
-    ]),
-  };
-});
-jest.mock('@react-native-ml-kit/text-recognition', () => ({
-  __esModule: true,
-  default: {
-    recognize: jest.fn(() => Promise.resolve({ text: '', blocks: [] })),
-  },
+// Native PdfBox extractor: the real one needs Android. Tests feed text items through the mock.
+jest.mock('./modules/pdf-text', () => ({
+  extractTextItems: jest.fn(() => Promise.resolve({ pages: [] })),
+}));
+jest.mock('expo-document-picker', () => ({
+  getDocumentAsync: jest.fn(() =>
+    Promise.resolve({ canceled: true, assets: null }),
+  ),
 }));
 // expo-gl: GLView renders a plain View; onContextCreate is never called.
 jest.mock('expo-gl', () => {

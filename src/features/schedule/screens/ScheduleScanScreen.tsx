@@ -5,29 +5,29 @@ import {
   type NavigationProp,
   type ParamListBase,
 } from '@react-navigation/native';
+import * as DocumentPicker from 'expo-document-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { ImportScheduleResult } from '../../../api/domainTypes';
 import { Button } from '../../../components/Button';
+import { TopNav } from '../../../components/TopNav';
 import { colors, fonts, ls, space } from '../../../theme';
-import { scanImage } from '../scan/ocr';
-import { ScanCapture } from '../scan/ScanCapture';
+import {
+  readTimetablePdfs,
+  timetablePdfErrorText,
+} from '../pdf/readTimetablePdfs';
 import { ScanReview } from '../scan/ScanReview';
-import { fromParsed, type ScanRow } from '../scan/rows';
+import { fromTimetableRows, type ScanRow } from '../scan/rows';
 
 type Step =
-  | { name: 'capture'; busy: boolean; notice: string | null }
-  | { name: 'review'; rows: ScanRow[] }
+  | { name: 'pick'; busy: boolean; notice: string | null }
+  | { name: 'review'; rows: ScanRow[]; sourceFiles: string[] }
   | { name: 'done'; result: ImportScheduleResult };
 
-const NOTHING_READ =
-  'Không đọc được dòng nào. Chụp gần hơn, đủ sáng, rồi thử lại.';
-const OCR_FAILED = 'Không đọc được ảnh. Thử chụp lại.';
-
-/** 18. Quét thời khóa biểu: chụp (18a), soát lại (18b), xong. */
+/** 18. Nhập thời khóa biểu từ PDF: chọn file (18a), soát lại (18b), xong. */
 export function ScheduleScanScreen() {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [step, setStep] = useState<Step>({
-    name: 'capture',
+    name: 'pick',
     busy: false,
     notice: null,
   });
@@ -39,33 +39,63 @@ export function ScheduleScanScreen() {
       navigation.navigate('MySchedule');
     }
   };
-  const toCapture = (notice: string | null = null) =>
-    setStep({ name: 'capture', busy: false, notice });
+  const toPick = (notice: string | null = null) =>
+    setStep({ name: 'pick', busy: false, notice });
 
-  const onCaptured = async (uri: string) => {
-    setStep({ name: 'capture', busy: true, notice: null });
+  const onPick = async () => {
+    setStep({ name: 'pick', busy: true, notice: null });
     try {
-      const parsed = await scanImage(uri);
-      if (parsed.length === 0) {
-        toCapture(NOTHING_READ);
-      } else {
-        setStep({ name: 'review', rows: fromParsed(parsed) });
+      const picked = await DocumentPicker.getDocumentAsync({
+        type: 'application/pdf',
+        multiple: true,
+        copyToCacheDirectory: true,
+      });
+      if (picked.canceled || picked.assets.length === 0) {
+        toPick();
+        return;
       }
-    } catch {
-      toCapture(OCR_FAILED);
+      const { rows, sourceFiles } = await readTimetablePdfs(
+        picked.assets.map(a => ({
+          uri: a.uri,
+          name: a.name,
+          mimeType: a.mimeType,
+        })),
+      );
+      setStep({ name: 'review', rows: fromTimetableRows(rows), sourceFiles });
+    } catch (e) {
+      toPick(timetablePdfErrorText(e));
     }
   };
 
-  if (step.name === 'capture') {
+  if (step.name === 'pick') {
     return (
-      <ScanCapture
-        busy={step.busy}
-        notice={step.notice}
-        onCaptured={onCaptured}
-        onCaptureFailed={() => toCapture(OCR_FAILED)}
-        onClose={close}
-        onManual={() => setStep({ name: 'review', rows: [] })}
-      />
+      <SafeAreaView edges={['top', 'bottom']} style={styles.root}>
+        <View style={styles.nav}>
+          <TopNav onBack={close} />
+        </View>
+        <View style={styles.body}>
+          <Text style={styles.title}>Nhập thời khóa biểu (PDF)</Text>
+          <Text style={styles.line}>
+            Chọn file PDF thời khóa biểu tải từ phòng Đào tạo. Có thể chọn nhiều
+            file một lần, ví dụ file lý thuyết và file thực hành.
+          </Text>
+          <Text style={styles.line}>
+            Chỉ nhận đúng file mẫu của trường, không nhận ảnh chụp.
+          </Text>
+          {step.notice ? <Text style={styles.err}>{step.notice}</Text> : null}
+        </View>
+        <View style={styles.footer}>
+          <Button title="Chọn file PDF" onPress={onPick} loading={step.busy} />
+          <Button
+            variant="quiet"
+            title="Nhập tay"
+            disabled={step.busy}
+            onPress={() =>
+              setStep({ name: 'review', rows: [], sourceFiles: [] })
+            }
+          />
+        </View>
+      </SafeAreaView>
     );
   }
 
@@ -73,7 +103,8 @@ export function ScheduleScanScreen() {
     return (
       <ScanReview
         initialRows={step.rows}
-        onBack={() => toCapture()}
+        sourceFiles={step.sourceFiles}
+        onBack={() => toPick()}
         onDone={result => setStep({ name: 'done', result })}
       />
     );
@@ -107,6 +138,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
   },
+  nav: {
+    paddingHorizontal: space.gutter,
+  },
+  err: {
+    fontSize: 13.5,
+    fontFamily: fonts.medium,
+    color: colors.err,
+    lineHeight: 20,
+  },
   body: {
     flex: 1,
     justifyContent: 'center',
@@ -129,5 +169,6 @@ const styles = StyleSheet.create({
   footer: {
     paddingHorizontal: space.gutter,
     paddingBottom: space.lg,
+    gap: space.sm,
   },
 });

@@ -1,5 +1,4 @@
 import { Linking } from 'react-native';
-import { Camera } from 'expo-camera';
 import * as Location from 'expo-location';
 import { Barometer } from 'expo-sensors';
 
@@ -22,10 +21,6 @@ function toResult(res: PermissionResponse): PermissionResult {
 /** Foreground location only: the app shares location while it is open. */
 export async function requestForegroundLocation(): Promise<PermissionResult> {
   return toResult(await Location.requestForegroundPermissionsAsync());
-}
-
-export async function requestCamera(): Promise<PermissionResult> {
-  return toResult(await Camera.requestCameraPermissionsAsync());
 }
 
 /** Barometer needs no permission; false means the device has no sensor ("Tầng ?"). */

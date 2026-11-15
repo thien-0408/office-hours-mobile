@@ -114,7 +114,7 @@ describe('ScanReview', () => {
     );
     const t = texts(r);
     expect(t).toContain('2 dòng · 1 đọc chưa chắc');
-    expect(t.join('|')).toContain('Xóa lịch đã quét trước đó');
+    expect(t.join('|')).toContain('Xóa lịch đã nhập từ PDF trước đó');
     expect(t).toContain('Lưu 2 dòng');
 
     await press(r, 'Gộp thêm');

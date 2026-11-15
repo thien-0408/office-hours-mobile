@@ -5,7 +5,7 @@ import {
   countLow,
   DAY_LABELS,
   emptyRow,
-  fromParsed,
+  fromTimetableRows,
   mapBatchErrors,
   MAX_ROWS,
   normalizeTime,
@@ -139,7 +139,7 @@ describe('DTO mapping', () => {
 
   it('builds the batch payload and keeps row order (rowIndex == list index)', () => {
     const rows = [good({ title: 'A' }), good({ title: 'B', dayOfWeek: 1 })];
-    const p = toBatchPayload(rows, 'sem-1', 'MERGE');
+    const p = toBatchPayload(rows, 'sem-1', 'MERGE', ['a.pdf', 'b.pdf']);
     expect(Object.keys(p).sort()).toEqual([
       'mode',
       'rows',
@@ -148,22 +148,29 @@ describe('DTO mapping', () => {
     ]);
     expect(p.semesterId).toBe('sem-1');
     expect(p.mode).toBe('MERGE');
-    expect(p.sourceFiles.length).toBeLessThanOrEqual(20);
+    expect(p.sourceFiles).toEqual(['a.pdf', 'b.pdf']);
     expect(p.rows.map(r => r.subjectName)).toEqual(['A', 'B']);
     expect(p.rows[1].day).toBe('Thứ 2');
   });
 
-  it('fromParsed / emptyRow', () => {
-    const [r] = fromParsed([
-      {
-        dayOfWeek: 1,
-        startTime: '07:30',
-        endTime: '09:30',
-        title: 'Mạng',
-        confidence: 'low',
-      },
-    ]);
-    expect(r).toMatchObject({ room: '', confidence: 'low', dayOfWeek: 1 });
+  it('fromTimetableRows keeps the PDF-only fields through toDtoRow', () => {
+    const src = {
+      day: 'Thứ 4',
+      date: '05/08',
+      startTime: '07:30',
+      endTime: '11:30',
+      subjectCode: 'CSW 430',
+      subjectName: 'Phát triển ứng dụng di động',
+      group: '01',
+      room: 'LAB405.B08',
+      lecturerName: 'Nguyễn Hoàng Lý',
+    };
+    const [r] = fromTimetableRows([src]);
+    expect(r).toMatchObject({ dayOfWeek: 3, confidence: 'high', title: src.subjectName });
+    expect(toDtoRow(r)).toEqual(src);
+  });
+
+  it('emptyRow', () => {
     expect(emptyRow(3)).toMatchObject({ dayOfWeek: 3, title: '', confidence: 'high' });
     expect(emptyRow().key).not.toBe(emptyRow().key);
   });
