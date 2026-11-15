@@ -43,6 +43,12 @@
         <package android:name="us.zoom.videomeetings" />
         <!-- Google Meet (https://meet.google.com links open in the app) -->
         <package android:name="com.google.android.apps.tachyon" />
+        <!-- Google Maps / any map app (the "Chỉ đường" button) -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="geo" />
+        </intent>
+        <package android:name="com.google.android.apps.maps" />
         <!-- Google Calendar -->
         <package android:name="com.google.android.calendar" />
         <intent>

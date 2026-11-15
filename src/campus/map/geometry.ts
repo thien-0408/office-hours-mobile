@@ -1,4 +1,11 @@
-import { ExtrudeGeometry, ShapeGeometry, Shape } from 'three';
+import {
+  BufferGeometry,
+  EdgesGeometry,
+  ExtrudeGeometry,
+  Float32BufferAttribute,
+  ShapeGeometry,
+  Shape,
+} from 'three';
 import type { XZ } from '../campusData';
 import { outlineToShapePoints } from './mapMath';
 
@@ -49,4 +56,30 @@ export function createGroundGeometry(
   const geometry = new ShapeGeometry(shape);
   geometry.rotateX(-Math.PI / 2);
   return geometry;
+}
+
+/** Closed polyline of the outline at height y as LineSegments pairs. */
+export function createOutlineLineGeometry(
+  outline: readonly XZ[],
+  y = 0.15,
+): BufferGeometry | null {
+  const pts = outlineToShapePoints(outline);
+  if (pts.length < 3) {
+    return null;
+  }
+  const positions: number[] = [];
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[i];
+    const b = pts[(i + 1) % pts.length];
+    // shape y = campus z -> world -z
+    positions.push(a.x, y, -a.y, b.x, y, -b.y);
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
+  return geometry;
+}
+
+/** Crisp wireframe edges of a prism (only edges sharper than 30 degrees). */
+export function createEdgesGeometry(prism: ExtrudeGeometry): EdgesGeometry {
+  return new EdgesGeometry(prism, 30);
 }

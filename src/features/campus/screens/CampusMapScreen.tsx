@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Linking, StyleSheet, Text, View } from 'react-native';
 import {
   useFocusEffect,
   useIsFocused,
@@ -16,12 +16,22 @@ import { errorText } from '../../../api';
 import { useCampusRooms } from '../../../api/hooks';
 import { campus } from '../../../campus/campusData';
 import { useLocationConsent } from '../../../campus/consent';
-import { locationLabel } from '../../../campus/geo';
+import { isOnCampus, locationLabel, toLatLng } from '../../../campus/geo';
 import { useCampusLocation } from '../../../campus/location/useCampusLocation';
 import { useFloorEstimate } from '../../../campus/location/useFloorEstimate';
 import { CampusMapView } from '../../../campus/map/CampusMapView';
 import type { MapMarker } from '../../../campus/map/CampusScene';
-import { resolveRoomTarget } from '../../../campus/map/mapMath';
+import { StreetMapView } from '../../../campus/map/StreetMapView';
+import {
+  directionsUrl,
+  geoUrl,
+  offCampusText,
+  type LatLngPoint,
+} from '../../../campus/map/streetMath';
+import {
+  polygonCentroid,
+  resolveRoomTarget,
+} from '../../../campus/map/mapMath';
 import {
   FloorPlan,
   countRooms,
@@ -105,6 +115,61 @@ export function CampusMapScreen() {
     [loc.fix, floorEst.floor],
   );
 
+  // Where I am in lat/lng for the street map: the filtered fix, else the last
+  // raw reading (the filter drops readings worse than 25 m, common off campus).
+  const me = useMemo<(LatLngPoint & { acc: number | null }) | null>(() => {
+    if (!(sharing && consentGranted)) {
+      return null;
+    }
+    if (loc.fix) {
+      const ll = toLatLng(loc.fix.x, loc.fix.z);
+      return { ...ll, acc: loc.fix.acc };
+    }
+    if (loc.lastReading) {
+      const { lat, lng, accuracy } = loc.lastReading;
+      return {
+        lat,
+        lng,
+        acc: Number.isFinite(accuracy) ? accuracy : null,
+      };
+    }
+    return null;
+  }, [sharing, consentGranted, loc.fix, loc.lastReading]);
+  const offCampus = me != null && !isOnCampus({ lat: me.lat, lng: me.lng });
+  const campusLatLng = useMemo<LatLngPoint>(() => {
+    const c = polygonCentroid(campus.boundary);
+    return toLatLng(c.x, c.z);
+  }, []);
+
+  // Street map ("Bản đồ đường phố"): a manual toggle, or automatic the first
+  // time the fix lands outside the campus boundary.
+  const [street, setStreet] = useState(false);
+  const [directionsError, setDirectionsError] = useState(false);
+  const autoStreet = useRef(false);
+  useEffect(() => {
+    if (!sharing) {
+      autoStreet.current = false;
+      return;
+    }
+    if (offCampus && !autoStreet.current) {
+      autoStreet.current = true;
+      setStreet(true);
+    }
+  }, [sharing, offCampus]);
+
+  const openDirections = async () => {
+    setDirectionsError(false);
+    try {
+      await Linking.openURL(directionsUrl(campusLatLng));
+    } catch {
+      try {
+        await Linking.openURL(geoUrl(campusLatLng));
+      } catch {
+        setDirectionsError(true);
+      }
+    }
+  };
+
   const gotFix = useRef(false);
   useEffect(() => {
     if (loc.fix && !gotFix.current) {
@@ -128,8 +193,7 @@ export function CampusMapScreen() {
   const showTarget =
     target != null && (selected == null || selected === targetBlockCode);
   const cardBlockCode = showTarget ? targetBlockCode : selected;
-  const cardBlock =
-    campus.blocks.find(b => b.code === cardBlockCode) ?? null;
+  const cardBlock = campus.blocks.find(b => b.code === cardBlockCode) ?? null;
 
   const myLabel = loc.fix
     ? locationLabel(loc.fix.block, floorEst.floor, floorEst.source)
@@ -153,15 +217,19 @@ export function CampusMapScreen() {
 
   return (
     <View style={styles.root}>
-      <CampusMapView
-        targetBlock={targetBlockCode}
-        targetFloor={target?.floor ?? null}
-        targetPoint={target?.point ?? null}
-        selectedBlock={selected}
-        markers={myMarkers}
-        focus={focus}
-        onBlockPress={block => setSelected(block?.code ?? null)}
-      />
+      {street ? (
+        <StreetMapView campus={campusLatLng} me={me} />
+      ) : (
+        <CampusMapView
+          targetBlock={targetBlockCode}
+          targetFloor={target?.floor ?? null}
+          targetPoint={target?.point ?? null}
+          selectedBlock={selected}
+          markers={myMarkers}
+          focus={focus}
+          onBlockPress={block => setSelected(block?.code ?? null)}
+        />
+      )}
 
       <LinearGradient
         pointerEvents="none"
@@ -178,42 +246,67 @@ export function CampusMapScreen() {
           />
         ) : null}
         <Glass level="solid" style={styles.titlePill}>
-          <Text style={styles.title}>Bản đồ campus</Text>
+          <Text style={styles.title}>
+            {street ? 'Bản đồ đường phố' : 'Bản đồ campus'}
+          </Text>
         </Glass>
       </View>
 
       <Glass level="solid" style={[styles.card, { bottom: cardBottom }]}>
-        {showTarget && target ? (
+        {street ? (
           <>
             <Text style={styles.cardTitle}>
-              {`Phòng ${target.label} · tầng ${target.floor ?? '?'}`}
+              {me
+                ? offCampus
+                  ? 'Bạn đang ở ngoài campus'
+                  : 'Bạn đang ở trong campus'
+                : 'Bản đồ đường phố'}
             </Text>
             <AppText variant="sm">
-              {cardBlock
-                ? `${cardBlock.name}${
-                    target.exactPoint ? '' : ' · vị trí gần đúng theo block'
-                  }`
-                : 'Không tìm thấy block của phòng này'}
-            </AppText>
-          </>
-        ) : cardBlock ? (
-          <>
-            <Text style={styles.cardTitle}>{cardBlock.name}</Text>
-            <AppText variant="sm">
-              {`${cardBlock.floors} tầng · ${countRooms(
-                campus.rooms,
-                cardBlock.code,
-              )} phòng`}
+              {me
+                ? offCampus
+                  ? offCampusText(me, campusLatLng)
+                  : 'Về bản đồ campus để xem block và phòng.'
+                : sharing && consentGranted
+                ? 'Đang tìm vị trí của bạn…'
+                : 'Bấm "Vị trí của tôi" để thấy bạn trên bản đồ.'}
             </AppText>
           </>
         ) : (
           <>
-            <Text style={styles.cardTitle}>Campus EIU</Text>
-            <AppText variant="sm">
-              {roomId && roomsQuery.isLoading
-                ? 'Đang tìm phòng…'
-                : 'Chạm vào một block để xem thông tin.'}
-            </AppText>
+            {showTarget && target ? (
+              <>
+                <Text style={styles.cardTitle}>
+                  {`Phòng ${target.label} · tầng ${target.floor ?? '?'}`}
+                </Text>
+                <AppText variant="sm">
+                  {cardBlock
+                    ? `${cardBlock.name}${
+                        target.exactPoint ? '' : ' · vị trí gần đúng theo block'
+                      }`
+                    : 'Không tìm thấy block của phòng này'}
+                </AppText>
+              </>
+            ) : cardBlock ? (
+              <>
+                <Text style={styles.cardTitle}>{cardBlock.name}</Text>
+                <AppText variant="sm">
+                  {`${cardBlock.floors} tầng · ${countRooms(
+                    campus.rooms,
+                    cardBlock.code,
+                  )} phòng`}
+                </AppText>
+              </>
+            ) : (
+              <>
+                <Text style={styles.cardTitle}>Campus EIU</Text>
+                <AppText variant="sm">
+                  {roomId && roomsQuery.isLoading
+                    ? 'Đang tìm phòng…'
+                    : 'Chạm vào một block để xem thông tin.'}
+                </AppText>
+              </>
+            )}
           </>
         )}
 
@@ -223,7 +316,13 @@ export function CampusMapScreen() {
           </Text>
         ) : null}
 
-        {myLabel && loc.fix ? (
+        {directionsError ? (
+          <Text style={styles.error} accessibilityRole="alert">
+            Không mở được ứng dụng bản đồ trên máy.
+          </Text>
+        ) : null}
+
+        {!street && myLabel && loc.fix ? (
           <View style={styles.who}>
             <Avatar id="me" size={40} />
             <View style={styles.whoText}>
@@ -241,20 +340,60 @@ export function CampusMapScreen() {
           </Text>
         ) : null}
 
-        <View style={styles.acts}>
-          <Button
-            title="Sơ đồ tầng"
-            style={styles.act}
-            disabled={!cardBlock}
-            onPress={() => setPlanOpen(true)}
-          />
-          <Button
-            variant="quiet"
-            title={sharing && consentGranted ? 'Dừng vị trí' : 'Vị trí của tôi'}
-            style={styles.act}
-            onPress={onMyLocation}
-          />
-        </View>
+        {street ? (
+          <>
+            <View style={styles.acts}>
+              <Button
+                title="Chỉ đường"
+                style={styles.act}
+                onPress={openDirections}
+              />
+              <Button
+                variant="quiet"
+                title="Về bản đồ campus"
+                style={styles.act}
+                onPress={() => setStreet(false)}
+              />
+            </View>
+            {!(sharing && consentGranted) ? (
+              <View style={styles.acts}>
+                <Button
+                  variant="quiet"
+                  title="Vị trí của tôi"
+                  style={styles.act}
+                  onPress={onMyLocation}
+                />
+              </View>
+            ) : null}
+          </>
+        ) : (
+          <>
+            <View style={styles.acts}>
+              <Button
+                title="Sơ đồ tầng"
+                style={styles.act}
+                disabled={!cardBlock}
+                onPress={() => setPlanOpen(true)}
+              />
+              <Button
+                variant="quiet"
+                title={
+                  sharing && consentGranted ? 'Dừng vị trí' : 'Vị trí của tôi'
+                }
+                style={styles.act}
+                onPress={onMyLocation}
+              />
+            </View>
+            <View style={styles.acts}>
+              <Button
+                variant="quiet"
+                title="Bản đồ đường phố"
+                style={styles.act}
+                onPress={() => setStreet(true)}
+              />
+            </View>
+          </>
+        )}
       </Glass>
 
       <Text
@@ -344,7 +483,7 @@ const styles = StyleSheet.create({
     color: colors.err,
     paddingTop: 4,
   },
-  acts: { flexDirection: 'row', gap: 8, marginTop: space.md },
+  acts: { flexDirection: 'row', gap: 8, marginTop: space.sm },
   act: { flex: 1, height: 46 },
   attribution: {
     position: 'absolute',
