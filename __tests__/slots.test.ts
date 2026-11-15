@@ -28,6 +28,7 @@ const slot = (over: Partial<BookableSlot> = {}): BookableSlot => ({
   endAt: vnDateToInstant(2026, 11, 18, 14, 20).toISOString(),
   available: true,
   conflict: false,
+  online: false,
   ...over,
 });
 

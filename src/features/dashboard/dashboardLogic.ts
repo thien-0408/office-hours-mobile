@@ -71,8 +71,11 @@ export function todayRowSubtitle(b: Pick<Booking, 'startAt' | 'topic'>): string 
 }
 
 /** "Thứ Năm · 09:30" under a suggestion card. */
-export function suggestionWhen(slot: Pick<SuggestedSlot, 'startAt'>): string {
-  return `${dayName(isoDayOfWeek(slot.startAt))} · ${formatVnTime(slot.startAt)}`;
+export function suggestionWhen(
+  slot: Pick<SuggestedSlot, 'startAt'> & { online?: boolean },
+): string {
+  const when = `${dayName(isoDayOfWeek(slot.startAt))} · ${formatVnTime(slot.startAt)}`;
+  return slot.online ? `${when} · Online` : when;
 }
 
 /** Tab badge text: nothing for 0, "99+" above 99. */

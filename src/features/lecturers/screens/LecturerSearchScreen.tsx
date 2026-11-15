@@ -26,6 +26,7 @@ import {
   toLecturerQuery,
   type LecturerFilters,
 } from '../lecturerLogic';
+import { departmentLabel } from '../../../api/departments';
 
 type Nav = NativeStackNavigationProp<StudentStackParamList>;
 
@@ -126,7 +127,7 @@ export function LecturerSearchScreen() {
         {knownDepartments.map(d => (
           <Chip
             key={d}
-            label={d}
+            label={departmentLabel(d) ?? d}
             on={department === d}
             onPress={() => setDepartment(cur => (cur === d ? undefined : d))}
           />

@@ -37,7 +37,7 @@ export function classifyLoginError(e: unknown): LoginFailure {
 }
 
 export type RegisterFailure = {
-  fields: Partial<Record<'email' | 'password' | 'fullName', string>>;
+  fields: Partial<Record<'email' | 'password' | 'fullName' | 'department', string>>;
   form?: string;
 };
 
@@ -76,6 +76,11 @@ export function classifyRegisterError(e: unknown): RegisterFailure {
     fields.email = MSG.emailTaken;
   }
   for (const fe of e.fieldErrors) {
+    if (fe.field === 'department') {
+      // Unknown code (the list changed on the server): ask to pick again.
+      fields.department ??= 'Khoa không hợp lệ. Chọn lại từ danh sách.';
+      continue;
+    }
     if (
       fe.field === 'email' ||
       fe.field === 'password' ||

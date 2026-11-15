@@ -19,7 +19,7 @@ import {
 } from '../../../api/hooks/campusAdmin';
 import { Avatar } from '../../../components/Avatar';
 import { Button } from '../../../components/Button';
-import { Field } from '../../../components/Field';
+import { DepartmentPicker } from '../../../components/DepartmentPicker';
 import { Seg, type SegOption } from '../../../components/Seg';
 import { colors, fonts, ls, radius, space } from '../../../theme';
 import { canDeleteUser } from './userAdminLogic';
@@ -188,11 +188,10 @@ export function UserEditSheet({
           </View>
 
           <View style={styles.formGroup}>
-            <Field
-              label="Khoa / Phòng ban"
-              placeholder="VD: CNTT, Kinh tế..."
+            <DepartmentPicker
+              label="Khoa"
               value={department}
-              onChangeText={setDepartment}
+              onChange={code => setDepartment(code ?? '')}
             />
           </View>
 

@@ -33,6 +33,7 @@ import {
   dateBlock,
   dayKey,
   groupSlotsByDay,
+  meetingModeText,
   roomLabel,
   slotState,
   useSlot,
@@ -60,6 +61,16 @@ export function BookSlotScreen() {
 
   const room = lecturer.data?.officeRoom ?? null;
   const label = roomLabel(room);
+  // Online vs in person comes from the student-facing slot listing (`online`);
+  // the slot detail hides the meeting link from students. Usually cached from
+  // the lecturer detail screen, so this costs no extra request.
+  const slotWeek = useMemo(
+    () =>
+      slot.data ? weekInfo(new Date(slot.data.startAt).getTime(), 0).week : undefined,
+    [slot.data],
+  );
+  const weekSlots = useLecturerSlots(slot.data ? lecturerId : undefined, slotWeek);
+  const online = weekSlots.data?.find(s => s.id === slotId)?.online;
   const topicError = validateTopic(topic);
 
   const submit = () => {
@@ -164,7 +175,7 @@ export function BookSlotScreen() {
               {lecturer.data?.name ?? ' '}
             </Text>
             <Text style={styles.lecturerSub} numberOfLines={1}>
-              {label ? `Trực tiếp tại ${label}` : 'Trực tiếp'}
+              {meetingModeText(online, label)}
             </Text>
           </View>
         </View>

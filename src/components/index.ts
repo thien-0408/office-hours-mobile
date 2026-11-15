@@ -13,3 +13,4 @@ export * from './SectionHeader';
 export * from './ListRow';
 export * from './TopNav';
 export * from './Screen';
+export * from './DepartmentPicker';

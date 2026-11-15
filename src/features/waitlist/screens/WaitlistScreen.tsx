@@ -32,6 +32,7 @@ import { StatusPill } from '../../../components/StatusPill';
 import { TopNav } from '../../../components/TopNav';
 import { colors, fonts, ls, radius, space, text } from '../../../theme';
 import { getCountdownState, waitlistStatusLabel } from '../countdown';
+import { departmentLabel } from '../../../api/departments';
 
 export function WaitlistScreen() {
   const navigation = useNavigation();
@@ -227,7 +228,7 @@ export function WaitlistScreen() {
                   <Text style={styles.slotLabel} numberOfLines={2}>
                     {offeredEntry.desiredSlotLabel}
                     {offeredEntry.department
-                      ? ` · ${offeredEntry.department}`
+                      ? ` · ${departmentLabel(offeredEntry.department)}`
                       : ''}
                   </Text>
                 </View>

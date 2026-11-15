@@ -43,6 +43,7 @@ import {
   Timeline,
   useNow,
 } from '../detail';
+import { departmentLabel } from '../../../api/departments';
 
 type Sheet = 'decline' | 'link' | null;
 
@@ -123,7 +124,7 @@ export function BookingDetailScreen() {
             {who.name}
           </AppText>
           {booking.department ? (
-            <AppText variant="sm">{booking.department}</AppText>
+            <AppText variant="sm">{departmentLabel(booking.department)}</AppText>
           ) : null}
         </View>
       </View>

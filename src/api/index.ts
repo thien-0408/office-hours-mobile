@@ -17,6 +17,7 @@ export * from './availability';
 export * from './campus';
 export * from './chat';
 export * from './admin';
+export * from './departments';
 export * from './realtime';
 export * from './hooks';
 export * from './errorText';

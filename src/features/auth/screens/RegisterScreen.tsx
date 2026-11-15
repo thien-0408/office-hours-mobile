@@ -5,6 +5,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   AppText,
   Button,
+  DepartmentPicker,
   Field,
   Seg,
   type FieldInputRef,
@@ -25,7 +26,9 @@ import {
 
 type Nav = NativeStackNavigationProp<AuthStackParamList>;
 type Role = 'STUDENT' | 'LECTURER';
-type Errors = Partial<Record<'fullName' | 'email' | 'password' | 'confirm', string>>;
+type Errors = Partial<
+  Record<'fullName' | 'email' | 'password' | 'confirm' | 'department', string>
+>;
 
 const ROLE_OPTIONS = [
   { value: 'STUDENT', label: 'Sinh viên' },
@@ -35,14 +38,13 @@ const ROLE_OPTIONS = [
 export function RegisterScreen() {
   const navigation = useNavigation<Nav>();
   const emailRef = useRef<FieldInputRef>(null);
-  const deptRef = useRef<FieldInputRef>(null);
   const passRef = useRef<FieldInputRef>(null);
   const confirmRef = useRef<FieldInputRef>(null);
 
   const [role, setRole] = useState<Role>('STUDENT');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [department, setDepartment] = useState('');
+  const [department, setDepartment] = useState<string | null>(null);
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [errors, setErrors] = useState<Errors>({});
@@ -70,7 +72,7 @@ export function RegisterScreen() {
         password,
         fullName: fullName.trim(),
         role,
-        department: department.trim() || undefined,
+        department: department ?? undefined,
       });
       setAuthNotice('Đã tạo tài khoản. Đăng nhập để tiếp tục.');
       navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
@@ -144,19 +146,18 @@ export function RegisterScreen() {
           autoComplete="email"
           textContentType="emailAddress"
           returnKeyType="next"
-          onSubmitEditing={() => deptRef.current?.focus()}
+          onSubmitEditing={() => passRef.current?.focus()}
           blurOnSubmit={false}
           error={errors.email}
         />
-        <Field
-          ref={deptRef}
+        <DepartmentPicker
           label="Khoa (không bắt buộc)"
           value={department}
-          onChangeText={setDepartment}
-          returnKeyType="next"
-          onSubmitEditing={() => passRef.current?.focus()}
-          blurOnSubmit={false}
-          maxLength={100}
+          onChange={code => {
+            setDepartment(code);
+            clear('department');
+          }}
+          error={errors.department}
         />
         <View>
           <PasswordField

@@ -21,7 +21,14 @@ import { ApiError } from '../../../api/errors';
 import { errorText, fieldErrorMap } from '../../../api/errorText';
 import { useSession } from '../../auth/session';
 import { useAppSession } from '../../../navigation/devSession';
-import { Avatar, Button, Field, TopNav } from '../../../components';
+import {
+  Avatar,
+  Button,
+  DepartmentPicker,
+  Field,
+  TopNav,
+} from '../../../components';
+import { useDepartmentLabel } from '../../../api/hooks/departments';
 import {
   BlurTarget,
   Skeleton,
@@ -36,6 +43,7 @@ export function ProfileScreen() {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const isFocused = useIsFocused();
   const tabBarSpace = useTabBarSpace();
+  const deptLabel = useDepartmentLabel();
   const queryClient = useQueryClient();
   const { reloadUser } = useSession();
   const { signOut } = useAppSession();
@@ -227,7 +235,7 @@ export function ProfileScreen() {
               <Text style={styles.eyebrow}>{formatRole(user.role)}</Text>
               <Text style={styles.fullName}>{user.fullName}</Text>
               <Text style={styles.department}>
-                {user.department || 'Chưa cập nhật khoa'}
+                {deptLabel(user.department) ?? 'Chưa cập nhật khoa'}
               </Text>
             </View>
 
@@ -247,12 +255,11 @@ export function ProfileScreen() {
 
                   <View style={styles.fieldSpacer} />
 
-                  <Field
-                    label="Khoa / Bộ môn"
+                  <DepartmentPicker
+                    label="Khoa"
                     value={department}
-                    onChangeText={setDepartment}
+                    onChange={code => setDepartment(code ?? '')}
                     error={fieldErrors.department}
-                    placeholder="Khoa Công nghệ Thông tin"
                   />
 
                   {generalError ? (

@@ -61,6 +61,8 @@ export type BookableSlot = {
   available: boolean;
   /** true: overlaps the student's own PENDING/CONFIRMED booking. */
   conflict: boolean;
+  /** true: the slot has a meeting link (Meet/Zoom); false: in person. The link itself stays hidden. */
+  online: boolean;
 };
 
 /** Either `week` ("YYYY-Www") or a from/to range. Without any, the backend uses the current week. */
@@ -83,6 +85,8 @@ export type SuggestedSlot = {
   specialtyTag: string | null;
   blurb: string | null;
   isConflictFree: boolean;
+  /** true: online (meeting link set); false: in person. */
+  online: boolean;
 };
 
 export type SlotStatus = 'OPEN' | 'FULL' | 'CLOSED';

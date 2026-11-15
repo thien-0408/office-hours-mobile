@@ -1,4 +1,5 @@
 import type { AdminUser } from '../../../api/domainTypes';
+import { departmentLabel } from '../../../api/departments';
 
 export function adminRoleLabel(role: 'STUDENT' | 'LECTURER' | 'ADMIN'): string {
   switch (role) {
@@ -30,7 +31,7 @@ export function formatUserSubtitle(user: AdminUser): string {
   }
   parts.push(adminRoleLabel(user.role));
   if (user.department) {
-    parts.push(user.department);
+    parts.push(departmentLabel(user.department) ?? user.department);
   }
   return parts.join(' · ');
 }

@@ -181,6 +181,28 @@ export function slotSummary(
     : formatVnDayTime(startAt);
 }
 
+/**
+ * Meeting mode line for a slot: "Online (Google Meet, Zoom…)" when the slot has a
+ * link, "Trực tiếp tại 306.B11" otherwise. `online` undefined = not known yet.
+ */
+export function meetingModeText(
+  online: boolean | undefined,
+  roomText: string | null,
+): string {
+  if (online === true) {
+    return 'Online qua link họp (Meet, Zoom…)';
+  }
+  if (online === false) {
+    return roomText ? `Trực tiếp tại ${roomText}` : 'Trực tiếp';
+  }
+  return roomText ? `Phòng ${roomText}` : ' ';
+}
+
+/** Short tag for slot chips / cards. */
+export function meetingModeTag(online: boolean): string {
+  return online ? 'Online' : 'Tại phòng';
+}
+
 /** "Thứ Sáu 14:20", for the reschedule button. */
 export function dayTimeShort(startAt: string): string {
   return `${dayName(vnParts(startAt).isoDayOfWeek)} ${formatVnTime(startAt)}`;

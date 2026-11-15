@@ -43,7 +43,7 @@ export function SlotGrid({
               <Pressable
                 key={slot.id}
                 accessibilityRole="button"
-                accessibilityLabel={`${time}, ${LABELS[state]}`}
+                accessibilityLabel={`${time}, ${slot.online ? 'online, ' : ''}${LABELS[state]}`}
                 accessibilityState={{ disabled, selected: on }}
                 disabled={disabled}
                 onPress={() => onSelect(slot, state)}
@@ -64,6 +64,9 @@ export function SlotGrid({
                 >
                   {time}
                 </Text>
+                {slot.online ? (
+                  <Text style={[styles.mode, on && styles.modeOn]}>Online</Text>
+                ) : null}
               </Pressable>
             );
           })}
@@ -113,4 +116,12 @@ const styles = StyleSheet.create({
   timeFull: { color: colors.fg4, textDecorationLine: 'line-through' },
   timeMuted: { color: colors.fg4 },
   timeCurrent: { color: colors.fg2 },
+  mode: {
+    fontSize: 9.5,
+    fontFamily: fonts.semibold,
+    letterSpacing: 0.2,
+    color: colors.fg3,
+    marginTop: -1,
+  },
+  modeOn: { color: 'rgba(0,0,0,0.55)' },
 });

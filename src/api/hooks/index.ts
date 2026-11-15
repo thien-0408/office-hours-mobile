@@ -7,3 +7,4 @@ export * from './notifications';
 export * from './schedule';
 export * from './availability';
 export * from './campusAdmin';
+export * from './departments';

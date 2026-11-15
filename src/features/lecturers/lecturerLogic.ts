@@ -2,6 +2,7 @@
 
 import type { Lecturer, LecturerListQuery } from '../../api/domainTypes';
 import { dayName } from '../../api/time';
+import { departmentLabel } from '../../api/departments';
 
 export const SEARCH_DEBOUNCE_MS = 300;
 
@@ -56,13 +57,13 @@ export const DAY_CHIPS = [1, 2, 3, 4, 5, 6].map(d => ({
 export function lecturerSubtitle(
   l: Pick<Lecturer, 'department' | 'blurb'>,
 ): string {
-  return [l.department, l.blurb]
+  return [departmentLabel(l.department), l.blurb]
     .map(s => (s ?? '').trim())
     .filter(Boolean)
     .join(' · ');
 }
 
-/** Departments seen in loaded results (the API has no departments endpoint). */
+/** Department codes seen in loaded results (chips; labels via departmentLabel). */
 export function departmentsOf(
   lecturers: readonly Pick<Lecturer, 'department'>[],
   keep: readonly (string | undefined)[] = [],

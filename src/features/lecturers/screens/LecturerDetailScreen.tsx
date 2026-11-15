@@ -25,6 +25,7 @@ import {
   waitlistJoinErrorOutcome,
   type SlotState,
 } from '../../booking/slots';
+import { departmentLabel } from '../../../api/departments';
 
 type Nav = NativeStackNavigationProp<StudentStackParamList>;
 type Route = RouteProp<{ LecturerDetail: ScreenParams['LecturerDetail'] }, 'LecturerDetail'>;
@@ -125,7 +126,7 @@ export function LecturerDetailScreen() {
             <>
               <Reveal id={`lecturer-head-${data.id}`}>
                 <Text style={styles.eyebrow}>
-                  {[data.department, label].filter(Boolean).join(' · ')}
+                  {[departmentLabel(data.department), label].filter(Boolean).join(' · ')}
                 </Text>
                 <Text style={styles.name}>{data.name}</Text>
                 <View style={styles.roomRow}>
