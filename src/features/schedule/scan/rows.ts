@@ -12,12 +12,10 @@ import type {
   ScheduleImportMode,
 } from '../../../api/domainTypes';
 import { batchRowErrors } from '../../../api/schedule';
-import type { ParsedScanRow } from './parseTimetable';
 
 export const MAX_ROWS = 2000; // backend: 1..2000 rows
 export const MAX_TITLE = 150; // subjectName
 export const MAX_ROOM = 100;
-export const SOURCE_FILE_NAME = 'camera-scan';
 
 /** Backend day strings, index = ISO day (1..7). `day` must be exactly one of these. */
 export const DAY_LABELS = [
@@ -43,8 +41,13 @@ export interface ScanRow {
   endTime: string;
   title: string;
   room: string;
-  /** 'low': the OCR was not sure. Becomes 'high' once the user edits the row. */
+  /** PDF rows are always 'high'. 'low' is kept for the review card's warning state. */
   confidence: 'high' | 'low';
+  /** Carried through from the PDF; not editable in the review card. */
+  date?: string | null;
+  subjectCode?: string;
+  group?: string;
+  lecturerName?: string;
 }
 
 let seq = 0;
@@ -53,15 +56,26 @@ export function newRowKey(): string {
   return `scan-row-${seq}`;
 }
 
-export function fromParsed(rows: ParsedScanRow[]): ScanRow[] {
+/** Day label ("Thứ 2".."Chủ Nhật") -> ISO 1..7, 0 when unknown. */
+export function dayOfWeekOf(day: string): number {
+  const i = (DAY_LABELS as readonly string[]).indexOf(day);
+  return i > 0 ? i : 0;
+}
+
+/** Rows parsed from the AAO PDF -> review rows. Keeps date/code/group/lecturer for the batch. */
+export function fromTimetableRows(rows: ParsedTimetableRow[]): ScanRow[] {
   return rows.map(r => ({
     key: newRowKey(),
-    dayOfWeek: r.dayOfWeek,
+    dayOfWeek: dayOfWeekOf(r.day),
     startTime: r.startTime,
     endTime: r.endTime,
-    title: r.title,
-    room: r.room ?? '',
-    confidence: r.confidence,
+    title: r.subjectName,
+    room: r.room,
+    confidence: 'high',
+    date: r.date,
+    subjectCode: r.subjectCode,
+    group: r.group,
+    lecturerName: r.lecturerName,
   }));
 }
 
@@ -160,14 +174,14 @@ export function submitBlock(rows: ScanRow[]): SubmitBlock {
 export function toDtoRow(row: ScanRow): ParsedTimetableRow {
   return {
     day: DAY_LABELS[row.dayOfWeek],
-    date: null,
+    date: row.date ?? null,
     startTime: normalizeTime(row.startTime) ?? row.startTime,
     endTime: normalizeTime(row.endTime) ?? row.endTime,
-    subjectCode: '',
+    subjectCode: row.subjectCode ?? '',
     subjectName: row.title.trim(),
-    group: '',
+    group: row.group ?? '',
     room: row.room.trim(),
-    lecturerName: '',
+    lecturerName: row.lecturerName ?? '',
   };
 }
 
@@ -179,11 +193,12 @@ export function toBatchPayload(
   rows: ScanRow[],
   semesterId: string,
   mode: ScheduleImportMode,
+  sourceFiles: string[],
 ): ScheduleBatchPayload {
   return {
     semesterId,
     mode,
-    sourceFiles: [SOURCE_FILE_NAME],
+    sourceFiles,
     rows: rows.map(toDtoRow),
   };
 }
@@ -229,7 +244,11 @@ export function mapBatchErrors(
   const general: string[] = [];
   let first: number | null = null;
   for (const e of errors) {
-    if (typeof e.rowIndex === 'number' && e.rowIndex >= 0 && e.rowIndex < rowCount) {
+    if (
+      typeof e.rowIndex === 'number' &&
+      e.rowIndex >= 0 &&
+      e.rowIndex < rowCount
+    ) {
       const field = SERVER_FIELD[e.field] ?? 'title';
       const rowErrs = (byRow[e.rowIndex] ??= {});
       rowErrs[field] ??=

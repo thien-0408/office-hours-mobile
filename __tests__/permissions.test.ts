@@ -1,16 +1,13 @@
 import { Linking } from 'react-native';
-import { Camera } from 'expo-camera';
 import * as Location from 'expo-location';
 import { Barometer } from 'expo-sensors';
 import {
   hasBarometer,
   openSettings,
-  requestCamera,
   requestForegroundLocation,
 } from '../src/platform/permissions';
 
 const mockLoc = Location.requestForegroundPermissionsAsync as jest.Mock;
-const mockCam = Camera.requestCameraPermissionsAsync as jest.Mock;
 const mockBaro = Barometer.isAvailableAsync as jest.Mock;
 
 describe('permissions', () => {
@@ -20,10 +17,6 @@ describe('permissions', () => {
     expect(await requestForegroundLocation()).toBe('denied');
     mockLoc.mockResolvedValueOnce({ granted: false, canAskAgain: false });
     expect(await requestForegroundLocation()).toBe('blocked');
-
-    mockCam.mockResolvedValueOnce({ granted: false, canAskAgain: false });
-    expect(await requestCamera()).toBe('blocked');
-    expect(await requestCamera()).toBe('granted');
   });
 
   it('reports barometer availability and tolerates errors', async () => {

@@ -39,18 +39,25 @@ const MODE_OPTIONS: SegOption[] = [
 
 const MODE_HINT: Record<ScheduleImportMode, string> = {
   REPLACE:
-    'Xóa lịch đã quét trước đó của học kỳ này, giữ lịch bạn nhập tay.',
+    'Xóa lịch đã nhập từ PDF trước đó của học kỳ này, giữ lịch bạn nhập tay.',
   MERGE: 'Giữ lịch hiện có, chỉ thêm các dòng mới và bỏ dòng trùng.',
 };
 
 export interface ScanReviewProps {
   initialRows: ScanRow[];
+  /** Names of the picked PDFs, sent as `sourceFiles` (empty for manual entry). */
+  sourceFiles?: string[];
   onBack: () => void;
   onDone: (result: ImportScheduleResult) => void;
 }
 
 /** 18b. Review and edit every row, then POST the batch. */
-export function ScanReview({ initialRows, onBack, onDone }: ScanReviewProps) {
+export function ScanReview({
+  initialRows,
+  sourceFiles = [],
+  onBack,
+  onDone,
+}: ScanReviewProps) {
   const [rows, setRows] = useState<ScanRow[]>(initialRows);
   const [mode, setMode] = useState<ScheduleImportMode>('REPLACE');
   // Errors from a 422, keyed by row key so they survive deleting other rows.
@@ -106,24 +113,30 @@ export function ScanReview({ initialRows, onBack, onDone }: ScanReviewProps) {
     setSubmitError(null);
     setServerErrors({});
     const sent = rows;
-    importMutation.mutate(toBatchPayload(sent, semester.data.id, mode), {
-      onSuccess: onDone,
-      onError: e => {
-        setSubmitError(submitErrorText(e, sent.length));
-        const mapped = mapBatchErrors(batchRowErrors(e), sent.length);
-        const byKey: Record<string, RowErrors> = {};
-        for (const [idx, errs] of Object.entries(mapped.byRow)) {
-          byKey[sent[Number(idx)].key] = errs;
-        }
-        setServerErrors(byKey);
-        if (mapped.firstRowIndex !== null) {
-          const y = layouts.current[sent[mapped.firstRowIndex].key];
-          if (y !== undefined) {
-            scroll.current?.scrollTo({ y: Math.max(0, y - 12), animated: true });
+    importMutation.mutate(
+      toBatchPayload(sent, semester.data.id, mode, sourceFiles),
+      {
+        onSuccess: onDone,
+        onError: e => {
+          setSubmitError(submitErrorText(e, sent.length));
+          const mapped = mapBatchErrors(batchRowErrors(e), sent.length);
+          const byKey: Record<string, RowErrors> = {};
+          for (const [idx, errs] of Object.entries(mapped.byRow)) {
+            byKey[sent[Number(idx)].key] = errs;
           }
-        }
+          setServerErrors(byKey);
+          if (mapped.firstRowIndex !== null) {
+            const y = layouts.current[sent[mapped.firstRowIndex].key];
+            if (y !== undefined) {
+              scroll.current?.scrollTo({
+                y: Math.max(0, y - 12),
+                animated: true,
+              });
+            }
+          }
+        },
       },
-    });
+    );
   };
 
   const summary = [
@@ -151,7 +164,7 @@ export function ScanReview({ initialRows, onBack, onDone }: ScanReviewProps) {
       >
         <Text style={styles.title}>Kiểm tra lại</Text>
         <Text style={styles.sub}>
-          Đọc thời khóa biểu tự động. Sửa từng dòng nếu máy đọc sai.
+          Đọc từ file PDF. Sửa hoặc xóa từng dòng nếu cần.
         </Text>
 
         <View style={styles.mode}>
@@ -193,7 +206,9 @@ export function ScanReview({ initialRows, onBack, onDone }: ScanReviewProps) {
         {block === 'tooMany' ? (
           <Text style={styles.footerErr}>Tối đa 2.000 dòng mỗi lần lưu.</Text>
         ) : null}
-        {submitError ? <Text style={styles.footerErr}>{submitError}</Text> : null}
+        {submitError ? (
+          <Text style={styles.footerErr}>{submitError}</Text>
+        ) : null}
         {semester.isError ? (
           <View style={styles.semRow}>
             <Text style={styles.footerErr}>

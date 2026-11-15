@@ -100,7 +100,7 @@ export function MyScheduleScreen() {
         <View style={styles.actionRow}>
           <Button
             variant="ghost"
-            title="Quét thời khóa biểu"
+            title="Nhập thời khóa biểu (PDF)"
             onPress={handleOpenScan}
             style={styles.scanButton}
           />
