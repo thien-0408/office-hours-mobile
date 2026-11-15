@@ -1,6 +1,7 @@
 import type { ComponentType, ReactNode } from 'react';
 import type { PressableProps, StyleProp, ViewStyle } from 'react-native';
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { PressableScale } from './motion/PressableScale';
 import type { LucideProps } from 'lucide-react-native';
 import { colors, radius, size as themeSize } from '../theme';
 import { Icon, type IconLevel } from './Icon';
@@ -27,18 +28,17 @@ export function IconButton({
   ...rest
 }: IconButtonProps) {
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       disabled={disabled}
-      style={({ pressed }) => [
+      style={[
         styles.base,
         {
           width: size,
           height: size,
           borderRadius: radius.pill,
         },
-        pressed && !disabled && styles.pressed,
         disabled && styles.disabled,
         style,
       ]}
@@ -50,7 +50,7 @@ export function IconButton({
       ) : (
         children
       )}
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -61,9 +61,6 @@ const styles = StyleSheet.create({
     borderColor: colors.line,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  pressed: {
-    opacity: 0.85,
   },
   disabled: {
     opacity: 0.38,

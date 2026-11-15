@@ -102,9 +102,9 @@ describe('Reveal', () => {
     expect(claimReveal('b')).toBe(true);
   });
 
-  it('staggers 40ms per index', () => {
+  it('staggers 35ms per index', () => {
     expect(revealDelay(0)).toBe(0);
-    expect(revealDelay(3)).toBe(120);
+    expect(revealDelay(3)).toBe(105);
   });
 
   it('second mount with the same id skips the entering animation', async () => {

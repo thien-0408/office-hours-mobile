@@ -358,7 +358,7 @@ export function WaitlistScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: 'transparent',
   },
   scrollContent: {
     paddingHorizontal: space.gutter,

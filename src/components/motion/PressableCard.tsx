@@ -6,6 +6,8 @@ import {
   useManualGesture,
 } from 'react-native-gesture-handler';
 import Animated, {
+  Extrapolation,
+  interpolate,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -92,9 +94,9 @@ export function PressableCard({
         Math.abs(t.y - startY.value) > TAP_SLOP
       ) {
         pressing.value = false;
-        rx.value = withSpring(0, springs.press);
-        ry.value = withSpring(0, springs.press);
-        scale.value = withSpring(1, springs.press);
+        rx.value = withSpring(0, springs.release);
+        ry.value = withSpring(0, springs.release);
+        scale.value = withSpring(1, springs.release);
         return;
       }
       const nx = Math.max(-1, Math.min(1, (t.x / w.value) * 2 - 1));
@@ -106,9 +108,9 @@ export function PressableCard({
       'worklet';
       const wasPressing = pressing.value;
       pressing.value = false;
-      rx.value = withSpring(0, springs.press);
-      ry.value = withSpring(0, springs.press);
-      scale.value = withSpring(1, springs.press);
+      rx.value = withSpring(0, springs.release);
+      ry.value = withSpring(0, springs.release);
+      scale.value = withSpring(1, springs.release);
       GestureStateManager.fail(e.handlerTag);
       if (wasPressing) {
         scheduleOnRN(firePress);
@@ -117,14 +119,20 @@ export function PressableCard({
     onTouchesCancel: e => {
       'worklet';
       pressing.value = false;
-      rx.value = withSpring(0, springs.press);
-      ry.value = withSpring(0, springs.press);
-      scale.value = withSpring(1, springs.press);
+      rx.value = withSpring(0, springs.release);
+      ry.value = withSpring(0, springs.release);
+      scale.value = withSpring(1, springs.release);
       GestureStateManager.fail(e.handlerTag);
     },
   });
 
   const animatedStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(
+      scale.value,
+      [press3D.pressedScale, 1],
+      [press3D.pressedOpacity, 1],
+      Extrapolation.CLAMP,
+    ),
     transform: [
       { perspective: PERSPECTIVE },
       { rotateX: `${rx.value}deg` },

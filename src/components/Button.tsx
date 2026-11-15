@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { PressableProps, StyleProp, TextStyle, ViewStyle } from 'react-native';
-import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text } from 'react-native';
+import { PressableScale } from './motion/PressableScale';
 import { colors, fonts, ls, radius, size as themeSize, text } from '../theme';
 
 export type ButtonVariant = 'primary' | 'ghost' | 'quiet';
@@ -46,19 +47,18 @@ export function Button({
     : colors.fg;
 
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       accessibilityState={{ disabled: isDisabled, busy: loading }}
       disabled={isDisabled}
       onPress={isDisabled ? undefined : onPress}
-      style={({ pressed }) => [
+      style={[
         styles.base,
         isQuiet ? styles.heightQuiet : styles.heightNormal,
         isPrimary && styles.primaryBg,
         isGhost && styles.ghostBg,
         isQuiet && styles.quietBg,
         disabled && isPrimary && styles.disabledPrimaryBg,
-        pressed && !isDisabled && styles.pressed,
         style,
       ]}
       {...rest}
@@ -84,7 +84,7 @@ export function Button({
           {trailing}
         </>
       )}
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -114,9 +114,6 @@ const styles = StyleSheet.create({
   },
   disabledPrimaryBg: {
     backgroundColor: '#2a2a2a',
-  },
-  pressed: {
-    opacity: 0.85,
   },
   normalText: {
     ...text.button,

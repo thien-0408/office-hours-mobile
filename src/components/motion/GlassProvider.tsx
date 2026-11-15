@@ -17,6 +17,8 @@ import {
   type ViewProps,
 } from 'react-native';
 import { BlurTargetView } from 'expo-blur';
+import { AmbientBackground } from './AmbientBackground';
+import { colors } from '../../theme';
 
 export type GlassLevel = 'high' | 'low' | 'solid';
 export type GlassQuality = 'auto' | GlassLevel;
@@ -135,6 +137,7 @@ export function useGlassLevel(forced?: GlassQuality): GlassLevel {
 export function BlurTarget({
   active = true,
   style,
+  children,
   ...props
 }: ViewProps & { active?: boolean }) {
   const { attachTarget, detachTarget } = useGlass();
@@ -150,7 +153,21 @@ export function BlurTarget({
   );
   // flex: 1 by default: a screen root that forgets the style collapses to 0 px
   // and renders black (MySchedule / Availability did).
-  return <BlurTargetView ref={ref} style={[styles.fill, style]} {...props} />;
+  // The ambient glows live INSIDE the target (opaque black under them) so
+  // glass blurs them; identical phase to the screen surface behind it.
+  return (
+    <BlurTargetView
+      ref={ref}
+      style={[styles.fill, style, styles.opaque]}
+      {...props}
+    >
+      <AmbientBackground />
+      {children}
+    </BlurTargetView>
+  );
 }
 
-const styles = StyleSheet.create({ fill: { flex: 1 } });
+const styles = StyleSheet.create({
+  fill: { flex: 1 },
+  opaque: { backgroundColor: colors.bg },
+});

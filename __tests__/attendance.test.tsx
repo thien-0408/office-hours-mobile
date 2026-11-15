@@ -176,10 +176,7 @@ describe('AttendanceActions component', () => {
     expect(texts).toContain('Vắng mặt');
 
     // Confirm buttons have no icon children
-    const buttons = r.root.findAll(
-      n => n.props.accessibilityRole === 'button' && typeof n.props.onPress === 'function',
-    );
-    expect(buttons.length).toBe(2);
+    expect(r.root.findAllByType(Button).length).toBe(2);
   });
 
   test('pressing "Đã gặp" calls completeBooking mutate and navigates to MeetingRecord on success', async () => {

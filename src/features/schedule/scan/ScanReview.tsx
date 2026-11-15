@@ -220,7 +220,7 @@ export function ScanReview({ initialRows, onBack, onDone }: ScanReviewProps) {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: 'transparent',
   },
   pad: {
     paddingHorizontal: space.gutter,

@@ -153,7 +153,7 @@ export function HelpScreen() {
 const styles = StyleSheet.create({
   safeRoot: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: 'transparent',
   },
   scroll: {
     flex: 1,

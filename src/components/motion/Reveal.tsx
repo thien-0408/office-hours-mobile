@@ -7,6 +7,8 @@ import {
 import { StyleSheet } from 'react-native';
 import Animated, {
   Easing,
+  FadeIn,
+  FadeOut,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
@@ -14,10 +16,12 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
+import { motion } from '../../theme';
+import { useReduceMotion } from './reduceMotion';
 
-const STAGGER_MS = 40;
-const DURATION_MS = 450;
-const OFFSET_Y = 14;
+const STAGGER_MS = motion.stagger;
+const DURATION_MS = motion.revealDuration;
+const OFFSET_Y = motion.revealOffsetY;
 
 // Ids already revealed in this app session. Module level so remounts and
 // recycled FlashList cells never replay the animation.
@@ -38,7 +42,8 @@ export function resetReveal() {
 }
 
 /** Entering delay for a list index. */
-export const revealDelay = (index: number) => index * STAGGER_MS;
+// Capped so long lists never make the last rows wait.
+export const revealDelay = (index: number) => Math.min(index, 12) * STAGGER_MS;
 
 export type RevealProps = {
   /** Stable identity (e.g. item id); the animation runs once per id. */
@@ -53,7 +58,9 @@ export type RevealProps = {
 export function Reveal({ id, index = 0, style, children }: RevealProps) {
   // Decided at mount: recycled cells keep their first decision, and the
   // `entering` prop only matters at mount anyway.
-  const [animate] = useState(() => claimReveal(id));
+  const reduce = useReduceMotion();
+  const [claimed] = useState(() => claimReveal(id));
+  const animate = claimed && !reduce;
   const delay = revealDelay(index);
   const entering = useMemo(
     () =>
@@ -62,7 +69,7 @@ export function Reveal({ id, index = 0, style, children }: RevealProps) {
             'worklet';
             const timing = {
               duration: DURATION_MS,
-              easing: Easing.out(Easing.cubic),
+              easing: Easing.bezier(0.22, 1, 0.36, 1),
             };
             return {
               initialValues: {
@@ -82,6 +89,28 @@ export function Reveal({ id, index = 0, style, children }: RevealProps) {
   );
   return (
     <Animated.View entering={entering} style={style}>
+      {children}
+    </Animated.View>
+  );
+}
+
+/**
+ * Wrap loaded content that replaces a Skeleton: it fades in while the
+ * skeleton (wrap it in this too) fades out, instead of popping.
+ */
+export function ContentFade({
+  style,
+  children,
+}: {
+  style?: StyleProp<ViewStyle>;
+  children?: ReactNode;
+}) {
+  return (
+    <Animated.View
+      entering={FadeIn.duration(motion.contentFade)}
+      exiting={FadeOut.duration(motion.contentFade / 2)}
+      style={style}
+    >
       {children}
     </Animated.View>
   );
