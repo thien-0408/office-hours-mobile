@@ -348,3 +348,101 @@ export function pickBlock(
   }
   return best;
 }
+
+// ---- zoom toward a point, projection, framing ----------------------------
+
+const isFiniteNum = (n: unknown): n is number =>
+  typeof n === 'number' && Number.isFinite(n);
+
+/** True when every field of the camera state is a finite number. */
+export function isValidCamera(s: CameraState): boolean {
+  return (
+    isFiniteNum(s.x) &&
+    isFiniteNum(s.z) &&
+    isFiniteNum(s.yaw) &&
+    isFiniteNum(s.distance)
+  );
+}
+
+/** Where a screen point lands on the ground plane (y = 0), campus metres. */
+export function groundPoint(
+  px: number,
+  py: number,
+  width: number,
+  height: number,
+  s: CameraState,
+): { x: number; z: number } | null {
+  const ray = screenToRay(px, py, width, height, s);
+  if (ray.dir[1] >= -1e-6) {
+    return null;
+  }
+  const t = -ray.origin[1] / ray.dir[1];
+  return {
+    x: ray.origin[0] + ray.dir[0] * t,
+    z: -(ray.origin[2] + ray.dir[2] * t),
+  };
+}
+
+/**
+ * Zoom by `factor` (> 1 zooms in) keeping the ground point under the screen
+ * point (px, py) where it is, like a map pinch.
+ */
+export function zoomCameraAt(
+  s: CameraState,
+  factor: number,
+  px: number,
+  py: number,
+  width: number,
+  height: number,
+): CameraState {
+  if (!isFiniteNum(factor) || factor <= 0) {
+    return s;
+  }
+  const distance = Math.min(
+    MAX_DISTANCE,
+    Math.max(MIN_DISTANCE, s.distance / factor),
+  );
+  const next = { ...s, distance };
+  const before = groundPoint(px, py, width, height, s);
+  const after = groundPoint(px, py, width, height, next);
+  if (!before || !after) {
+    return next;
+  }
+  return { ...next, x: s.x + before.x - after.x, z: s.z + before.z - after.z };
+}
+
+/**
+ * Campus point (+ height in metres) -> screen px, or null when it is behind
+ * the camera. Used to pin 2D labels to 3D positions.
+ */
+export function projectToScreen(
+  x: number,
+  z: number,
+  y: number,
+  width: number,
+  height: number,
+  s: CameraState,
+): Pt | null {
+  const { position, target } = cameraPose(s);
+  const f = norm(sub(target, position));
+  const r = norm(cross(f, [0, 1, 0]));
+  const u = cross(r, f);
+  const v = sub(toWorld(x, z, y), position);
+  const depth = v[0] * f[0] + v[1] * f[1] + v[2] * f[2];
+  if (depth <= 1) {
+    return null;
+  }
+  const t = Math.tan((CAMERA_FOV_DEG * Math.PI) / 360);
+  const aspect = width / Math.max(1, height);
+  const ndcX = (v[0] * r[0] + v[1] * r[1] + v[2] * r[2]) / (depth * t * aspect);
+  const ndcY = (v[0] * u[0] + v[1] * u[1] + v[2] * u[2]) / (depth * t);
+  return { x: ((ndcX + 1) / 2) * width, y: ((1 - ndcY) / 2) * height };
+}
+
+/** Outline scaled about its centroid (glow halo around the target block). */
+export function scaleOutline(outline: readonly XZ[], k: number): XZ[] {
+  const c = polygonCentroid(outline);
+  return outline.map(
+    ([x, z]): XZ => [c.x + (x - c.x) * k, c.z + (z - c.z) * k],
+  );
+}

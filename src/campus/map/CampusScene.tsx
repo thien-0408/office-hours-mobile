@@ -1,28 +1,82 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber/native';
-import type { Group } from 'three';
+import {
+  LineBasicMaterial,
+  MeshBasicMaterial,
+  MeshStandardMaterial,
+  type Group,
+} from 'three';
 import { DEFAULT_FLOOR_HEIGHT_M } from '../geo';
 import type { Block, XZ } from '../campusData';
 import type { CameraStore } from './cameraStore';
-import { createGroundGeometry, createPrismGeometry } from './geometry';
+import {
+  createEdgesGeometry,
+  createGroundGeometry,
+  createOutlineLineGeometry,
+  createPrismGeometry,
+} from './geometry';
 import {
   accuracyRingRadius,
   blockHeight,
   cameraPose,
   dotRadius,
+  scaleOutline,
   toWorld,
 } from './mapMath';
 
 // STYLE-MOCHY 8.10: every block grey, the destination is the only bright white.
+// Readable variant: light-grey tops (sides get darker from the lighting) on a
+// slightly lighter ground, crisp dark edge lines, a campus boundary outline.
 export const MAP_COLORS = {
   background: '#000000',
-  ground: '#070707',
-  block: '#3a3a3a',
-  blockSelected: '#6a6a6a',
+  ground: '#1a1a1a',
+  boundary: '#5a5a5a',
+  block: '#bdbdbd',
+  blockSelected: '#e4e4e4',
+  edge: '#262626',
+  edgeTarget: '#707070',
   target: '#ffffff',
+  glow: '#ffffff',
   markerBorder: '#ffffff',
   markerFill: '#cfcfcf',
 } as const;
+
+// Shared materials: one instance for every block / line (cheap on the GPU).
+const blockMaterial = new MeshStandardMaterial({
+  color: MAP_COLORS.block,
+  roughness: 0.95,
+  metalness: 0,
+});
+const selectedMaterial = new MeshStandardMaterial({
+  color: MAP_COLORS.blockSelected,
+  roughness: 0.9,
+  metalness: 0,
+});
+const targetMaterial = new MeshBasicMaterial({ color: MAP_COLORS.target });
+const edgeMaterial = new LineBasicMaterial({ color: MAP_COLORS.edge });
+const edgeTargetMaterial = new LineBasicMaterial({
+  color: MAP_COLORS.edgeTarget,
+});
+const boundaryMaterial = new LineBasicMaterial({
+  color: MAP_COLORS.boundary,
+});
+const groundMaterial = new MeshStandardMaterial({
+  color: MAP_COLORS.ground,
+  roughness: 1,
+  metalness: 0,
+});
+const glowMaterialOuter = new MeshBasicMaterial({
+  color: MAP_COLORS.glow,
+  transparent: true,
+  opacity: 0.12,
+  depthWrite: false,
+});
+const glowMaterialInner = new MeshBasicMaterial({
+  color: MAP_COLORS.glow,
+  transparent: true,
+  opacity: 0.24,
+  depthWrite: false,
+});
 
 /** A person on the map. `acc` draws the accuracy ring, `floor` lifts the dot. */
 export type MapMarker = {
@@ -70,14 +124,23 @@ function CameraRig({ store }: { store: CameraStore }) {
 
 function Ground({ boundary }: { boundary: readonly XZ[] }) {
   const geometry = useMemo(() => createGroundGeometry(boundary), [boundary]);
+  const line = useMemo(() => createOutlineLineGeometry(boundary), [boundary]);
   useEffect(() => () => geometry?.dispose(), [geometry]);
+  useEffect(() => () => line?.dispose(), [line]);
   if (!geometry) {
     return null;
   }
   return (
-    <mesh geometry={geometry} position={[0, -0.05, 0]}>
-      <meshBasicMaterial color={MAP_COLORS.ground} />
-    </mesh>
+    <>
+      <mesh
+        geometry={geometry}
+        position={[0, -0.05, 0]}
+        material={groundMaterial}
+      />
+      {line ? (
+        <lineSegments geometry={line} material={boundaryMaterial} />
+      ) : null}
+    </>
   );
 }
 
@@ -85,27 +148,74 @@ type SliceProps = {
   outline: readonly XZ[];
   y0: number;
   y1: number;
-  color: string;
-  basic?: boolean;
+  selected?: boolean;
+  /** White, unlit (destination). */
+  target?: boolean;
 };
 
-function Slice({ outline, y0, y1, color, basic }: SliceProps) {
+function Slice({ outline, y0, y1, selected, target }: SliceProps) {
   const geometry = useMemo(
     () => createPrismGeometry(outline, y0, y1),
     [outline, y0, y1],
   );
+  const edges = useMemo(
+    () => (geometry ? createEdgesGeometry(geometry) : null),
+    [geometry],
+  );
   useEffect(() => () => geometry?.dispose(), [geometry]);
+  useEffect(() => () => edges?.dispose(), [edges]);
   if (!geometry) {
     return null;
   }
   return (
-    <mesh geometry={geometry}>
-      {basic ? (
-        <meshBasicMaterial color={color} />
-      ) : (
-        <meshStandardMaterial color={color} roughness={0.9} metalness={0} />
-      )}
-    </mesh>
+    <>
+      <mesh
+        geometry={geometry}
+        material={
+          target ? targetMaterial : selected ? selectedMaterial : blockMaterial
+        }
+      />
+      {edges ? (
+        <lineSegments
+          geometry={edges}
+          material={target ? edgeTargetMaterial : edgeMaterial}
+        />
+      ) : null}
+    </>
+  );
+}
+
+/** Soft white halo on the ground around the destination block. */
+function Glow({ outline }: { outline: readonly XZ[] }) {
+  const outer = useMemo(
+    () => createGroundGeometry(scaleOutline(outline, 1.55)),
+    [outline],
+  );
+  const inner = useMemo(
+    () => createGroundGeometry(scaleOutline(outline, 1.22)),
+    [outline],
+  );
+  useEffect(() => () => outer?.dispose(), [outer]);
+  useEffect(() => () => inner?.dispose(), [inner]);
+  return (
+    <>
+      {outer ? (
+        <mesh
+          geometry={outer}
+          material={glowMaterialOuter}
+          position={[0, 0.1, 0]}
+          renderOrder={2}
+        />
+      ) : null}
+      {inner ? (
+        <mesh
+          geometry={inner}
+          material={glowMaterialInner}
+          position={[0, 0.2, 0]}
+          renderOrder={3}
+        />
+      ) : null}
+    </>
   );
 }
 
@@ -125,11 +235,10 @@ const BlockMesh = React.memo(function BlockMeshInner({
   floorHeightM,
 }: BlockMeshProps) {
   const total = blockHeight(block.floors, floorHeightM);
-  const grey = isSelected ? MAP_COLORS.blockSelected : MAP_COLORS.block;
 
   if (!isTarget) {
     return (
-      <Slice outline={block.outline} y0={0} y1={total} color={grey} />
+      <Slice outline={block.outline} y0={0} y1={total} selected={isSelected} />
     );
   }
   const floor =
@@ -138,13 +247,10 @@ const BlockMesh = React.memo(function BlockMeshInner({
       : null;
   if (floor == null) {
     return (
-      <Slice
-        outline={block.outline}
-        y0={0}
-        y1={total}
-        color={MAP_COLORS.target}
-        basic
-      />
+      <>
+        <Glow outline={block.outline} />
+        <Slice outline={block.outline} y0={0} y1={total} target />
+      </>
     );
   }
   // Only the destination storey is white; the rest of the block stays grey.
@@ -152,19 +258,10 @@ const BlockMesh = React.memo(function BlockMeshInner({
   const hi = floor * floorHeightM;
   return (
     <>
-      {lo > 0 ? (
-        <Slice outline={block.outline} y0={0} y1={lo} color={grey} />
-      ) : null}
-      <Slice
-        outline={block.outline}
-        y0={lo}
-        y1={hi}
-        color={MAP_COLORS.target}
-        basic
-      />
-      {hi < total ? (
-        <Slice outline={block.outline} y0={hi} y1={total} color={grey} />
-      ) : null}
+      <Glow outline={block.outline} />
+      {lo > 0 ? <Slice outline={block.outline} y0={0} y1={lo} /> : null}
+      <Slice outline={block.outline} y0={lo} y1={hi} target />
+      {hi < total ? <Slice outline={block.outline} y0={hi} y1={total} /> : null}
     </>
   );
 });
@@ -221,7 +318,10 @@ function PersonMarker({
       <group ref={dot} position={[0, 0, 0]} renderOrder={12}>
         <mesh renderOrder={12}>
           <circleGeometry args={[1, 32]} />
-          <meshBasicMaterial color={MAP_COLORS.markerBorder} depthTest={false} />
+          <meshBasicMaterial
+            color={MAP_COLORS.markerBorder}
+            depthTest={false}
+          />
         </mesh>
         <mesh position={[0, 0, 0.01]} renderOrder={13}>
           <circleGeometry args={[0.78, 32]} />
@@ -288,8 +388,8 @@ export function CampusScene({
   return (
     <>
       <color attach="background" args={[MAP_COLORS.background]} />
-      <ambientLight intensity={1.1} />
-      <directionalLight position={[120, 260, 90]} intensity={1.6} />
+      <hemisphereLight args={['#ffffff', '#3a3a3a', 1.0]} />
+      <directionalLight position={[160, 240, 120]} intensity={1.7} />
       <CameraRig store={camera} />
       <Ground boundary={boundary} />
       {blocks.map(block => (
