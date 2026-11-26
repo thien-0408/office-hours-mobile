@@ -1,4 +1,9 @@
 {
   "name": "OfficeHoursMobile",
-  "displayName": "OfficeHoursMobile"
+  "displayName": "OfficeHoursMobile",
+  "plugins": [
+    "expo-image",
+    "expo-font",
+    "expo-status-bar"
+  ]
 }
